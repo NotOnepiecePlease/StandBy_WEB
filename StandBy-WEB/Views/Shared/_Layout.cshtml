@@ -1,0 +1,30 @@
+﻿<!doctype html>
+<html lang="en" data-layout="vertical" data-layout-style="detached" data-sidebar="dark" data-topbar="dark" data-sidebar-size="lg" data-layout-mode="dark">
+    
+<head>
+    <title id="indexView">StandBy System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @RenderSection("styles", required: false)
+    @Html.Partial("~/Views/Shared/_head_css.cshtml")
+</head>
+
+    <body>
+        <div id="layout-wrapper" >
+            @Html.Partial("~/Views/Shared/_menu.cshtml")
+
+            <div class="main-content" >
+
+                <div class="page-content" >
+                    <div class="container-fluid" >
+
+                        @RenderBody()
+
+                    </div>
+                </div>
+            </div>
+        </div>
+@*@Html.Partial("~/Views/Shared/_customizer.cshtml")*@
+@Html.Partial("~/Views/Shared/_vendor_scripts.cshtml")
+@RenderSection("scripts", required: false)
+</body>
+</html>

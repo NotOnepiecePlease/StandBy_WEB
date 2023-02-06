@@ -1,0 +1,25 @@
+﻿<div id ="Sucesso"></div>
+<div class="modal fade" id="deletadoSucessoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                Registro deletado com sucesso!
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-danger" onclick="Sucesso()">Ok</button>
+                @* <button type="button" onclick="abrirModal(@Model.cl_id)">Abrir Modal</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Sucesso() {
+       location.reload();
+    }
+</script>

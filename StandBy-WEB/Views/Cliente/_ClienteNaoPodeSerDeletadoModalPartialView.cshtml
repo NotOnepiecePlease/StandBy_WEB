@@ -1,0 +1,35 @@
+﻿@model IEnumerable<standby_data.Models.tb_clientes>
+
+
+<div class="modal fade" id="clientesNaoPodemSerDeletadosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Confirmar exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                        id="close-modal"></button>
+            </div>
+            <div class="modal-body">
+                Os clientes abaixo possuem serviços vinculados e nao puderam ser deletados:
+                <p></p>
+                <ul>
+                    @foreach (var item in Model)
+                    {
+                        <li>@item.cl_nome</li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="ConfirmarDelete">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#ConfirmarDelete").click(function() {
+            location.reload();
+        });
+    });
+</script>
