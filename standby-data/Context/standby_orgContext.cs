@@ -5,8 +5,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using standby_data.Models;
-using standby_data.Repositories;
-using standby_data.Interfaces;
+using standby_data.Models.ProcedureModels;
 
 namespace standby_data.Context
 {
@@ -32,12 +31,17 @@ namespace standby_data.Context
         public virtual DbSet<tb_orcamento> tb_orcamento { get; set; }
         public virtual DbSet<tb_pagamento> tb_pagamento { get; set; }
         public virtual DbSet<tb_servicos> tb_servicos { get; set; }
+        public virtual DbSet<ServicosUltimos7DiasV2> ServicosUltimaSemana { get; set; }
+        public virtual DbSet<BuscarLucroValorUltimaSemana> BuscarLucroValorUltimaSemana { get; set; }
+        public virtual DbSet<BuscarServicoValorUltimaSemana> BuscarServicoValorUltimaSemana { get; set; }
+        public virtual DbSet<BuscarPrejuizoValorUltimaSemana> BuscarPrejuizoValorUltimaSemana { get; set; }
+        public virtual DbSet<BuscarPecasValorUltimaSemana> BuscarPecasValorUltimaSemana { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=standby_org;Persist Security Info=True;User ID=sa;Password=123adr;TrustServerCertificate=true");
+                optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=standby_org;Persist Security Info=True;User ID=sa;Password=123adr;TrustServerCertificate=True");
             }
         }
 
@@ -160,6 +164,9 @@ namespace standby_data.Context
                     .HasConstraintName("tb_servicos_fk0");
             });
 
+            //Procedures abaixo
+            modelBuilder = ProcedureModel.CarregarProcedures(modelBuilder);
+            
             OnModelCreatingPartial(modelBuilder);
         }
 

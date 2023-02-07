@@ -12,6 +12,7 @@ function getChartColorsArray(chartId) {
         var colors = document.getElementById(chartId).getAttribute("data-colors");
         if (colors) {
             colors = JSON.parse(colors);
+            //console.log(colors);
             return colors.map(function (value) {
                 var newValue = value.replace(" ", "");
                 if (newValue.indexOf(",") === -1) {
@@ -38,29 +39,184 @@ function getChartColorsArray(chartId) {
         }
     }
 }
+   
+
+// Stacked Columns Charts
+var chartColumnStackedColors = getChartColorsArray("column_stacked");
+if (chartColumnStackedColors) {
+
+    //console.log(chartColumnStackedColors);
+    $.ajax({
+        type: "GET",
+        url: "DashBoard/PreencherGraficoSemanal",
+        success: function (data)
+        {
+            var chartData = [
+                {
+                    name: 'Area',
+                    //type: 'area',
+                    data: []
+                }
+            ]
+
+
+            chartData.forEach(item => {
+                data.forEach(d => {
+                    item.data.push(d.count)
+                })
+            })
+
+
+            var options = {
+                series: chartData,
+                chart: {
+                    type: 'bar',
+                    height: 350,
+                    stacked: true,
+                    toolbar: {
+                        show: false
+                    },
+                    zoom: {
+                        enabled: true
+                    },
+                    toolbar: {
+                        show: false,
+                    }
+                },
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        legend: {
+                            position: 'bottom',
+                            offsetX: -10,
+                            offsetY: 0
+                        }
+                    }
+                }],
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        borderRadius: 10
+                    },
+                },
+                xaxis: {
+                    type: 'text',
+                    //categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
+                    //    '01/05/2011 GMT', '01/06/2011 GMT', '01/06/2011 GMT'
+                    //],
+                    categories: [
+                        "Segunda",
+                        "Terca",
+                        "Quarta",
+                        "Quinta",
+                        "Sexta",
+                        "Sabado",
+                        "Domingo",
+                    ],
+                },
+                legend: {
+                    position: 'right',
+                    offsetY: 40
+                },
+                fill: {
+                    opacity: 1
+                },
+            colors: chartColumnStackedColors,
+         };
+
+    var chart = new ApexCharts(document.querySelector("#column_stacked"), options);
+            chart.render();
+        }
+    });
+}
+
 
 var linechartcustomerColors = getChartColorsArray("customer_impression_charts");
 if (linechartcustomerColors) {
-    var options = {
-        series: [{
-                name: "Orders",
-                type: "area",
-                data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
-            },
-            {
-                name: "Earnings",
-                type: "bar",
-                data: [
-                    89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57, 92.57, 42.36,
-                    88.51, 36.57,
-                ],
-            },
-            {
-                name: "Refunds",
-                type: "line",
-                data: [8, 12, 7, 17, 21, 11, 5, 9, 7, 29, 12, 35],
-            },
-        ],
+
+    console.log(linechartcustomerColors);
+    $.ajax({
+        type: "GET",
+        url: "DashBoard/GetChartData",
+        success: function (data) {
+            var chartData = [
+
+                {
+                    name: 'Area',
+                    type: 'area',
+                    data: []
+                }
+                //{
+                //    name: 'Bar',
+                //    type: 'bar',
+                //    data: []
+                //}
+                //{
+                //    name: 'Line',
+                //    type: 'line',
+                //    data: []
+                //}
+            ]
+
+
+            //for (var i = 0; i < data.length; i++) {
+            //    chartData.push({
+            //        name: data[i].day_of_week,
+            //        type: "bar",
+            //        data: [data[i].count]
+            //    });
+            //}
+
+            chartData.forEach(item => {
+                data.forEach(d => {
+                    item.data.push(d.count)
+                })
+            })
+
+
+
+            console.log(data);
+            console.log(chartData);
+
+            var options = {
+                series: chartData,
+                //series: [
+                //    {
+                //        name: "Area",
+                //        type: "area",
+                //        data: [51, 51, 51, 24, 41, 41, 50]
+                //    },
+                //    {
+                //        name: "Bar",
+                //        type: "bar",
+                //        data: [71, 21 , 51 , 34 , 41, 41 , 50]
+                //    },
+                    
+                //    {
+                //        name: "Line",
+                //        type: "line",
+                //        data: [7, 2, 5, 34, 4, 4, 80]
+                //    }
+                //],
+        //series: [{
+        //        name: "Orders",
+        //        type: "area",
+        //        data: [34, 65, 46, 68, 49, 61, 42, 44, 78, 52, 63, 67],
+        //    },
+        //    {
+        //        name: "Earnings",
+        //        type: "bar",
+        //        data: [
+        //            89.25, 98.58, 68.74, 108.87, 77.54, 84.03, 51.24, 28.57, 92.57, 42.36,
+        //            88.51, 36.57,
+        //        ],
+        //    },
+        //    {
+        //        name: "Refunds",
+        //        type: "line",
+        //        data: [8, 12, 7, 17, 21, 11, 5, 9, 7, 29, 12, 35],
+        //    },
+        //],
         chart: {
             height: 370,
             type: "line",
@@ -84,19 +240,28 @@ if (linechartcustomerColors) {
             },
         },
         xaxis: {
+            //categories: [
+            //    "Jan",
+            //    "Feb",
+            //    "Mar",
+            //    "Apr",
+            //    "May",
+            //    "Jun",
+            //    "Jul",
+            //    "Aug",
+            //    "Sep",
+            //    "Oct",
+            //    "Nov",
+            //    "Dec",
+            //],
             categories: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
+                "Seg",
+                "Ter",
+                "Qua",
+                "Qui",
+                "Sex",
+                "Sab",
+                "Dom",
             ],
             axisTicks: {
                 show: false,
@@ -148,30 +313,31 @@ if (linechartcustomerColors) {
         colors: linechartcustomerColors,
         tooltip: {
             shared: true,
-            y: [{
-                    formatter: function (y) {
-                        if (typeof y !== "undefined") {
-                            return y.toFixed(0);
-                        }
-                        return y;
-                    },
-                },
-                {
-                    formatter: function (y) {
-                        if (typeof y !== "undefined") {
-                            return "$" + y.toFixed(2) + "k";
-                        }
-                        return y;
-                    },
-                },
-                {
-                    formatter: function (y) {
-                        if (typeof y !== "undefined") {
-                            return y.toFixed(0) + " Sales";
-                        }
-                        return y;
-                    },
-                },
+            y: [
+                //{
+                //    formatter: function (y) {
+                //        if (typeof y !== "undefined") {
+                //            return y.toFixed(0);
+                //        }
+                //        return y;
+                //    },
+                //},
+                //{
+                //    formatter: function (y) {
+                //        if (typeof y !== "undefined") {
+                //            return "$" + y.toFixed(2) + "k";
+                //        }
+                //        return y;
+                //    },
+                //},
+                //{
+                //    formatter: function (y) {
+                //        if (typeof y !== "undefined") {
+                //            return y.toFixed(0) + " Sales";
+                //        }
+                //        return y;
+                //    },
+                //},
             ],
         },
     };
@@ -179,7 +345,9 @@ if (linechartcustomerColors) {
         document.querySelector("#customer_impression_charts"),
         options
     );
-    chart.render();
+            chart.render();
+        }
+    });
 }
 
 // Simple Donut Charts

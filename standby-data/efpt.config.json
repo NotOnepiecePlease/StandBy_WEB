@@ -6,7 +6,7 @@
    "FilterSchemas": false,
    "IncludeConnectionString": true,
    "ModelNamespace": null,
-   "OutputContextPath": "Context",
+   "OutputContextPath": "Context1",
    "OutputPath": "Models",
    "PreserveCasingWithRegex": true,
    "ProjectRootNamespace": "standby_data",

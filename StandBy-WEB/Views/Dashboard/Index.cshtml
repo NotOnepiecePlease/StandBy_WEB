@@ -1,0 +1,425 @@
+﻿@model List<standby_data.Models.tb_clientes>
+
+@{
+    ViewBag.Title = "Dashboard";
+    var valorLucroSemana = ViewData["Lucro"] as string;
+    var valorServicoSemana = ViewData["ServicoValor"] as string;
+    var valorPrejuizoSemana = ViewData["PrejuizoValor"] as string;
+    var lucroPorcentagem = ViewData["LucroPorcentagem"] as string;
+    var valorPecasSemana = ViewData["PecasValor"] as string;
+    Layout = null;
+    int contador = 1;
+}
+
+
+<!doctype html>
+<html data-layout="vertical" data-layout-mode="dark" data-layout-style="detached" data-sidebar="dark" data-sidebar-size="lg" data-topbar="dark" lang="en" >
+<head>
+    @Html.Partial("~/Views/Shared/_title_meta.cshtml")
+    <!-- jsvectormap css -->
+    <link href="~/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+    <!--Swiper slider css-->
+    <link href="~/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+    @Html.Partial("~/Views/Shared/_head_css.cshtml")
+</head>
+<body>
+
+<!-- Begin page -->
+<div id="layout-wrapper" >
+@Html.Partial("~/Views/Shared/_menu.cshtml")
+
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="main-content" >
+
+
+<div class="page-content" >
+<div class="container-fluid" >
+<div class="row" >
+<div class="col" >
+<div class="h-100" >
+<div class="row mb-3 pb-1" >
+    <div class="col-12" >
+        <div class="d-flex align-items-lg-center flex-lg-row flex-column" >
+            <div class="flex-grow-1" >
+                <h4 class="fs-16 mb-1" >Bom dia, Adriano!</h4>
+                <p class="text-muted mb-0" >
+                    Essas sao as informações do sistema!
+                </p>
+            </div>
+            
+        </div><!-- end card header -->
+    </div>
+    <!--end col-->
+</div>
+<!--end row-->
+
+
+
+<div class="row" >
+    <div class="col-xl-12" >
+        <div class="card" >
+            <div class="card-header border-0 align-items-center d-flex" >
+                <h4 class="card-title mb-0 flex-grow-1" >Serviços desta semana</h4>
+                @*<div>
+                    <button class="btn btn-soft-secondary btn-sm" type="button" >
+                        ALL
+                    </button>
+                    <button class="btn btn-soft-secondary btn-sm" type="button" >
+                        1M
+                    </button>
+                    <button class="btn btn-soft-secondary btn-sm" type="button" >
+                        6M
+                    </button>
+                    <button class="btn btn-soft-primary btn-sm" type="button" >
+                        1Y
+                    </button>
+                </div>*@
+            </div><!-- end card header -->
+
+            <div class="card-header p-0 border-0 bg-soft-light" >
+                <div class="row g-0 text-center" >
+                    <div class="col-4 col-sm-3" >
+                        <div class="p-3 border border-dashed border-start-0" >
+                            <h5 class="mb-1" >
+                                @*<label>@ViewData["Lucro"]</label>*@
+                                R$
+                                <span class="counter-value" data-target="@valorServicoSemana.Replace(',', '.')" >
+                                    0
+                                </span>
+                            </h5>
+                            <p class="text-muted mb-0" >Total</p>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-6 col-sm-2" >
+                        <div class="p-3 border border-dashed border-start-0" >
+                            <h5 class="mb-1" >
+                                R$
+                                <span class="counter-value" data-target="@valorLucroSemana.Replace(',', '.')" >
+                                    0
+                                </span>
+                            </h5>
+                            <p class="text-muted mb-0" >Lucro</p>
+                        </div>
+                    </div>
+                    <!--end col-->
+                    <div class="col-6 col-sm-2" >
+                        <div class="p-3 border border-dashed border-start-0" >
+                            <h5 class="mb-1" id="valorPrejuizo" >
+                                R$
+                                <span class="counter-value" data-target="@valorPrejuizoSemana.Replace(',', '.')" >
+                                    0
+                                </span>
+                            </h5>
+                            <p class="text-muted mb-0" >Prejuizo</p>
+                        </div>
+                    </div>
+                    <!--end col-->
+
+                    <div class="col-6 col-sm-2" >
+                        <div class="p-3 border border-dashed border-start-0" >
+                            <h5 class="mb-1" >
+                                R$
+                                <span class="counter-value" data-target="@valorPecasSemana.Replace(',', '.')" >
+                                    0
+                                </span>
+                            </h5>
+                            <p class="text-muted mb-0" >Despesas</p>
+                        </div>
+                    </div>
+                    <!--end col-->
+
+                    <div class="col-6 col-sm-3" >
+                        <div class="p-3 border border-dashed border-start-0 border-end-0" >
+                            <h5 class="mb-1 text-success" >
+                                <span class="counter-value"
+                                      data-target="@lucroPorcentagem.Replace(',', '.')" >
+                                    0
+                                </span>%
+                            </h5>
+                            <p class="text-muted mb-0" >Lucro %</p>
+                        </div>
+                    </div>
+                    <!--end col-->
+                </div>
+            </div><!-- Final dos itens do card -->
+
+            <div class="card-body p-0 pb-2" >
+                <div class="w-100" >
+                    <div class="apex-charts" data-colors='["--vz-primary", "--vz-success", "--vz-warning", "--vz-danger"]' dir="ltr" id="column_stacked" ></div>
+                </div>
+            </div><!-- end card body -->
+        </div><!-- end card -->
+    </div><!-- end col -->
+
+    <!-- end col -->
+</div>
+
+<div class="row" >
+<div class="col-xl-6" >
+    <div class="card" >
+        <div class="card-header align-items-center d-flex" >
+            <h4 class="card-title mb-0 flex-grow-1 text-center" >Aniversariantes mais proximos</h4>
+        </div><!-- end card header -->
+
+        <div class="card-body" >
+            <div class="table-responsive table-card" >
+                <table class="table table-hover table-centered align-middle table-nowrap mb-0" >
+                    <thead class="thead-dark" >
+                        <tr class="w-100" >
+                            <th scope="col" >Nome</th>
+                            <th scope="col" >Data aniversario</th>
+                            <th scope="col" >Qtd Servico</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in @Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center" >
+                                        <div class="avatar-sm bg-light rounded p-1 me-2 " >
+                                            <img alt=""
+                                                 class="img-fluid d-block" src="~/assets/images/bg-d.png" />
+                                                 @*class="img-fluid d-block" src="~/assets/images/users/avatar-@(contador).jpg" />*@
+                                        </div>
+                                        <div>
+                                            <h5 class="fs-14 my-1" >
+                                                <a class="text-reset"
+                                                   href="@Url.Action("Index", "Dashboard")" >
+                                                    @item.cl_nome
+                                                </a>
+                                            </h5>
+
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <h5 class="fs-14 my-1 fw-normal" >@Convert.ToDateTime(item.cl_data_nascimento).ToShortDateString() </h5>
+
+                                </td>
+                                <td>
+                                    <h5 class="fs-14 my-1 fw-normal" >62</h5>
+                                    @*<span class="text-muted" >Orders</span>*@
+                                </td>
+                            </tr>
+                            contador++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xl-6" >
+    @*<div class="card card-height-100" >*@ <!-- Se quiser que ele tenha um footer-->
+    <div class="card" >
+        <div class="card-header align-items-center d-flex" >
+            <h4 class="card-title mb-0 flex-grow-1" >Serviços mais lucrativos do mês</h4>
+        </div><!-- end card header -->
+
+        <div class="card-body" >
+            <div class="table-responsive table-card" >
+                <table class="table table-centered table-hover align-middle table-nowrap mb-0" >
+                    <thead class="thead-dark" >
+                        <tr class="w-100" >
+                            <th scope="col" >Aparelho</th>
+                            <th scope="col" >Cliente</th>
+                            <th scope="col" >Lucro</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center" >
+                                    <div class="flex-shrink-0 me-2" >
+                                        <img alt=""
+                                             class="avatar-sm p-2" src="~/assets/images/companies/img-1.png" />
+                                    </div>
+                                    <div>
+                                        <h5 class="fs-14 my-1 fw-medium" >
+                                            <a class="fw-medium link-primary"
+                                               href="@Url.Action("SellerDetails", "Ecommerce")" >
+                                                Samsung Galaxy S8+
+                                            </a>
+                                        </h5>
+                                        <span class="text-muted" >Celular</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="" >Adriano Andrade</span>
+                            </td>
+                            <td>
+                                <span class="text-success" >R$ 600,00</span>
+                            </td>
+                        </tr><!-- end -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center" >
+                                    <div class="flex-shrink-0 me-2" >
+                                        <img alt=""
+                                             class="avatar-sm p-2" src="~/assets/images/companies/img-2.png" />
+                                    </div>
+                                    <div class="flex-grow-1" >
+                                        <h5 class="fs-14 my-1 fw-medium" >
+                                            <a class="fw-medium link-primary"
+                                               href="@Url.Action("SellerDetails", "Ecommerce")" >
+                                                B450m-4
+                                            </a>
+                                        </h5>
+                                        <span class="text-muted" >Notebook</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="" >Cleison Ribeiro</span>
+                            </td>
+                            <td>
+                                <span class="text-success" >R$ 500,00</span>
+                            </td>
+                        </tr><!-- end -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center" >
+                                    <div class="flex-shrink-0 me-2" >
+                                        <img alt=""
+                                             class="avatar-sm p-2" src="~/assets/images/companies/img-3.png" />
+                                    </div>
+                                    <div class="flex-gow-1" >
+                                        <h5 class="fs-14 my-1 fw-medium" >
+                                            <a class="fw-medium link-primary"
+                                               href="@Url.Action("SellerDetails", "Ecommerce")" >
+                                                Moto G3
+                                            </a>
+                                        </h5>
+                                        <span class="text-muted" >Celular</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="">Leandro dos Santos</span>
+                            </td>
+                            <td>
+                                <span class="text-success" >R$ 430,00</span>
+                            </td>
+                        </tr><!-- end -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center" >
+                                    <div class="flex-shrink-0 me-2" >
+                                        <img alt=""
+                                             class="avatar-sm p-2" src="~/assets/images/companies/img-8.png" />
+                                    </div>
+                                    <div class="flex-grow-1" >
+                                        <h5 class="fs-14 my-1 fw-medium" >
+                                            <a class="fw-medium link-primary"
+                                               href="@Url.Action("SellerDetails", "Ecommerce")" >
+                                                Samsung S10
+                                            </a>
+                                        </h5>
+                                        <span class="text-muted" >Celular</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="" >Larissa Souza</span>
+                            </td>
+                            <td>
+                                <span class="text-success" >R$ 410,00</span>
+                            </td>
+
+                        </tr><!-- end -->
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center" >
+                                    <div class="flex-shrink-0 me-2" >
+                                        <img alt=""
+                                             class="avatar-sm p-2" src="~/assets/images/companies/img-5.png" />
+                                    </div>
+                                    <div class="flex-grow-1" >
+                                        <h5 class="fs-14 my-1 fw-medium" >
+                                            <a class="fw-medium link-primary"
+                                               href="@Url.Action("SellerDetails", "Ecommerce")" >
+                                                iPhone X
+                                            </a>
+                                        </h5>
+                                        <span class="text-muted " >Celular</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="" >Tarcisio Andrade</span>
+                            </td>
+                            <td>
+                                <span class="text-success" >R$ 380,00</span>
+                                @*<p class="mb-0" >R$ 380,00</p>*@
+                            </td>
+
+                        </tr><!-- end -->
+                    </tbody>
+                </table><!-- end table -->
+            </div>
+        </div> <!-- .card-body-->
+    </div> <!-- .card-->
+</div> <!-- .col-->
+</div> <!-- end row-->
+
+</div> <!-- end .h-100-->
+</div> <!-- end col -->
+</div>
+</div>
+<!-- container-fluid -->
+</div>
+<!-- End Page-content -->
+@Html.Partial("~/Views/Shared/_footer.cshtml")
+</div>
+</div>
+<!-- END layout-wrapper -->
+@*@Html.Partial("~/Views/Shared/_customizer.cshtml")*@
+
+@Html.Partial("~/Views/Shared/_vendor_scripts.cshtml")
+
+<script crossorigin="anonymous" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
+<!-- apexcharts -->
+<script src="~/assets/libs/apexcharts/apexcharts.min.js" ></script>
+
+<!-- Vector map-->
+<script src="~/assets/libs/jsvectormap/js/jsvectormap.min.js" ></script>
+<script src="~/assets/libs/jsvectormap/maps/world-merc.js" ></script>
+
+<!--Swiper slider js-->
+<script src="~/assets/libs/swiper/swiper-bundle.min.js" ></script>
+
+<!-- Dashboard init -->
+<script src="~/assets/js/pages/dashboard-ecommerce.init.js" ></script>
+
+<!-- App js -->
+<script src="~/assets/js/app.js" ></script>
+
+<script>
+    $(document).ready(function() {
+        var prejuizo = parseFloat("@valorPrejuizoSemana.Replace(',', '.')");
+        console.log((-500 > -700));
+        if (prejuizo > -500) {
+            console.log(1);
+            $('#valorPrejuizo').css('color', 'yellow');
+        } else if (prejuizo <= -500 && prejuizo >= -700) {
+            console.log(2);
+            $('#valorPrejuizo').css('color', 'orange');
+        } else {
+            console.log(3);
+            $('#valorPrejuizo').css('color', 'crimson');
+        }
+    });
+</script>
+
+
+</body>
+</html>

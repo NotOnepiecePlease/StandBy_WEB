@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using standby_data.Context;
 using standby_data.Interfaces;
 using standby_data.Repositories;
@@ -7,8 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
-builder.Services.AddDbContext<standby_orgContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase")));
+string? connection = builder.Configuration.GetConnectionString("DataBase");
+builder.Services.AddDbContext<standby_orgContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("standby-data")));
+//options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase")));
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRepositoryCliente, RepositoryCliente>();
@@ -21,7 +23,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    //app.UseBrowserLink();
+    app.UseBrowserLink();
 }
 
 app.UseHttpsRedirection();
@@ -33,6 +35,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=DashBoard}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using standby_data.Enums;
 using standby_data.Models;
+using standby_data.Models.UtilModels;
 using standby_data.Services;
 
 namespace StandBy_WEB.Controllers
@@ -26,6 +27,7 @@ namespace StandBy_WEB.Controllers
         public IActionResult AddCliente(tb_clientes _cliente)
         {
             MessageAlertModel message = new MessageAlertModel();
+
             if (!ModelState.IsValid)
             {
                 foreach (var modelState in ViewData.ModelState.Values)
@@ -103,10 +105,36 @@ namespace StandBy_WEB.Controllers
 
         #region Deletar registro especifico
 
-        public IActionResult Delete(int _id)
+        public async Task<IActionResult> Delete(int _id)
         {
-            var _cliente = clienteService.repositoryCliente.BuscarPorID(_id);
-            return PartialView("_DeleteUnidadeModalPartialView", _cliente);
+            try
+            {
+                var _cliente = clienteService.repositoryCliente.BuscarPorID(_id);
+                return Ok($"Tem certeza que deseja deletar {_cliente.cl_nome}?");
+            }
+            catch (Exception e)
+            {
+                var erroTraduzido = await TraduzirTexto(e.Message);
+                return BadRequest(new BadRequestErrorModel
+                {
+                    CustomMessage = $"Algo inesperado aconteceu",
+                    ErrorMessage = $"{erroTraduzido}"
+                });
+            }
+            //return PartialView("_DeleteUnidadeModalPartialView", _cliente);
+        }
+
+        public static async Task<string> TraduzirTexto(string text)
+        {
+            using (var client = new HttpClient())
+            {
+                var response = await client.GetAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-br&dt=t&q={Uri.EscapeUriString(text)}");
+                response.EnsureSuccessStatusCode();
+                var result = await response.Content.ReadAsStringAsync();
+                var startIndex = result.IndexOf("\"") + 1;
+                var endIndex = result.IndexOf("\"", startIndex);
+                return result.Substring(startIndex, endIndex - startIndex);
+            }
         }
 
         [HttpPost]
@@ -114,10 +142,11 @@ namespace StandBy_WEB.Controllers
         {
             List<tb_clientes> listClienteNaoPodeSerDeletado = new List<tb_clientes>();
             bool isExisteServicoVinculado = clienteService.repositoryCliente.SeExisteServicoVinculado(_id);
-
+            string clienteDeletado = "";
             if (isExisteServicoVinculado == false)
             {
                 var _cliente = clienteService.repositoryCliente.BuscarPorID(_id);
+                clienteDeletado = _cliente.cl_nome;
                 clienteService.repositoryCliente.Deletar(_cliente);
                 clienteService.repositoryCliente.SalvarModificacoes();
             }
@@ -125,10 +154,13 @@ namespace StandBy_WEB.Controllers
             {
                 var _cliente = clienteService.repositoryCliente.BuscarPorID(_id);
                 listClienteNaoPodeSerDeletado.Add(_cliente);
-                return PartialView("_ClienteNaoPodeSerDeletadoModalPartialView", listClienteNaoPodeSerDeletado);
+                //return PartialView("_ClienteNaoPodeSerDeletadoModalPartialView", listClienteNaoPodeSerDeletado);
+                return BadRequest($"{_cliente.cl_nome} possui serviços vinculados =( !");
             }
 
-            return PartialView("_DeletadoSucessoModalPartialView");
+
+            return Ok($"{clienteDeletado} foi deletado com sucesso =D !");
+            //return PartialView("_DeletadoSucessoModalPartialView");
         }
 
         #endregion
