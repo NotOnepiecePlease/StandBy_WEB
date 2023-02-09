@@ -8,35 +8,35 @@ using Microsoft.EntityFrameworkCore;
 
 namespace standby_data.Models.ProcedureModels
 {
-    public static class ProcedureModel
+  public static class ProcedureModel
+  {
+    public static ModelBuilder CarregarProcedures(ModelBuilder model)
     {
-        public static ModelBuilder CarregarProcedures(ModelBuilder model)
-        {
-            model.Entity<ServicosUltimos7DiasV2>(entity =>
-            {
-                entity.HasNoKey().ToView(null);
-            });
+      model.Entity<ServicosUltimaSemana>(entity =>
+      {
+        entity.HasNoKey().ToView(null);
+      });
 
-            model.Entity<BuscarLucroValorUltimaSemana>(entity =>
-            {
-                entity.HasNoKey().ToView(null);
-            });
+      model.Entity<BuscarLucroValorUltimaSemana>(entity =>
+      {
+        entity.HasNoKey().ToView(null);
+      });
 
-            model.Entity<BuscarServicoValorUltimaSemana>(entity =>
-            {
-                entity.HasNoKey().ToView(null);
-            });
+      model.Entity<BuscarServicoValorUltimaSemana>(entity =>
+      {
+        entity.HasNoKey().ToView(null);
+      });
 
-            model.Entity<BuscarPrejuizoValorUltimaSemana>(entity =>
-            {
-                entity.HasNoKey().ToView(null);
-            });
+      model.Entity<BuscarPrejuizoValorUltimaSemana>(entity =>
+      {
+        entity.HasNoKey().ToView(null);
+      });
 
-            model.Entity<BuscarPecasValorUltimaSemana>(entity =>
-            {
-                entity.HasNoKey().ToView(null);
-            });
-            return model;
-        }
+      model.Entity<BuscarPecasValorUltimaSemana>(entity =>
+      {
+        entity.HasNoKey().ToView(null);
+      });
+      return model;
     }
+  }
 }

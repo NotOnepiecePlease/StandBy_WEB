@@ -1,14 +1,40 @@
 ﻿<!doctype html>
-<html lang="en" data-layout="vertical" data-layout-style="detached" data-sidebar="dark" data-topbar="dark" data-sidebar-size="lg" data-layout-mode="dark">
-    
-<head>
-    <title id="indexView">StandBy System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @RenderSection("styles", required: false)
-    @Html.Partial("~/Views/Shared/_head_css.cshtml")
-</head>
+<html class="data-body-image" lang="en" data-layout="vertical" data-layout-style="detached" data-sidebar="dark" data-topbar="dark"  data-sidebar-size="lg" data-layout-mode="dark">
+    @using standby_data.Models.UtilModels
+    <head>
+        <title id="indexView">StandBy System</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        @RenderSection("styles", required: false)
+        @Html.Partial("~/Views/Shared/_head_css.cshtml")
+        <!-- Syncfusion ASP.NET Core controls styles -->
+        @* <link rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.4.48/fluent.css" /> *@
+        <!-- Syncfusion ASP.NET Core controls scripts -->
+        @* <script src="https://cdn.syncfusion.com/ej2/20.4.48/dist/ej2.min.js"></script> *@
+
+        @* <link id="cssfile" rel="stylesheet" href="https://cdn.syncfusion.com/ej2/20.4.48/bootstrap5.css" /> *@
+        @* <link rel="stylesheet" href="~/syncfusion/bootstrap5-dark.css" /> *@
+
+        @* <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-base/styles/fluent-dark.css" rel="stylesheet" />
+        <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-grids/styles/fluent-dark.css" rel="stylesheet" />
+        <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-buttons/styles/fluent-dark.css" rel="stylesheet" />
+        <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-popups/styles/fluent-dark.css" rel="stylesheet" />
+        <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-navigations/styles/fluent-dark.css" rel="stylesheet" />
+        <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-dropdowns/styles/fluent-dark.css" rel="stylesheet" />
+        <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-inputs/styles/fluent-dark.css" rel="stylesheet" />
+        <link href="https://cdn.syncfusion.com/ej2/20.4.48/ej2-calendars/styles/fluent-dark.css" rel="stylesheet" /> *@
+        
+        @* <link rel="stylesheet" href="~/syncfusion/bootstrap5-dark.css" /> *@
+        
+    </head>
 
     <body>
+        @* @{
+        MessageAlertModel mensagemErro = new MessageAlertModel();
+            if (ViewData["Message"] != null)
+            {
+                mensagemErro = ViewData["Message"] as MessageAlertModel;
+            }
+        } *@
         <div id="layout-wrapper" >
             @Html.Partial("~/Views/Shared/_menu.cshtml")
 
@@ -16,15 +42,17 @@
 
                 <div class="page-content" >
                     <div class="container-fluid" >
-
                         @RenderBody()
-
+                        <!-- Partial view que carrega um mini painel administrativo -->
+                        @* <partial name="_ClientMessageAlert" model="mensagemErro" /> *@
                     </div>
                 </div>
             </div>
         </div>
-@*@Html.Partial("~/Views/Shared/_customizer.cshtml")*@
-@Html.Partial("~/Views/Shared/_vendor_scripts.cshtml")
-@RenderSection("scripts", required: false)
-</body>
+        @Html.Partial("~/Views/Shared/_customizer.cshtml")
+        @Html.Partial("~/Views/Shared/_vendor_scripts.cshtml")
+        @RenderSection("scripts", required: false)
+        <!-- Syncfusion ASP.NET Core Script Manager -->
+    @* <ejs-scripts></ejs-scripts> *@
+    </body>
 </html>

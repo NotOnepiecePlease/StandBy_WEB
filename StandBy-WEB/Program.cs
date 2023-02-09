@@ -15,26 +15,29 @@ builder.Services.AddDbContext<standby_orgContext>(options => options.UseSqlServe
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IRepositoryCliente, RepositoryCliente>();
 builder.Services.AddScoped<IRepositoryServico, RepositoryServico>();
+builder.Services.AddSession();
 
-
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBMAY9C3t2VVhkQlFadVdJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkdjUX9YcHdVQWhdUk0=");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    app.UseBrowserLink();
+  app.UseExceptionHandler("/Home/Error");
+  //app.UseBrowserLink();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=DashBoard}/{action=Index}/{id?}");
+    //pattern: "{controller=DashBoard}/{action=Index}/{id?}");
+    pattern: "{controller=Login}/{action=Index}/{id?}");
 
 app.Run();

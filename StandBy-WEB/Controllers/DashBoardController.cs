@@ -10,135 +10,148 @@ using standby_data.Models.ProcedureModels;
 
 namespace StandBy_WEB.Controllers
 {
-    public class DashboardController : Controller
+  public class DashboardController : Controller
+  {
+    readonly standby_orgContext context = new standby_orgContext();
+
+    private readonly ILogger<DashboardController> _logger;
+
+    public DashboardController(ILogger<DashboardController> logger)
     {
-        readonly standby_orgContext context = new standby_orgContext();
-
-
-        public async Task<IActionResult> Index()
-        {
-            var valorLucroSemana = await BuscarValorLucrosSemana();
-            ViewData["Lucro"] = valorLucroSemana.First().LucroTotalSemana.ToString(CultureInfo.InvariantCulture);
-
-            var valorServicoSemana = await BuscarValorServicoSemana();
-            ViewData["ServicoValor"] = valorServicoSemana.First().ServicoTotalSemana.ToString(CultureInfo.InvariantCulture);
-
-            var valorPrejuizoSemana = await BuscarValorPrejuizoSemana();
-            ViewData["PrejuizoValor"] = valorPrejuizoSemana.First().PrejuizoTotalSemana.ToString(CultureInfo.InvariantCulture);
-
-            var valorPecasSemana = await BuscarValorPecasSemana();
-            ViewData["PecasValor"] = valorPecasSemana.First().GastosPecasTotalSemana.ToString(CultureInfo.InvariantCulture);
-            //Calculo da porcentagem
-            decimal receita = valorServicoSemana.First().ServicoTotalSemana;
-            decimal despesas = valorPecasSemana.First().GastosPecasTotalSemana;
-            var lucroPorcentagem = ((receita - despesas) / receita) * 100;
-
-            ViewData["LucroPorcentagem"] = lucroPorcentagem.ToString("N2");
-
-
-            var aniversariantesMes = BuscarAniversariantesDoMes();
-
-            return View("Index", aniversariantesMes);
-        }
-
-
-        public async Task<IActionResult> PreencherGraficoSemanal()
-        {
-            //List<tb_servicos> dados = new List<tb_servicos>();
-            try
-            {
-                standby_orgContext context = new standby_orgContext();
-                //standby_orgContextProcedures _context = new standby_orgContextProcedures(context);
-                //var dados = await _context.ServicosUltimos7DiasV2Async();
-                var dados = await context.ServicosUltimaSemana.FromSqlRaw(Querys.ServicoUltimos7Dias).ToListAsync();
-                return Json(dados);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
-            return BadRequest();
-        }
-
-        [ActionName("Analytics")]
-        public IActionResult Analytics()
-        {
-            return View();
-        }
-
-        [ActionName("CRM")]
-        public IActionResult CRM()
-        {
-            return View();
-        }
-
-        [ActionName("Crypto")]
-        public IActionResult Crypto()
-        {
-            return View();
-        }
-
-        [ActionName("Projects")]
-        public IActionResult Projects()
-        {
-            return View();
-        }
-
-        [ActionName("NFT")]
-        public IActionResult NFT()
-        {
-            return View();
-        }
-
-        [ActionName("Job")]
-        public IActionResult Job()
-        {
-            return View();
-        }
-
-
-        //Buscar  Dados
-        private async Task<List<BuscarLucroValorUltimaSemana>> BuscarValorLucrosSemana()
-        {
-            return await context.BuscarLucroValorUltimaSemana.FromSqlRaw(Querys.ValorLucroUltimos7Dias).ToListAsync();
-        }
-
-        private async Task<List<BuscarServicoValorUltimaSemana>> BuscarValorServicoSemana()
-        {
-            return await context.BuscarServicoValorUltimaSemana.FromSqlRaw(Querys.ValorServicoUltimos7Dias).ToListAsync();
-        }
-
-        private async Task<List<BuscarPrejuizoValorUltimaSemana>> BuscarValorPrejuizoSemana()
-        {
-            return await context.BuscarPrejuizoValorUltimaSemana.FromSqlRaw(Querys.ValorPrejuizoUltimos7Dias).ToListAsync();
-        }
-
-        private async Task<List<BuscarPecasValorUltimaSemana>> BuscarValorPecasSemana()
-        {
-            return await context.BuscarPecasValorUltimaSemana.FromSqlRaw(Querys.ValorPecasUltimos7Dias).ToListAsync();
-        }
-
-        private List<tb_clientes> BuscarAniversariantesDoMes()
-        {
-            var hoje = DateTime.Today;
-            var clientes = context.tb_clientes
-                .Where(c => c.cl_data_nascimento.HasValue && c.cl_data_nascimento.Value.Month == hoje.Month)
-                .OrderBy(c => Math.Abs((c.cl_data_nascimento.Value.Month - hoje.Month) +
-                                       (c.cl_data_nascimento.Value.Day - hoje.Day)))
-                .Take(5)
-                .ToList();
-
-
-            //var hoje = DateTime.Today;
-            //var clientes = context.tb_clientes
-            //    .Where(c => c.cl_data_nascimento != null)
-            //    .OrderBy(c => Math.Abs((c.cl_data_nascimento.Value.Month - hoje.Month) +
-            //                           (c.cl_data_nascimento.Value.Day - hoje.Day)))
-            //    .Take(5)
-            //    .ToList();
-
-            return clientes;
-        }
+      _logger = logger;
     }
+    // public async Task<IActionResult> Index()
+    // {
+
+    //   return View("Teste", new List<tb_clientes>());
+    // }
+    public async Task<IActionResult> Index(string _usuarioLogado)
+    {
+
+      var valorLucroSemana = await BuscarValorLucrosSemana();
+      ViewData["Lucro"] = valorLucroSemana.First().LucroTotalSemana.ToString(CultureInfo.InvariantCulture);
+
+      var valorServicoSemana = await BuscarValorServicoSemana();
+      ViewData["ServicoValor"] = valorServicoSemana.First().ServicoTotalSemana.ToString(CultureInfo.InvariantCulture);
+
+      var valorPrejuizoSemana = await BuscarValorPrejuizoSemana();
+      ViewData["PrejuizoValor"] = valorPrejuizoSemana.First().PrejuizoTotalSemana.ToString(CultureInfo.InvariantCulture);
+
+      var valorPecasSemana = await BuscarValorPecasSemana();
+      ViewData["PecasValor"] = valorPecasSemana.First().GastosPecasTotalSemana.ToString(CultureInfo.InvariantCulture);
+      //Calculo da porcentagem
+      decimal receita = valorServicoSemana.First().ServicoTotalSemana;
+      decimal despesas = valorPecasSemana.First().GastosPecasTotalSemana;
+      var lucroPorcentagem = ((receita - despesas) / receita) * 100;
+
+      ViewData["LucroPorcentagem"] = lucroPorcentagem.ToString("N2");
+
+      var aniversariantesMes = BuscarAniversariantesDoMes();
+
+      ViewData["Usuario"] = _usuarioLogado;
+
+      _logger.LogInformation("Carregando a DashBoard - Index...");
+      return View("Index", aniversariantesMes);
+    }
+
+
+    public async Task<IActionResult> PreencherGraficoSemanal()
+    {
+      //List<tb_servicos> dados = new List<tb_servicos>();
+      try
+      {
+        standby_orgContext context = new standby_orgContext();
+        //standby_orgContextProcedures _context = new standby_orgContextProcedures(context);
+        //var dados = await _context.ServicosUltimos7DiasV2Async();
+        var dados = await context.ServicosUltimaSemana.FromSqlRaw(Querys.ServicoUltimos7Dias).ToListAsync();
+        return Json(dados);
+      }
+      catch (Exception e)
+      {
+        Console.WriteLine(e);
+      }
+
+      return BadRequest();
+    }
+
+    [ActionName("Analytics")]
+    public IActionResult Analytics()
+    {
+      return View();
+    }
+
+    [ActionName("CRM")]
+    public IActionResult CRM()
+    {
+      return View();
+    }
+
+    [ActionName("Crypto")]
+    public IActionResult Crypto()
+    {
+      return View();
+    }
+
+    [ActionName("Projects")]
+    public IActionResult Projects()
+    {
+      return View();
+    }
+
+    [ActionName("NFT")]
+    public IActionResult NFT()
+    {
+      return View();
+    }
+
+    [ActionName("Job")]
+    public IActionResult Job()
+    {
+      return View();
+    }
+
+
+    //Buscar  Dados
+    private async Task<List<BuscarLucroValorUltimaSemana>> BuscarValorLucrosSemana()
+    {
+      return await context.BuscarLucroValorUltimaSemana.FromSqlRaw(Querys.ValorLucroUltimos7Dias).ToListAsync();
+    }
+
+    private async Task<List<BuscarServicoValorUltimaSemana>> BuscarValorServicoSemana()
+    {
+      return await context.BuscarServicoValorUltimaSemana.FromSqlRaw(Querys.ValorServicoUltimos7Dias).ToListAsync();
+    }
+
+    private async Task<List<BuscarPrejuizoValorUltimaSemana>> BuscarValorPrejuizoSemana()
+    {
+      return await context.BuscarPrejuizoValorUltimaSemana.FromSqlRaw(Querys.ValorPrejuizoUltimos7Dias).ToListAsync();
+    }
+
+    private async Task<List<BuscarPecasValorUltimaSemana>> BuscarValorPecasSemana()
+    {
+      return await context.BuscarPecasValorUltimaSemana.FromSqlRaw(Querys.ValorPecasUltimos7Dias).ToListAsync();
+    }
+
+    private List<tb_clientes> BuscarAniversariantesDoMes()
+    {
+      var hoje = DateTime.Today;
+      var clientes = context.tb_clientes
+          .Where(c => c.cl_data_nascimento.HasValue && c.cl_data_nascimento.Value.Month == hoje.Month)
+          .OrderBy(c => Math.Abs((c.cl_data_nascimento.Value.Month - hoje.Month) +
+                                 (c.cl_data_nascimento.Value.Day - hoje.Day)))
+          .Take(5)
+          .ToList();
+
+
+      //var hoje = DateTime.Today;
+      //var clientes = context.tb_clientes
+      //    .Where(c => c.cl_data_nascimento != null)
+      //    .OrderBy(c => Math.Abs((c.cl_data_nascimento.Value.Month - hoje.Month) +
+      //                           (c.cl_data_nascimento.Value.Day - hoje.Day)))
+      //    .Take(5)
+      //    .ToList();
+
+      return clientes;
+    }
+  }
 }

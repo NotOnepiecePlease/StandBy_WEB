@@ -13,6 +13,15 @@ if (document.querySelector("#cleave-date")) {
     });
 }
 
+if (document.querySelector("#cleave-date1")) {
+    var cleaveDate = new Cleave('#cleave-date1', {
+        date: true,
+        delimiter: '-',
+        datePattern: ['d', 'm', 'Y']
+    });
+}
+
+
 if (document.querySelector("#cleave-telefone")) {
     var cleaveTelefone = new Cleave('#cleave-telefone', {
         delimiters: ['(', ') ', ' ', '-'],

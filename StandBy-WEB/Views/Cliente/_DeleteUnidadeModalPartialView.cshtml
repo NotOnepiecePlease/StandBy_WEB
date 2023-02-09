@@ -10,24 +10,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         id="close-modal"></button>
             </div>
-            @*<div class="mb-3" id="modal-id" style="display: none;">
-                <label for="id-field" class="form-label">ID</label>
-                <input asp-for="cl_id" type="text" id="id-field" class="form-control" placeholder="ID" readonly />
-            </div>*@
             <div class="modal-body">
                 Tem certeza que deseja excluir o cliente @Model.cl_nome?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-danger" onclick="abrirModal(@Model.cl_id)">Sim</button>
-               @* <button type="button" onclick="abrirModal(@Model.cl_id)">Abrir Modal</button>*@
             </div>
         </div>
     </div>
 </div>
 
 <div id="minhaModal"></div>
-@*</form>*@
 
 <script>
     function abrirModal(id) {

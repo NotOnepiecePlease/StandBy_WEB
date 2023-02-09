@@ -1,41 +1,31 @@
 ﻿@model List<standby_data.Models.tb_clientes>
 
 @{
+    Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Dashboard";
     var valorLucroSemana = ViewData["Lucro"] as string;
     var valorServicoSemana = ViewData["ServicoValor"] as string;
     var valorPrejuizoSemana = ViewData["PrejuizoValor"] as string;
     var lucroPorcentagem = ViewData["LucroPorcentagem"] as string;
     var valorPecasSemana = ViewData["PecasValor"] as string;
-    Layout = null;
     int contador = 1;
+MessageAlertModel mensagemErro = new MessageAlertModel();
+    if (ViewData["Message"] != null)
+            {
+                mensagemErro = ViewData["Message"] as MessageAlertModel;
+            }
+
+    string usuarioLogado = @ViewData["Usuario"] as string;
 }
 
-
-<!doctype html>
-<html data-layout="vertical" data-layout-mode="dark" data-layout-style="detached" data-sidebar="dark" data-sidebar-size="lg" data-topbar="dark" lang="en" >
-<head>
-    @Html.Partial("~/Views/Shared/_title_meta.cshtml")
+@section styles{
     <!-- jsvectormap css -->
     <link href="~/assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
     <!--Swiper slider css-->
     <link href="~/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
-    @Html.Partial("~/Views/Shared/_head_css.cshtml")
-</head>
-<body>
+    
+}
 
-<!-- Begin page -->
-<div id="layout-wrapper" >
-@Html.Partial("~/Views/Shared/_menu.cshtml")
-
-<!-- ============================================================== -->
-<!-- Start right Content here -->
-<!-- ============================================================== -->
-<div class="main-content" >
-
-
-<div class="page-content" >
-<div class="container-fluid" >
 <div class="row" >
 <div class="col" >
 <div class="h-100" >
@@ -43,7 +33,7 @@
     <div class="col-12" >
         <div class="d-flex align-items-lg-center flex-lg-row flex-column" >
             <div class="flex-grow-1" >
-                <h4 class="fs-16 mb-1" >Bom dia, Adriano!</h4>
+                <h4 class="fs-16 mb-1" >Bom dia, @usuarioLogado !</h4>
                 <p class="text-muted mb-0" >
                     Essas sao as informações do sistema!
                 </p>
@@ -217,10 +207,10 @@
 </div>
 
 <div class="col-xl-6" >
-    @*<div class="card card-height-100" >*@ <!-- Se quiser que ele tenha um footer-->
+<!-- Se quiser que ele tenha um footer-->
     <div class="card" >
         <div class="card-header align-items-center d-flex" >
-            <h4 class="card-title mb-0 flex-grow-1" >Serviços mais lucrativos do mês</h4>
+            <h4 class="card-title mb-0 flex-grow-1 text-center" >Serviços mais lucrativos do mês</h4>
         </div><!-- end card header -->
 
         <div class="card-body" >
@@ -374,18 +364,8 @@
 </div> <!-- end .h-100-->
 </div> <!-- end col -->
 </div>
-</div>
-<!-- container-fluid -->
-</div>
-<!-- End Page-content -->
-@Html.Partial("~/Views/Shared/_footer.cshtml")
-</div>
-</div>
-<!-- END layout-wrapper -->
-@*@Html.Partial("~/Views/Shared/_customizer.cshtml")*@
 
-@Html.Partial("~/Views/Shared/_vendor_scripts.cshtml")
-
+@section scripts{
 <script crossorigin="anonymous" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js" ></script>
 <!-- apexcharts -->
 <script src="~/assets/libs/apexcharts/apexcharts.min.js" ></script>
@@ -406,20 +386,17 @@
 <script>
     $(document).ready(function() {
         var prejuizo = parseFloat("@valorPrejuizoSemana.Replace(',', '.')");
-        console.log((-500 > -700));
+        @* console.log((-500 > -700)); *@
         if (prejuizo > -500) {
-            console.log(1);
+            @* console.log(1); *@
             $('#valorPrejuizo').css('color', 'yellow');
         } else if (prejuizo <= -500 && prejuizo >= -700) {
-            console.log(2);
+            @* console.log(2); *@
             $('#valorPrejuizo').css('color', 'orange');
         } else {
-            console.log(3);
+            @* console.log(3); *@
             $('#valorPrejuizo').css('color', 'crimson');
         }
     });
 </script>
-
-
-</body>
-</html>
+}

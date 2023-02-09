@@ -32,7 +32,7 @@ namespace standby_data.Models
         [MinLength(14, ErrorMessage = "O Campo de 'CPF/CNPJ' deve ter no minimo 14 digitos.")]
         [Unicode(false)]
         public string cl_cpf { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Telefone de recado está vazio.")]
         [StringLength(100)]
         [MinLength(15, ErrorMessage = "Preencha o telefone de recados corretamente : (xx) x xxxx-xxxx")]
         [Unicode(false)]

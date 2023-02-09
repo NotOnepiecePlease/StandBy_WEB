@@ -1,43 +1,30 @@
-﻿@using X.PagedList.Mvc.Core;
-@using X.PagedList;
-@using X.PagedList.Web.Common
-@using standby_data.Models;
-@using standby_data.Models.UtilModels
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-
+﻿@using standby_data.Models.UtilModels
 
 @model IEnumerable<standby_data.Models.tb_clientes>
-
 @{
-    ViewData["Title"] = "Index";
-    ViewBag.Title = "Data Tables";
-    ViewBag.pTitle = "Data Tables";
-    ViewBag.pageTitle = "Tables";
     Layout = "~/Views/Shared/_Layout.cshtml";
     MessageAlertModel mensagemErro = new MessageAlertModel();
     if (ViewData["Message"] != null)
     {
         mensagemErro = ViewData["Message"] as MessageAlertModel;
-
     }
 }
 
 @section styles{
-           <!--datatable css-->
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" />
-        <!--datatable responsive css-->
-           <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" />
-           <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+<!--datatable css-->
+<link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+<!--datatable responsive css-->
+<link href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet">
 }
 
-@*<partial name="_ClientMessageAlert" /> <!--Sweetie alert que exibe a mensagem de erro-->*@
-
-
-<div id="indexView"></div>
-@*<label>Sucesso Index TempData: @TempData["Sucess"]</label>*@
-@*@Html.Partial("_ClientMessageAlert")*@
-<div class="row">
+<div class="row" id="root">
     <div class="col-lg-12">
+        <div class="card " style="height: 50px">
+            <div class="card-body ">
+                <h4 class="card-title text-center">Tela Principal</h4>
+            </div>
+        </div>
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">Lista de clientes StandBy</h5>
@@ -46,73 +33,135 @@
                 <div class="col-sm-auto mb-3">
                     <div>
 
-                        <a asp-controller="Cliente" asp-action="AddCliente" class="btn btn-primary add-btn me-1">
+                        <a asp-action="AddCliente" asp-controller="Cliente" class="btn btn-primary add-btn me-1">
                             <i class="ri-add-line align-bottom me-1"></i> Add
                         </a>
 
-                        <button type="button" class="btn btn-secondary" id="deleteSelecionadosButton"><i class="ri-delete-bin-5-fill align-bottom me-1"></i>Excluir selecionados</button>
-                        @await Html.PartialAsync("_DeleteSelecionadosModalPartialView")
-
+                        <button class="btn btn-secondary" id="deleteSelecionadosButton" onclick="return deleteTodosRegistrosSelecionados()" type="button"><i
+                                class="ri-delete-bin-5-fill align-bottom me-1"></i>Excluir selecionados</button>
                     </div>
                 </div>
-        
 
-                <table id="tabelaClientes" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%">
-                    <thead> <!-- Cabecalho da table-->
-                    <tr>
-                        <th scope="col" style="width: 10px;">
-                        </th>
-                        <th data-ordering="false" id="cl_id" name="cl_id">ID</th>
-                        <th data-ordering="false" id="cl_nome" name="cl_nome" >Nome</th>
-                        <th id="" name="" >Data</th>
-                        <th data-ordering="false" id="cl_telefone" name="cl_telefone">Telefone</th>
-                        <th data-ordering="false" id="cl_cpf" name="cl_cpf" >CPF</th>
-                        <th data-ordering="true" id="cep" name="cl_cep">CEP</th>
-                        <th>Cadastro</th>
-                        <th>Action</th>
-                    </tr>
+
+                <table class="table table-bordered dt-responsive nowrap table-striped align-middle" id="tabelaClientes"
+                    style="width: 100%">
+
+                    <thead>
+                        <!-- Cabecalho da table-->
+                        <tr>
+                            <th scope="col" style="width: 10px;">
+                            </th>
+                            <th data-ordering="false" id="cl_id" name="cl_id">ID</th>
+                            <th data-ordering="false" id="cl_nome" name="cl_nome">Nome</th>
+                            <th id="" name="">Data</th>
+                            <th data-ordering="false" id="cl_telefone" name="cl_telefone">Telefone</th>
+                            <th data-ordering="false" id="cl_cpf" name="cl_cpf">CPF</th>
+                            <th data-ordering="true" id="cep" name="cl_cep">CEP</th>
+                            <th>Cadastro</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
-                    <tbody> <!-- Corpo da table, onde comecam os dados-->
-                        <!--Body renderizado por javascript-->
+                    <tbody>
                     </tbody>
                 </table>
-                 @*@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }), new PagedListRenderOptions
-                {
-                    LinkToFirstPageFormat = "<< Primeira", 
-                    LinkToPreviousPageFormat = "< Anterior", 
-                    LinkToNextPageFormat = "Proxima >", 
-                    LinkToLastPageFormat = "Ultima >>",
-                    LiElementClasses = new []{"page-item"},
-                    PageClasses = new []{"page-link"}
-                })*@
             </div>
         </div>
     </div>
-</div>
-<div id ="clientesNaoPodemSerDeletadosDIV"></div>
-<div id ="tes"></div>
-@Html.Partial("_ClientMessageAlert", mensagemErro)
-
+    <div id="clientesNaoPodemSerDeletadosDIV"></div>
+    <div id="tes"></div>
+    
+</div>   
 
 
 @section scripts{
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!--Jquery padrao pra funcoes e ajax funcionar-->
+<script crossorigin="anonymous" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="~/assets/js/pages/datatables.init.js"></script>
-    <script   type="text/javascript" charset="utf-8"  src="https://cdn.datatables.net/plug-ins/1.10.20/sorting/datetime-moment.js"></script>
-    <script  type="text/javascript" charset="utf-8"  src="https://cdn.datatables.net/plug-ins/1.10.19/dataRender/datetime.js"></script>
-    <script src ="~/js/site.js"></script>
-    <!-- App js -->
-    <script src="~/assets/js/app.js"></script>
+<!-- Bibliotecas de mascara-->
+<script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
+<script src="~/assets/js/pages/form-masks.init.js"></script>
+
+<!-- bibliotecas de datatable -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.print.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<script src="~/assets/js/pages/datatables.init.js"></script>
+<script charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.20/sorting/datetime-moment.js" type="text/javascript"></script>
+<script charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/dataRender/datetime.js" type="text/javascript"></script>
+
+
+<!-- Script para carregar a tabela de clientes -->
+<script>
+$(document).ready(function () {
+    $.fn.dataTable.moment('DD/MM/YYYY');
+    $('#tabelaClientes').DataTable({
+        language: { url: "https://cdn.datatables.net/plug-ins/1.13.2/i18n/pt-BR.json" },
+        order: [[1, 'desc']], //Comeca em 0 = primeira coluna
+        ajax: {
+            url: 'Cliente/ListaClientes',
+            dataSrc: ''
+        },
+        columns: [
+            {
+                data: null,
+                render: function (data) {
+                    return '<input class="form-check-input fs-15" type="checkbox" name="selectedIds" value="' +
+                        data.cl_id +
+                        '">';
+                }
+            },
+            { data: "cl_id" },
+            { data: "cl_nome" },
+            {
+                data: "cl_data_nascimento",
+                orderDataType: "date",
+                render: function (data, type, row) {
+                    if (data) {
+                        var date = new Date(data);
+                        return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric', year: 'numeric' });
+                    } else {
+                        return "";
+                    }
+                }
+            },
+            { data: "cl_telefone" },
+            { data: "cl_cpf" },
+            { data: "cl_cep" },
+            {
+                data: null, //Coluna de Status
+                render: function (data) {
+                    var estado = "";
+                    estado = verificaRegistroCompleto(data) ? "Completo" : "Incompleto";
+                    return '<td><span class="badge badge-soft-' +
+                        (estado === "Completo" ? "success" : "warning") +
+                        '">' +
+                        estado +
+                        '</span></td>';
+
+                }
+            },
+            {
+                data: null,
+                render: function (data) { //Coluna de Action
+                    return '<div class="d-flex justify-center text-center"><a href="javascript:void(0);" class="link-success fs-15">' +
+                        '<a href="@Url.Action("EditarCliente", "Cliente")?id=' +
+                        data.cl_id +
+                        '" class="link-primary fs-15 me-2 ms-2"><i class="ri-edit-2-line" data-bs-toggle="modal" id="create-btn"></i></a>' +
+                        '<a  class="link-danger fs-15"><i class="ri-delete-bin-line" data-bs-toggle="modal" id="delete-btn" data-bs-target="#deleteRegistro-' +
+                        data.cl_id +
+                        '" onclick="loadDeleteClientePartialView(' +
+                        data.cl_id +
+                        ')"></i></a></div>';
+                }
+            }
+        ],
+        pageLength: 10,
+    });
+});
+</script>
 }

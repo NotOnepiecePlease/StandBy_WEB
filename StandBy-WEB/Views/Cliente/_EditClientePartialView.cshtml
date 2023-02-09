@@ -1,49 +1,58 @@
 ﻿@model standby_data.Models.tb_clientes
 
-<div class="modal fade" id="showModal-@Model.cl_id" tabindex="-1" aria-labelledby="EditClienteLabel"
-     aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-light p-3">
-                    <h5 class="modal-title">Editar Cliente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                        id="close-modal"></button>
-                </div>
-             <form asp-action="Edit" class="tablelist-form" autocomplete="off" method ="post">
-                    <div class="modal-body">
-
-                        <div class="mb-3" id="modal-id" style="display: none;">
-                            <label for="id-field" class="form-label">ID</label>
-                            <input asp-for="cl_id" type="text" id="id-field" class="form-control" placeholder="ID" readonly />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="customername-field" class="form-label">Nome</label>
-                            <input asp-for="cl_nome" type="text" id="customername-field" class="form-control" placeholder="Digite seu nome" required />
-                                <div class="invalid-feedback">Por favor, digite o nome</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="cpf-field" class="form-label">CPF</label>
-                            <input asp-for="cl_cpf" type="text" id="email-field" class="form-control" placeholder="ex: 071.548.145-55" required />
-                            <div class="invalid-feedback">Por favor, digite o cpf.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="phone-field" class="form-label">Telefone</label>
-                            <input asp-for="cl_telefone" type="tel" id="phone-field" class="form-control" placeholder="Ex: 71-992851111" required />
-                            <div class="invalid-feedback">Por favor, digite o telefone</div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="submit" class="btn btn-success" id="add-btn">Atualizar</button>
-                            <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                        </div>
-                    </div>
-                </form>
+<div aria-hidden="true" aria-labelledby="EditClienteLabel" class="modal fade" id="showModal-@Model.cl_id"
+     tabindex="-1" >
+    <div class="modal-dialog modal-dialog-centered" >
+        <div class="modal-content" >
+            <div class="modal-header bg-light p-3" >
+                <h5 class="modal-title" >Editar Cliente</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" id="close-modal"
+                        type="button" >
+                </button>
             </div>
+            <form asp-action="Edit" autocomplete="off" class="tablelist-form needs-validation" method="post" novalidate >
+                <div class="modal-body" >
+
+                    <div class="mb-3" id="modal-id" style="display: none;" >
+                        <label class="form-label" for="id-field" >ID</label>
+                        <input asp-for="cl_id" class="form-control" id="id-field" placeholder="ID" readonly type="text" />
+                    </div>
+
+                    <div class="mb-3" >
+                        <label class="form-label" for="customername-field" >Nome</label>
+                        <input asp-for="cl_nome" class="form-control" id="customername-field" placeholder="Digite seu nome" required type="text" />
+                        <div class="invalid-feedback" >Por favor, digite o nome</div>
+                    </div>
+
+                    <div class="mb-3" >
+                        <label class="form-label" for="cpf-field" >CPF</label>
+                        <input asp-for="cl_cpf" class="form-control" id="email-field" placeholder="ex: 071.548.145-55" required type="text" />
+                        <div class="invalid-feedback" >Por favor, digite o cpf.</div>
+                    </div>
+
+                    <div class="mb-3" >
+                        <label class="form-label" for="phone-field" >Telefone</label>
+                        <input asp-for="cl_telefone" class="form-control" id="phone-field" placeholder="Ex: 71-992851111" required type="tel" />
+                        <div class="invalid-feedback" >Por favor, digite o telefone</div>
+                    </div>
+
+                </div>
+                <div class="modal-footer" >
+                    <div class="hstack gap-2 justify-content-end" >
+                        <button class="btn btn-light" data-bs-dismiss="modal" type="button" >Cancelar</button>
+                        <button class="btn btn-success" id="add-btn" type="submit" >Atualizar</button>
+                        <!-- <button class="btn btn-success" id="edit-btn" type="button">Update</button> -->
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
+</div>
+
+@section scripts
+{
+    <!--Validacao do form-->
+    <script src="~/assets/libs/prismjs/prism.js" ></script>
+    <script src="~/assets/js/pages/form-validation.init.js" ></script>
+    <script src="~/assets/js/app.js" ></script>
+}
