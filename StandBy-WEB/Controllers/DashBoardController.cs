@@ -7,27 +7,20 @@ using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using standby_data.Constantes;
 using standby_data.Models.ProcedureModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace StandBy_WEB.Controllers
 {
+  [Authorize]
   public class DashboardController : Controller
   {
     readonly standby_orgContext context = new standby_orgContext();
-
-    private readonly ILogger<DashboardController> _logger;
-
-    public DashboardController(ILogger<DashboardController> logger)
-    {
-      _logger = logger;
-    }
-    // public async Task<IActionResult> Index()
-    // {
-
-    //   return View("Teste", new List<tb_clientes>());
-    // }
     public async Task<IActionResult> Index(string _usuarioLogado)
     {
-
+      System.Console.WriteLine("Entrando na DASH");
       var valorLucroSemana = await BuscarValorLucrosSemana();
       ViewData["Lucro"] = valorLucroSemana.First().LucroTotalSemana.ToString(CultureInfo.InvariantCulture);
 
@@ -50,7 +43,7 @@ namespace StandBy_WEB.Controllers
 
       ViewData["Usuario"] = _usuarioLogado;
 
-      _logger.LogInformation("Carregando a DashBoard - Index...");
+      //_logger.LogInformation("Carregando a DashBoard - Index...");
       return View("Index", aniversariantesMes);
     }
 
@@ -74,41 +67,6 @@ namespace StandBy_WEB.Controllers
       return BadRequest();
     }
 
-    [ActionName("Analytics")]
-    public IActionResult Analytics()
-    {
-      return View();
-    }
-
-    [ActionName("CRM")]
-    public IActionResult CRM()
-    {
-      return View();
-    }
-
-    [ActionName("Crypto")]
-    public IActionResult Crypto()
-    {
-      return View();
-    }
-
-    [ActionName("Projects")]
-    public IActionResult Projects()
-    {
-      return View();
-    }
-
-    [ActionName("NFT")]
-    public IActionResult NFT()
-    {
-      return View();
-    }
-
-    [ActionName("Job")]
-    public IActionResult Job()
-    {
-      return View();
-    }
 
 
     //Buscar  Dados

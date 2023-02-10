@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using standby_data.Enums;
 using standby_data.Models;
@@ -7,6 +8,7 @@ using standby_data.Services;
 
 namespace StandBy_WEB.Controllers
 {
+  [Authorize]
   public class ClienteController : Controller
   {
     private ClienteService clienteService = new ClienteService();

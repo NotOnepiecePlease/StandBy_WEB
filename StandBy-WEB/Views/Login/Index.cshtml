@@ -8,6 +8,7 @@
 
     string usuario = ViewData["Usuario"] as string;
     string senha = ViewData["Senha"] as string;
+    bool lembrar = Convert.ToBoolean(ViewData["lembrar"]);
 }
 
 <!doctype html>
@@ -83,7 +84,7 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <form action="@Url.Action("FazerLogin", "Login" )" method="post">
+                                            <form action="@Url.Action("Index", "Login" )" method="post">
 
                                                 <div class="mb-3">
                                                     <label for="username" class="form-label">Usuario</label>
@@ -110,12 +111,15 @@
                                                 </div>
 
                                                 <div class="form-check">
-                                                    @* <input class="form-check-input" type="checkbox" value=""
-                                                        id="auth-remember-check"> *@
-
-                                                        <input asp-for="lembrarInfos" class="form-check-input" type="checkbox" value="true" id="auth-remember-check">
-                                                    <label class="form-check-label" for="auth-remember-check">Lembrar
+                                                    @* <input class="form-check-input" type="checkbox" value="" id="auth-remember-check"> *@
+                                                
+                                                    
+                                                        <input asp-for="lembrarInfos" class="form-check-input" type="checkbox" value="true" id="checkLembrarme">
+                                                        <label class="form-check-label" for="auth-remember-check">Lembrar
                                                         dados</label>
+                                                    
+                                                
+                                                    
                                                 </div>
 
                                                 <div class="mt-4">
@@ -190,6 +194,22 @@
 
     <!-- password-addon init -->
     <script src="~/assets/js/pages/password-addon.init.js"></script>
+    <script>
+        $(document).ready(function () {
+            var lembrarme = "@lembrar";
+            var x = document.getElementById("checkLembrarme");
+            console.log(lembrarme)
+            console.log(x)
+            if(lembrarme == 'True'){
+                console.log("entrou")
+                x.checked = true;
+            }else{
+                console.log("nao entrou")
+                x.checked = false;
+            }
+        });
+    </script>
+
 
 </body>
 

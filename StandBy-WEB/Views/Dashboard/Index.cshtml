@@ -33,7 +33,7 @@ MessageAlertModel mensagemErro = new MessageAlertModel();
     <div class="col-12" >
         <div class="d-flex align-items-lg-center flex-lg-row flex-column" >
             <div class="flex-grow-1" >
-                <h4 class="fs-16 mb-1" >Bom dia, @usuarioLogado !</h4>
+                <h4 class="fs-16 mb-1" id="userLogado">Bom dia, @usuarioLogado !</h4>
                 <p class="text-muted mb-0" >
                     Essas sao as informações do sistema!
                 </p>
@@ -382,6 +382,11 @@ MessageAlertModel mensagemErro = new MessageAlertModel();
 
 <!-- App js -->
 <script src="~/assets/js/app.js" ></script>
+
+<script>
+    var nome = document.getElementById('nomeLogado').innerHTML;
+    $('#userLogado').html("Bom dia, " + nome + "!");
+</script>
 
 <script>
     $(document).ready(function() {

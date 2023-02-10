@@ -11,6 +11,16 @@ namespace standby_data.Repositories
     {
       public tb_servicos Servicos { get; set; }
       public string cl_nome { get; set; }
+      public int? diferenca
+      {
+        get
+        {
+          if(Servicos.sv_previsao_entrega == null){
+            return null;
+          }
+          return (Servicos.sv_data - Convert.ToDateTime(Servicos.sv_previsao_entrega)).Days;
+        }
+      }
     }
 
     public struct ServicosColunasSelecionadas
@@ -30,14 +40,29 @@ namespace standby_data.Repositories
     }
     public List<ServicoComNomeClienteStruct> BuscarServicosComCliente()
     {
-      var result = context.tb_servicos.Join(context.tb_clientes,
-                                            servico => servico.sv_cl_idcliente,
-                                            cliente => cliente.cl_id,
-                                            (servico, cliente) => new ServicoComNomeClienteStruct
-                                            {
-                                              Servicos = servico,
-                                              cl_nome = cliente.cl_nome
-                                            }).Where(x => x.Servicos.sv_status == 1).ToList();
+      // var result = context.tb_servicos.Join(context.tb_clientes,
+      //                                       servico => servico.sv_cl_idcliente,
+      //                                       cliente => cliente.cl_id,
+      //                                       (servico, cliente) => new ServicoComNomeClienteStruct
+      //                                       {
+      //                                         Servicos = servico,
+      //                                         cl_nome = cliente.cl_nome
+      //                                       }).Where(x => x.Servicos.sv_status == 1).ToList();
+      // return result;
+      var result = context.tb_servicos
+                                .Join(context.tb_clientes,
+                                    servico => servico.sv_cl_idcliente,
+                                    cliente => cliente.cl_id,
+                                    (servico, cliente) => new ServicoComNomeClienteStruct
+                                    {
+                                      Servicos = servico,
+                                      cl_nome = cliente.cl_nome
+                                    })
+                                .Where(x => x.Servicos.sv_status == 1)
+                                .AsEnumerable()
+                                .OrderByDescending(ti => (Convert.ToDateTime(ti.Servicos.sv_previsao_entrega) - ti.Servicos.sv_data).Days)
+                                .ToList();
+
       return result;
     }
     public List<ServicosColunasSelecionadas> BuscarServicosSelecionados()

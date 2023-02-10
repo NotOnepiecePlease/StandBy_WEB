@@ -20,24 +20,6 @@
 }
 
 <div class="row" id="root">
-
- @* <div>
-        <ejs-grid id="grid"  dataSource="@Model" allowPaging="true" allowSorting="true" allowFiltering="true" allowGrouping="true">
-                    <e-grid-pagesettings pageSize="10"></e-grid-pagesettings>
-                    <e-grid-columns>
-                        <e-grid-column field="sv_id" headerText="ID" textAlign="Center" width="50" type="number" ></e-grid-column>
-                        <e-grid-column field="sv_ordem_serv" headerText="OS" textAlign="Center" width="50" type="number" ></e-grid-column>
-                        <e-grid-column field="sv_defeito" headerText="Defeito" textAlign="Center" width="50" type="number" ></e-grid-column>
-                        <e-grid-column field="sv_data" headerText="Data" textAlign="Center" width="50" type="date" ></e-grid-column>
-                        <e-grid-column field="sv_aparelho" headerText="Aparelho" textAlign="Center" width="50" type="number" ></e-grid-column>
-                        <e-grid-column field="sv_previsao_entrega" headerText="Previsao Entrega" textAlign="Center" width="50" type="number" ></e-grid-column>
-                        <e-grid-column field="sv_situacao" headerText="Situacao" textAlign="Center" width="50" type="number" ></e-grid-column>
-                    </e-grid-columns>
-                </ejs-grid>
-    </div>  
-    *@
-
-
     <div class="col-lg-12">
         <div class="card " style="height: 50px">
             <div class="card-body ">
@@ -63,22 +45,22 @@
                     </div>
                 </div>
                 @* <input class="form-check-input fs-15" type="checkbox" id="checkAll1" value="0"> *@
-                <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title mb-0 flex-grow-1">Base Example</h4>
-                                    </div><!-- end card header -->
+                @* <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title mb-0 flex-grow-1">Base Example</h4>
+                            </div><!-- end card header -->
 
-                                    <div class="card-body">
-                                        <div id="table-gridjs"></div>
-                                    </div><!-- end card-body -->
-                                </div><!-- end card -->
-                            </div>
-                            <!-- end col -->
-                        </div>
+                            <div class="card-body">
+                                <div id="table-gridjs"></div>
+                            </div><!-- end card-body -->
+                        </div><!-- end card -->
+                    </div>
+                    <!-- end col -->
+                </div> *@
 
-                @* <table class="table table-bordered dt-responsive nowrap table-striped align-middle" id="tabelaClientes"
+                <table class="table table-bordered dt-responsive nowrap table-striped align-middle" id="tabelaClientes"
                     style="width: 100%">
 
                     <thead>
@@ -99,7 +81,7 @@
                     </thead>
                     <tbody>
                     </tbody>
-                </table> *@
+                </table>
             </div>
         </div>
     </div>
@@ -122,7 +104,6 @@
 <script src="~/assets/js/pages/datatables.init.js"></script>
 <script charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.20/sorting/datetime-moment.js" type="text/javascript"></script>
 <script charset="utf-8" src="https://cdn.datatables.net/plug-ins/1.10.19/dataRender/datetime.js" type="text/javascript"></script>
-<script src="//cdn.datatables.net/plug-ins/1.13.2/sorting/signed-num.js"></script>
 
 <!-- gridjs js -->
 <script src="~/assets/libs/prismjs/prism.js"></script>
@@ -131,171 +112,40 @@
 <!-- funcoes js da pagina -->
 <script src="~/js/IndexServico.js"></script>
 
-
-
-<script>
-    $(document).ready(function () {
-        $.ajax({
-            url: '/Servico/ListaServicosTeste',
-            @* url: '/Servico/ListaTb_Servicos', *@
-            data: '',
-            type: "GET",
-            success: function (result) {
-                if (document.getElementById("table-gridjs"))
-                new gridjs.Grid({ //Documentacao https://gridjs.io/docs
-                    columns: [
-                        {
-                            name: gridjs.html('<input class="form-check-input fs-15" type="checkbox" onClick="return SelecionarTodasCheckBoxes()" id="checkAll" value="0">'),
-                            width: '10px',
-                            sort: false,
-                            formatter: (function (cell) {
-                                return gridjs.html('<input class="form-check-input fs-15" type="checkbox" name="selectedIds" value="'+cell+'">');
-                            })
-                        },
-                        {
-                            name: 'ID',
-                            width: '10px',
-                            formatter: (function (cell) {
-                                return gridjs.html('<span class="fw-semibold">' + cell + '</span>');
-                            })
-                        },
-                        {
-                            name: 'Nome',
-                            width: '80px',
-                            formatter: (function (cell) {
-                                return gridjs.html('<a href="#">' + cell + '</a>');
-                            })
-                        },
-                        {
-                            name: 'OS',
-                            width: '10px',
-                            formatter: (function (cell) {
-                                return gridjs.html('<a href="#">' + cell + '</a>');
-                            })
-                        },
-                        {
-                            name: 'Data',
-                            width: '25px',
-                        },
-                        
-                        {
-                            name: 'Defeito',
-                            width: '90px',
-                        },
-                        {
-                            name: 'Prazo',
-                            width: '10px',
-                            formatter: (function (cell) {
-                                if(cell == ""){
-                                    return gridjs.html('<td><span class="badge badge-soft-light">SEM PRAZO</span></td>');
-                                    return "SEM PRAZO";
-                                }else if(cell < 0){
-                                    return gridjs.html('<td><span class="badge badge-soft-danger">'+cell+' Dias</span></td>');
-                                }
-                                return gridjs.html('<td><span class="badge badge-soft-success" style="text-align: center;">'+cell+' Dias</span></td>');
-                            })
-                        },
-                        {
-                            name: 'Prev. Entrega',
-                            width: '25px',
-                        },
-                        {
-                            name: 'Ações',
-                            sort: false,
-                            width: '10px',
-                            formatter: (function (cell) {
-                                //Coluna de Action
-                                return gridjs.html("<div class='d-flex justify-center text-center'><a href='javascript:void(0);' class='link-success fs-15'><a href='#' class='link-primary fs-15 me-2 ms-2'><i class='ri-edit-2-line' data-bs-toggle='modal' id='create-btn'></i></a><a  class='link-danger fs-15'><i class='ri-delete-bin-line' data-bs-toggle='modal' id='delete-btn' onclick=''></i></a></div>");
-                            }),
-                        },
-                    ],
-                    pagination: {
-                        limit: 15
-                    },
-                    resizable: true,
-                    sort: true,
-                    search: {
-                        enabled: true, //habilita a busca
-                    },
-                    data: () => {
-                        return result.map(function(item) {
-                            return [
-                                item.Servicos.sv_id,
-                                item.Servicos.sv_id,
-                                item.cl_nome,
-                                item.Servicos.sv_ordem_serv,
-                                ConverterData(item.Servicos.sv_data),
-                                item.Servicos.sv_defeito,
-                                CalcularPrazo(item.Servicos.sv_data, item.Servicos.sv_previsao_entrega),
-                                ConverterData(item.Servicos.sv_previsao_entrega),
-                                item.Servicos.sv_id
-                            ];
-                        });
-                    },
-                    language: {
-                        search: {
-                            placeholder: 'Pesquisar...'
-                        },
-                        sort: {
-                            sortAsc: 'Ordernar crescente',
-                            sortDesc: 'Ordernar decrescente',
-                        },
-                        pagination: {
-                            previous: 'Anterior',
-                            next: 'Próximo',
-                            navigate: (page, pages) => `Pagina ${page} de ${pages}`,
-                            page: (page) => `Pagina ${page}`,
-                            showing: 'Mostrando',
-                            of: 'de',
-                            to: 'de',
-                            results: 'resultado(s)',
-                        },
-                        loading: 'Carregando...',
-                        noRecordsFound: 'Nenhum registro encontrado',
-                        error: 'Um erro ocorreu enquanto carregava os dados',
-                        }
-
-                }).render(document.getElementById("table-gridjs"));
-            },
-            error: function (xhr, status, error) {
-                console.log(xhr.responseText);
-            }});
-        }); 
-</script>
-
-
-
-@* <script type="text/javascript">
-    function onThemeChange(e) {
-        document.getElementsByTagName('body')[0].style.display = 'none';
-        var themeName = e.value;
-        let synclink = document.getElementById('cssfile');
-        synclink.href = 'https://cdn.syncfusion.com/ej2/20.4.48/' + themeName + '.css';
-        setTimeout(function () { document.getElementsByTagName('body')[0].style.display = 'block'; }, 500);
-    }
-</script> *@
-
 @* <script>
     $(document).ready(function () {
         $.ajax({
-    url: '/Servico/ListaServicosTeste',
-    data: '',
-    type: "GET",
-    success: function (result) {
-        console.log(result);
-    },
-  });
+            url: '/Servico/ListaServicos',
+            data: '',
+            type: "GET",
+            success: function (result) {
+                console.log(result);
+            },
+        });
     });
 </script> *@
-
 
 
 <script>
 $(document).ready(function () {
     $.fn.dataTable.moment('DD/MM/YYYY');
     var table = $('#tabelaClientes').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'excel',
+            'csv',
+            {
+            extend: 'print',
+            text: 'Print current page',
+            autoPrint: false,
+            exportOptions: {
+                columns: [2, 3, 4, 5, 6, 7, 8],
+            }
+        }         
+        ],
+        order: [[5, 'asc']],
         language: { url: "https://cdn.datatables.net/plug-ins/1.13.2/i18n/pt-BR.json" },
-        order: [[5, 'desc']], //Comeca em 0 = primeira coluna
+        @* order: [[5, 'desc']], //Comeca em 0 = primeira coluna *@
         ajax: {
             url: '/Servico/ListaServicos',
             dataSrc: ''
@@ -303,6 +153,7 @@ $(document).ready(function () {
         columns: [
             {
                 data: null,
+                orderable: false,
                 render: function (data) {
                     
                     return '<input class="form-check-input fs-15" type="checkbox" name="selectedIds" value="' +
@@ -326,24 +177,8 @@ $(document).ready(function () {
                 }
             },
             { 
-                data: null,
-                orderDataType: "numeric",
-                render: function (data) {
-                    var dataServico = new Date(data.Servicos.sv_data);
-                    var previsaoEntrega = new Date(data.Servicos.sv_previsao_entrega);
-                    var diferencaDias = Math.round((previsaoEntrega - dataServico) / (1000 * 60 * 60 * 24));
-                    var diferencaDiasSemEspaco = diferencaDias.toString().replace(/\s/g, "");
-                    var diferencaDiasSemEspacoInteiro = parseInt(diferencaDiasSemEspaco);
-                    if(data.Servicos.sv_previsao_entrega == null){
-                        @* return "!SEM"; *@
-                        return 'null';
-                    }else if(diferencaDiasSemEspacoInteiro < 0){
-                        @* return '<td><span class="badge badge-soft-danger">'+diferencaDiasSemEspacoInteiro +' Dias</span></td>'; *@
-                        return diferencaDiasSemEspacoInteiro;
-                    }
-                    @* return '<td><span class="badge badge-soft-success">'+diferencaDiasSemEspacoInteiro +' Dias</span></td>'; *@
-                    return diferencaDiasSemEspacoInteiro;
-                }
+                data: "diferenca",
+                type: "numeric",
             },
             { data: "Servicos.sv_defeito" },
             { data: "Servicos.sv_aparelho" },
@@ -361,6 +196,7 @@ $(document).ready(function () {
             },
             {
                 data: null,
+                orderable: false,
                 render: function (data) { //Coluna de Action
                     return '<div class="d-flex justify-center text-center"><a href="javascript:void(0);" class="link-success fs-15">' +
                         '<a href="@Url.Action("EditarCliente", "Cliente")?id=' +
@@ -374,15 +210,22 @@ $(document).ready(function () {
                 }
             }
         ],
-        columnDefs: [
-        {"orderDataType": "dom-text", "targets": [ 5 ]}
-       @* { type: 'any-number', targets: 5 } *@
-     ],
         pageLength: 10,
+        drawCallback: function () {//Mudar o texto e o HTML da coluna apos renderizada
+            $('#tabelaClientes tbody tr').each(function () {
+                var valor = $(this).find('td:eq(5)').text();
+                var diferencaDias = parseInt($(this).find('td:eq(5)').text());
+                @* console.log(valor); *@
+                if(valor == ""){
+                    return valor;
+                }else if (diferencaDias < 0) {
+                    $(this).find('td:eq(5)').html('<span class="badge badge-soft-danger">' + diferencaDias + ' Dias</span>');
+                } else {
+                    $(this).find('td:eq(5)').html('<span class="badge badge-soft-success">' + diferencaDias + ' Dias</span>');
+                }
+            });
+        }
     });
-
-    //table.column(5).search('^((?!null).)*$', true, false).draw();
 });
 </script>
-
 }
