@@ -32,7 +32,6 @@
             <div class="card-body">
                 <div class="col-sm-auto mb-3">
                     <div>
-
                         <a asp-action="AddCliente" asp-controller="Cliente" class="btn btn-primary add-btn me-1">
                             <i class="ri-add-line align-bottom me-1"></i> Add
                         </a>
@@ -97,71 +96,74 @@
 
 <!-- Script para carregar a tabela de clientes -->
 <script>
-$(document).ready(function () {
-    $.fn.dataTable.moment('DD/MM/YYYY');
-    $('#tabelaClientes').DataTable({
-        language: { url: "https://cdn.datatables.net/plug-ins/1.13.2/i18n/pt-BR.json" },
-        order: [[1, 'desc']], //Comeca em 0 = primeira coluna
-        ajax: {
-            url: 'Cliente/ListaClientes',
-            dataSrc: ''
-        },
-        columns: [
-            {
-                data: null,
-                render: function (data) {
-                    return '<input class="form-check-input fs-15" type="checkbox" name="selectedIds" value="' +
-                        data.cl_id +
-                        '">';
-                }
+    $(document).ready(function () {
+        $.fn.dataTable.moment('DD/MM/YYYY');
+        $('#tabelaClientes').DataTable({
+            language: { url: "https://cdn.datatables.net/plug-ins/1.13.2/i18n/pt-BR.json" },
+            order: [[1, 'desc']], //Comeca em 0 = primeira coluna
+            ajax: {
+                url: 'Cliente/ListaClientes',
+                dataSrc: ''
             },
-            { data: "cl_id" },
-            { data: "cl_nome" },
-            {
-                data: "cl_data_nascimento",
-                orderDataType: "date",
-                render: function (data, type, row) {
-                    if (data) {
-                        var date = new Date(data);
-                        return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric', year: 'numeric' });
-                    } else {
-                        return "";
+            columns: [
+                {
+                    data: null,
+                    render: function (data) {
+                        return '<input class="form-check-input fs-15" type="checkbox" name="selectedIds" value="' +
+                            data.cl_id +
+                            '">';
+                    }
+                },
+                { data: "cl_id" },
+                { data: "cl_nome" },
+                {
+                    data: "cl_data_nascimento",
+                    orderDataType: "date",
+                    render: function (data, type, row) {
+                        if (data) {
+                            var date = new Date(data);
+                            return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric', year: 'numeric' });
+                        } else {
+                            return "";
+                        }
+                    }
+                },
+                { data: "cl_telefone" },
+                { data: "cl_cpf" },
+                { data: "cl_cep" },
+                {
+                    data: null, //Coluna de Status
+                    render: function (data) {
+                        var estado = "";
+                        estado = verificaRegistroCompleto(data) ? "Completo" : "Incompleto";
+                        return '<td><span class="badge badge-soft-' +
+                            (estado === "Completo" ? "success" : "warning") +
+                            '">' +
+                            estado +
+                            '</span></td>';
+
+                    }
+                },
+                {
+                    data: null,
+                    render: function (data) { //Coluna de Action
+
+                        var id = data.cl_id;
+                        var action = '@Url.Action("EditarCliente", "Cliente")?id='+data.cl_id +'';
+                        var action2 = '/Cliente/Editar/' + id;
+
+                        return '<div class="d-flex justify-center text-center"><a href="javascript:void(0);" class="link-success fs-15">' +
+                            '<a href= '+action2+' class="link-primary fs-15 me-2 ms-2"><i class="ri-edit-2-line" data-bs-toggle="modal" id="create-btn"></i></a>' +
+                            '<a  class="link-danger fs-15"><i class="ri-delete-bin-line" data-bs-toggle="modal" id="delete-btn" data-bs-target="#deleteRegistro-' +
+                            data.cl_id +
+                            '" onclick="loadDeleteClientePartialView(' +
+                            data.cl_id +
+                            ')"></i></a></div>';
                     }
                 }
-            },
-            { data: "cl_telefone" },
-            { data: "cl_cpf" },
-            { data: "cl_cep" },
-            {
-                data: null, //Coluna de Status
-                render: function (data) {
-                    var estado = "";
-                    estado = verificaRegistroCompleto(data) ? "Completo" : "Incompleto";
-                    return '<td><span class="badge badge-soft-' +
-                        (estado === "Completo" ? "success" : "warning") +
-                        '">' +
-                        estado +
-                        '</span></td>';
-
-                }
-            },
-            {
-                data: null,
-                render: function (data) { //Coluna de Action
-                    return '<div class="d-flex justify-center text-center"><a href="javascript:void(0);" class="link-success fs-15">' +
-                        '<a href="@Url.Action("EditarCliente", "Cliente")?id=' +
-                        data.cl_id +
-                        '" class="link-primary fs-15 me-2 ms-2"><i class="ri-edit-2-line" data-bs-toggle="modal" id="create-btn"></i></a>' +
-                        '<a  class="link-danger fs-15"><i class="ri-delete-bin-line" data-bs-toggle="modal" id="delete-btn" data-bs-target="#deleteRegistro-' +
-                        data.cl_id +
-                        '" onclick="loadDeleteClientePartialView(' +
-                        data.cl_id +
-                        ')"></i></a></div>';
-                }
-            }
-        ],
-        pageLength: 10,
+            ],
+            pageLength: 10,
+        });
     });
-});
 </script>
 }

@@ -32,6 +32,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 builder.Services.AddScoped<IRepositoryCliente, RepositoryCliente>();
 builder.Services.AddScoped<IRepositoryServico, RepositoryServico>();
+builder.Services.AddScoped<IRepositoryLogin, RepositoryLogin>();
 
 // builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<standby_orgContext>().AddDefaultTokenProviders();
 
@@ -67,6 +68,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Login}/{action=Index}/{id?}");
+    pattern: "{controller=Cliente}/{action=Index}/{id?}");
 
 app.Run();

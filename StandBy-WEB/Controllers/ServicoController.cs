@@ -27,20 +27,99 @@ namespace StandBy_WEB.Controllers
       _logger = logger;
     }
 
+    [Route("Servico/Editar/{id?}")]
+    public IActionResult EditarServico(int? id, tb_servicos _servico, IFormCollection form)
+    {
+      try
+      {
+        var imageData = form["ImageData"].ToString();
+
+        // Converte a string base64 em um array de bytes
+        byte[] imageBytes = Convert.FromBase64String(imageData.Split(',')[1]);
+
+        // Armazena a imagem na coluna sv_senha_pattern
+        var senhaPattern = imageBytes;
+
+        tb_servicos servico = servicoService.repositoryServico.BuscarPorID(33943);
+        servico.sv_senha_pattern = senhaPattern;
+        servicoService.repositoryServico.Atualizar(servico);
+        servicoService.repositoryServico.SalvarModificacoes();
+
+
+      }
+      catch (System.Exception ex)
+      {
+        System.Console.WriteLine(ex.Message);
+      }
+
+
+
+      if (id.HasValue)
+      {
+        _servico = servicoService.repositoryServico.BuscarPorID(id.Value);
+        return View(_servico);
+      }
+
+      if (!ModelState.IsValid)
+      {
+        ModelState.AddModelError(string.Empty, GetModelStateErrorString());
+        return View("EditarServico", _servico);
+      }
+
+      try
+      {
+        Convert.ToInt16("ae");
+        servicoService.repositoryServico.Atualizar(_servico);
+        servicoService.repositoryServico.SalvarModificacoes();
+      }
+      catch (Exception ex)
+      {
+        ModelState.AddModelError(string.Empty, ex.Message);
+        System.Console.WriteLine(ex.Message);
+        return View("EditarServico", _servico);
+      }
+
+      return RedirectToAction("Index");
+    }
+
+    // [Route("Servico/Editar/{id?}")]
+    // public IActionResult EditarServico(int? id, tb_servicos servico = null)
+    // {
+    //   if (!id.HasValue && servico == null)
+    //   {
+    //     return RedirectToAction("Index");
+    //   }
+
+    //   servico = ObterServicoPorId(id.Value);
+
+    //   if (!ModelState.IsValid)
+    //   {
+    //     ModelState.AddModelError(string.Empty, GetModelStateErrorString());
+    //     return View("EditarServico", servico);
+    //   }
+
+    //   try
+    //   {
+    //     servico.sv_ordem_serv = 000;
+    //     servico.sv_cl_idcliente = 22;
+    //     servico.sv_aparelho = "Ae boy";
+    //     servico.sv_ativo = 1;
+    //     servicoService.repositoryServico.Atualizar(servico);
+    //     servicoService.repositoryServico.SalvarModificacoes();
+    //   }
+    //   catch (Exception ex)
+    //   {
+    //     ModelState.AddModelError(string.Empty, ex.Message);
+    //     return View("EditarServico", servico);
+    //   }
+
+    //   return RedirectToAction("Index");
+    // }
     public IActionResult Index()
     {
       var servicos = servicoService.repositoryServico.BuscarTodos();
-      ThemeDetail themas = new ThemeDetail();
-      var teste = servicoService.repositoryServico.BuscarTodos();
-      ViewBag.Data = teste;
-      ViewData["temas"] = teste;
-      // foreach (var item in teste)
-      // {
-      //   System.Console.WriteLine(item.sv_defeito);
-      // }
       return View("Index", servicos);
     }
-
 
     [HttpGet]
     public JsonResult ListaServicos()
@@ -86,7 +165,17 @@ namespace StandBy_WEB.Controllers
     {
       return View("Error!");
     }
+
+    private tb_servicos ObterServicoPorId(int id)
+    {
+      return servicoService.repositoryServico.BuscarPorID(id);
+    }
+
+    private string GetModelStateErrorString()
+    {
+      return string.Join(Environment.NewLine, ModelState.Values
+          .SelectMany(x => x.Errors)
+          .Select(x => x.ErrorMessage));
+    }
   }
-
-
 }

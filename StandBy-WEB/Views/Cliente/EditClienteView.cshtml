@@ -1,6 +1,7 @@
 ﻿@using standby_data.Models.UtilModels;
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model standby_data.Models.tb_clientes
+@using standby_data.Models;
+@model tb_clientes
 
 @section styles{
 <!--datatable css-->
@@ -10,7 +11,7 @@
 <link href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" rel="stylesheet">
 }
 
-<form asp-action="Edit" asp-controller="Cliente" class="row needs-validation was-validated" id="formulario"
+<form asp-action="Editar" asp-controller="Cliente" class="row needs-validation was-validated" id="formulario"
     method="post" novalidate>
     <!--div central-->
     <div class="col-12 col-md-12, col-xl-12">
@@ -34,7 +35,6 @@
 
         <!--Info Pessoal-->
         <div class="card">
-
             <div class="card-header align-items-center d-flex">
                 <h4 class="card-title mb-0 flex-grow-1">Informações pessoais</h4>
                 <div class="flex-shrink-0"></div>
@@ -148,7 +148,9 @@
 
         <!-- Endereco -->
         <div class="card">
-            <div class="card-header">Endereço</div>
+            <div class="card-header">
+                Endereço
+            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-4 mb-3">
@@ -158,7 +160,7 @@
                             style="height: 15px; line-height: 5px">CPF nao encontrado!</span>
                         <span class="badge rounded-pill badge-outline-success ms-2 d-none" id="badge-avisoSucess"
                             style="height: 15px; line-height: 5px">CPF Encontrado!</span>
-                        <input asp-for="cl_cep" class="form-control" id="cleave-cep" placeholder="ex: 42000-000"
+                        <input asp-for="cl_cep" class="form-control" id="cleave-cep" placeholder="42000-000"
                             type="text" />
                     </div>
 
@@ -166,27 +168,27 @@
                         <!--RUA-->
                         <label class="form-label" for="">Rua</label>
                         <input asp-for="cl_endereco" class="form-control" id="cleave-rua"
-                            placeholder="ex: Rua segunda ligação" type="text" />
+                            placeholder="Rua segunda ligação" type="text" />
                     </div>
 
                     <div class="col-md-4">
                         <!--COMPLEMENTO-->
                         <label class="form-label" for="">Complemento</label>
                         <input asp-for="cl_complemento" class="form-control" id="cleave-complemento"
-                            placeholder="ex: Casa" type="text" />
+                            placeholder="Casa" type="text" />
                     </div>
 
                     <div class="col-md-4">
                         <!--BAIRRO-->
                         <label class="form-label" for="cleave-bairro">Bairro</label>
-                        <input asp-for="cl_bairro" class="form-control" id="cleave-bairro" placeholder="ex: Gleba B"
+                        <input asp-for="cl_bairro" class="form-control" id="cleave-bairro" placeholder="Gleba B"
                             type="text" />
                     </div>
 
                     <div class="col-md-4">
                         <!--CIDADE-->
                         <label class="form-label" for="">Cidade</label>
-                        <input asp-for="cl_cidade" class="form-control" id="cleave-cidade" placeholder="ex: Camaçari"
+                        <input asp-for="cl_cidade" class="form-control" id="cleave-cidade" placeholder="Camaçari"
                             type="text" />
                     </div>
 

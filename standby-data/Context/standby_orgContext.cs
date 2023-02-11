@@ -133,6 +133,8 @@ namespace standby_data.Context
 
       modelBuilder.Entity<tb_servicos>(entity =>
       {
+        entity.ToTable("tb_servicos", tb => tb.HasTrigger("TGR_BuscarUltimaOrdemServicoID"));
+
         entity.HasKey(e => e.sv_id)
                   .HasName("pk_tb_servicos");
 

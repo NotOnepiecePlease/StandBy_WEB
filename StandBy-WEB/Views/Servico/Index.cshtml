@@ -6,7 +6,6 @@
     ViewBag.Title = "Index";
     ViewBag.pTitle = "Serviços";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var temas = ViewData["temas"] as List<ThemeDetail>;
     @* var order = ViewData["Lista"] as List<tb_servicos>; *@
 }
 
@@ -66,17 +65,17 @@
                     <thead>
                         <!-- Cabecalho da table-->
                         <tr>
-                            <th scope="col" style="width: 10px;">
-                            </th>
-                            <th data-ordering="false" id="cl_id" name="cl_id">ID</th>
-                            <th data-ordering="false" id="cl_id" name="cl_id">OS</th>
-                            <th data-ordering="false" id="cl_nome" name="cl_nome">Nome</th>
-                            <th id="" name="">Data</th>
-                            <th data-ordering="false" id="cl_telefone" name="cl_telefone">Prazo</th>
-                            <th data-ordering="false" id="cl_cpf" name="cl_cpf">Defeito</th>
-                            <th data-ordering="true" id="cep" name="cl_cep">Aparelho</th>
-                            <th data-ordering="true" id="cep" name="cl_cep">Prev. Entrega</th>
-                            <th>Action</th>
+                            @* <th scope="col" style="width: 10px;"></th> *@
+                            <th><input class="form-check-input fs-15" type="checkbox" id="checkAll" onclick="return SelecionarTodasCheckBoxes()" value="0"></th>
+                            <th data-ordering="false" id="sv_id" name="sv_id">ID</th>
+                            <th id="sv_ordem_serv" name="sv_ordem_serv">OS</th>
+                            <th id="cl_nome" name="cl_nome">Nome</th>
+                            <th id="sv_data" name="sv_data">Data</th>
+                            <th id="" name="">Prazo</th>
+                            <th id="sv_defeito" name="sv_defeito">Defeito</th>
+                            <th id="cl_aparelho" name="cl_aparelho">Aparelho</th>
+                            <th id="cl_previsao_entrega" name="cl_previsao_entrega">Prev. Entrega</th>
+                            <th id="" name="">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,13 +134,13 @@ $(document).ready(function () {
             'excel',
             'csv',
             {
-            extend: 'print',
-            text: 'Print current page',
-            autoPrint: false,
-            exportOptions: {
-                columns: [2, 3, 4, 5, 6, 7, 8],
+                extend: 'print',
+                text: 'Imprimir',
+                autoPrint: false,
+                exportOptions: {
+                    columns: [2, 3, 4, 5, 6, 7, 8],
+                }
             }
-        }         
         ],
         order: [[5, 'asc']],
         language: { url: "https://cdn.datatables.net/plug-ins/1.13.2/i18n/pt-BR.json" },
@@ -155,13 +154,12 @@ $(document).ready(function () {
                 data: null,
                 orderable: false,
                 render: function (data) {
-                    
                     return '<input class="form-check-input fs-15" type="checkbox" name="selectedIds" value="' +
                         data.cl_id +
                         '">';
                 }
             },
-            { data: "Servicos.sv_id" },
+            { data: "Servicos.sv_id", visible: false, },
             { data: "Servicos.sv_ordem_serv" },
             { data: "cl_nome"},
             {
@@ -198,30 +196,31 @@ $(document).ready(function () {
                 data: null,
                 orderable: false,
                 render: function (data) { //Coluna de Action
-                    return '<div class="d-flex justify-center text-center"><a href="javascript:void(0);" class="link-success fs-15">' +
-                        '<a href="@Url.Action("EditarCliente", "Cliente")?id=' +
-                        data.cl_id +
-                        '" class="link-primary fs-15 me-2 ms-2"><i class="ri-edit-2-line" data-bs-toggle="modal" id="create-btn"></i></a>' +
-                        '<a  class="link-danger fs-15"><i class="ri-delete-bin-line" data-bs-toggle="modal" id="delete-btn" data-bs-target="#deleteRegistro-' +
-                        data.cl_id +
-                        '" onclick="loadDeleteClientePartialView(' +
-                        data.cl_id +
-                        ')"></i></a></div>';
+
+                    var id = data.Servicos.sv_id;
+                    @* console.log(id) *@
+                    var action = '@Url.Action("EditarServico", "Servico")?id='+id+'';
+                    var action2 = '/Servico/Editar/' + id;
+
+                    var botao1 = '<a href='+action2+' class="link-primary fs-15 me-2 ms-2"><i class="ri-edit-2-line" data-bs-toggle="modal" id="create-btn"></i></a>';
+                    var botao2 =  '<a  class="link-danger fs-15"><i class="ri-delete-bin-line" data-bs-toggle="modal" id="delete-btn" data-bs-target="#deleteRegistro-'+data.cl_id+'" onclick="loadDeleteClientePartialView('+data.cl_id+')"></i></a>';
+
+                    return '<div class="d-flex justify-center text-center"><a href="javascript:void(0);" class="link-success fs-15">' +botao1 + botao2 + '</div>';
                 }
             }
         ],
         pageLength: 10,
         drawCallback: function () {//Mudar o texto e o HTML da coluna apos renderizada
             $('#tabelaClientes tbody tr').each(function () {
-                var valor = $(this).find('td:eq(5)').text();
-                var diferencaDias = parseInt($(this).find('td:eq(5)').text());
+                var valor = $(this).find('td:eq(4)').text();
+                var diferencaDias = parseInt($(this).find('td:eq(4)').text());
                 @* console.log(valor); *@
                 if(valor == ""){
                     return valor;
                 }else if (diferencaDias < 0) {
-                    $(this).find('td:eq(5)').html('<span class="badge badge-soft-danger">' + diferencaDias + ' Dias</span>');
+                    $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + diferencaDias + ' Dias</span>');
                 } else {
-                    $(this).find('td:eq(5)').html('<span class="badge badge-soft-success">' + diferencaDias + ' Dias</span>');
+                    $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + diferencaDias + ' Dias</span>');
                 }
             });
         }

@@ -13,28 +13,109 @@ namespace StandBy_WEB.Controllers
   {
     private ClienteService clienteService = new ClienteService();
 
-    //public IActionResult Index(int? page)
-    //{
-    //    var pageNumber = page ?? 1;
-    //    int pageSize = 15;
-    //    var onePageOfProducts = clienteService.repositoryCliente.BuscarTodos().ToPagedList(pageNumber, pageSize);
-    //    return View(onePageOfProducts);
-    //}
     public IActionResult Index()
     {
       return View("Index");
     }
 
+    #region Adicionar cliente VIEW
     public IActionResult AddCliente()
     {
       return View("AddCliente");
     }
+    #endregion
 
-    [HttpPost]
-    public IActionResult AddCliente(tb_clientes _cliente)
+    // #region Adicionar cliente com modal
+    // [HttpPost]
+    // public IActionResult AddCliente(tb_clientes _cliente)
+    // {
+    //   MessageAlertModel message = new MessageAlertModel();
+
+    //   if (!ModelState.IsValid)
+    //   {
+    //     foreach (var modelState in ViewData.ModelState.Values)
+    //     {
+    //       foreach (var error in modelState.Errors)
+    //       {
+    //         ModelState.AddModelError(string.Empty, error.ErrorMessage);
+    //       }
+    //     }
+
+
+    //     message.Type = MessageAlertEnum.Error;
+    //     message.Message = $"Erro ao cadastrar o cliente: {_cliente.cl_nome}";
+    //     message.Desc = "Verifique os campos e tente novamente";
+
+    //     ViewData["Message"] = message;
+
+    //     return View("AddCliente");
+    //     //View = Retorna uma view sem recarregar ela
+    //     //RedirectToAction = Retorna a view recarregando novamente os dados.
+    //   }
+
+    //   clienteService.repositoryCliente.Adicionar(_cliente);
+    //   clienteService.repositoryCliente.SalvarModificacoes();
+
+    //   message.Type = MessageAlertEnum.Success;
+    //   message.Message = $"{_cliente.cl_nome} foi inserido com sucesso!";
+    //   message.Desc = "";
+
+    //   ViewData["Message"] = message;
+
+    //   return RedirectToAction("Index");
+    // }
+    // #endregion
+
+    // #region Editar cliente com id
+    // [Route("Cliente/EditarCliente/{id}")]
+    // public IActionResult EditarCliente(int id)
+    // {
+    //   tb_clientes cliente = clienteService.repositoryCliente.BuscarPorID(id);
+    //   return View("EditClienteView", cliente);
+    // }
+    // #endregion
+
+    // #region Editar cliente com modal
+    // [HttpPost]
+    // public IActionResult Edit(tb_clientes _cliente)
+    // {
+    //   if (!ModelState.IsValid)
+    //   {
+    //     foreach (var modelState in ViewData.ModelState.Values)
+    //     {
+    //       foreach (var error in modelState.Errors)
+    //       {
+    //         ModelState.AddModelError(string.Empty, error.ErrorMessage);
+    //       }
+    //     }
+
+    //     return View("EditClienteView", _cliente);
+    //   }
+
+    //   clienteService.repositoryCliente.Atualizar(_cliente);
+    //   clienteService.repositoryCliente.SalvarModificacoes();
+    //   return RedirectToAction("Index");
+    // }
+    // #endregion
+
+
+
+    [Route("Cliente/Editar/{id?}")]
+    public IActionResult EditarCliente1(int? id, tb_clientes _cliente = null)
     {
-      MessageAlertModel message = new MessageAlertModel();
+      #region Essa parte é chamada quando o usuário clica no botão de editar na tabela
+      System.Console.WriteLine("ID: " + id);
+      System.Console.WriteLine("Cliente: " + _cliente.cl_id);
+      if (id.HasValue && _cliente.cl_id == 0)
+      {
+        _cliente = clienteService.repositoryCliente.BuscarPorID(id.Value);
+        System.Console.WriteLine("Editando cliente: " + _cliente.cl_nome);
+        System.Console.WriteLine("-----------------------------");
+        return View("EditClienteView", _cliente);
+      }
+      #endregion
 
+      #region Essa parte é chamada quando o usuário clica no botão de salvar dentro da tela de edição e retorna erros
       if (!ModelState.IsValid)
       {
         foreach (var modelState in ViewData.ModelState.Values)
@@ -44,88 +125,47 @@ namespace StandBy_WEB.Controllers
             ModelState.AddModelError(string.Empty, error.ErrorMessage);
           }
         }
-
-
-        message.Type = MessageAlertEnum.Error;
-        message.Message = $"Erro ao cadastrar o cliente: {_cliente.cl_nome}";
-        message.Desc = "Verifique os campos e tente novamente";
-
-        ViewData["Message"] = message;
-
-        return View("AddCliente");
-        //View = Retorna uma view sem recarregar ela
-        //RedirectToAction = Retorna a view recarregando novamente os dados.
+        System.Console.WriteLine("Segundo IF, deu erro");
+        System.Console.WriteLine("-----------------------------");
+        return View("EditClienteView", _cliente);
       }
+      #endregion
 
-      clienteService.repositoryCliente.Adicionar(_cliente);
+      #region Essa parte é chamada quando o usuário clica no botão de salvar dentro da tela de edição e retorna sucesso
+      System.Console.WriteLine("Salvando cliente: " + _cliente.cl_nome);
+      System.Console.WriteLine("-----------------------------");
+      clienteService.repositoryCliente.Atualizar(_cliente);
       clienteService.repositoryCliente.SalvarModificacoes();
-
-      message.Type = MessageAlertEnum.Success;
-      message.Message = $"{_cliente.cl_nome} foi inserido com sucesso!";
-      message.Desc = "";
-
-      ViewData["Message"] = message;
-
       return RedirectToAction("Index");
+      #endregion
     }
 
 
-    public IActionResult EditarCliente(int id)
-    {
-      tb_clientes cliente = clienteService.repositoryCliente.BuscarPorID(id);
-      //return View("EditClienteView", new tb_clientes());
-      return View("EditClienteView", cliente);
-    }
 
-    //Usado para popular o grid mas usando ajax
+
+    #region Lista de clientes usado para popular o grid mas usando ajax
     public JsonResult ListaClientes()
     {
       var clientes = GetClientes();
       return Json(clientes);
     }
+    #endregion
 
+    #region Pegar a lista de clientes do banco
     private List<tb_clientes> GetClientes()
     {
       List<tb_clientes> listCliente = clienteService.repositoryCliente.BuscarTodos();
       return listCliente;
     }
+    #endregion
 
-    #region Editar cliente
-
-    public IActionResult Edit(int id)
-    {
-      tb_clientes cliente = clienteService.repositoryCliente.BuscarPorID(id);
-      return PartialView("EditClienteView", cliente);
-      //return PartialView("_EditClientePartialView", cliente);
-    }
-
-    [HttpPost]
-    public IActionResult Edit(tb_clientes _cliente)
-    {
-      if (!ModelState.IsValid)
-      {
-        foreach (var modelState in ViewData.ModelState.Values)
-        {
-          foreach (var error in modelState.Errors)
-          {
-            ModelState.AddModelError(string.Empty, error.ErrorMessage);
-          }
-        }
-
-        return View("EditClienteView", _cliente);
-        //return View("_EditClientePartialView", _cliente);
-      }
-
-      if (_cliente.cl_telefone_recado == "------------" || string.IsNullOrWhiteSpace(_cliente.cl_telefone_recado))
-      {
-        _cliente.cl_telefone_recado = "------------";
-      }
-
-      clienteService.repositoryCliente.Atualizar(_cliente);
-      clienteService.repositoryCliente.SalvarModificacoes();
-      return RedirectToAction("Index");
-    }
-
+    #region Editar cliente com id #DESCARTADO
+    // public IActionResult Edit(int id)
+    // {
+    //   tb_clientes cliente = clienteService.repositoryCliente.BuscarPorID(id);
+    //   return PartialView("EditClienteView", cliente);
+    //   //return PartialView("_EditClientePartialView", cliente);
+    // }
     #endregion
 
     #region Deletar registro especifico
@@ -146,7 +186,6 @@ namespace StandBy_WEB.Controllers
           ErrorMessage = $"{erroTraduzido}"
         });
       }
-      //return PartialView("_DeleteUnidadeModalPartialView", _cliente);
     }
 
     public static async Task<string> TraduzirTexto(string text)

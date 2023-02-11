@@ -1,15 +1,15 @@
 function SelecionarTodasCheckBoxes() {
-  console.log("entrou");
+  //console.log("entrou");
   var checkAll = document.getElementById("checkAll");
   var checkboxes = document.querySelectorAll("input[name='selectedIds']");
 
   for (var i = 0; i < checkboxes.length; i++) {
-    console.log(checkAll.checked);
+    //console.log(checkAll.checked);
     if (checkAll.checked == true) {
-      console.log("if", checkboxes[i]);
+      //console.log("if", checkboxes[i]);
       checkboxes[i].checked = true;
     } else {
-      console.log("else", checkboxes[i]);
+      //console.log("else", checkboxes[i]);
       checkboxes[i].checked = false;
     }
   }

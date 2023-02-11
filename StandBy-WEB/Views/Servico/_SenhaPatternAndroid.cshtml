@@ -1,0 +1,50 @@
+@using StandBy_WEB.Models;
+@model SenhaPatternModel
+@{
+    ViewData["Title"] = "_SenhaPatternAndroid";
+}
+
+
+<!-- Modal -->
+
+<div class="modal fade" id="exibirPatternPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Senha Pattern</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="card">
+                        
+                        <div class="card-body">
+                            <div class="live-preview">
+                                <div class="row">
+
+                                    <div class='pattern-container'>
+                                        <div id='root'>
+                                        </div>
+                                    </div>
+                                    @* <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit" id="capture-button">Print</a> *@
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer align-items-center ">
+                <button type="button" class="btn btn-secondary" onclick="return teste()" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="return EnviarSenhaPatternParaViewPai()" id="submitButton">Sim</button>
+                <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit" id="capture-button">Print</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script crossorigin="anonymous" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="~/js/script.js"></script>
+}

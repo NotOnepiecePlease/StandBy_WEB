@@ -15,10 +15,11 @@ namespace standby_data.Repositories
       {
         get
         {
-          if(Servicos.sv_previsao_entrega == null){
+          if (Servicos.sv_previsao_entrega == null)
+          {
             return null;
           }
-          return (Servicos.sv_data - Convert.ToDateTime(Servicos.sv_previsao_entrega)).Days;
+          return (Convert.ToDateTime(Servicos.sv_previsao_entrega) - Servicos.sv_data).Days;
         }
       }
     }
