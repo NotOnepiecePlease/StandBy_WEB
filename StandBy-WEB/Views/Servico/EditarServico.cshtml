@@ -1,218 +1,348 @@
 @using standby_data.Models;
-@model tb_servicos
+@model ServicoCompletoModel
 @{
     ViewData["Title"] = "EditarServico";
+    ViewData["Senha"] = @Model.servico.sv_senha;
 }
 
 @section Styles {
     <link href="~/css/lockscreen.css" rel="stylesheet" />
      <link rel="stylesheet" href="~/css/style.css" />
+
+     <style>
+        textarea::-webkit-scrollbar {
+            background-color: var(--vz-input-bg);
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: var(--vz-body-bg);
+        }
+
+        textarea::-webkit-scrollbar-corner {
+            background-color: var(--vz-input-bg);
+        }
+
+        textarea::-webkit-resizer {
+            background-color: var(--vz-input-bg);
+        }
+    </style>
 }
 
-<div class="row">
-    <form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post" novalidate>
-        @* <div class="col-12 col-md-12, col-xl-12"> *@
-            <input asp-for="sv_senha_pattern" type="hidden" id="ImageData" name="ImageData">
-            <input asp-for="sv_id" type="hidden" />
-            <!-- Errors -->
-            <div class="card d-none" id="errorCard">
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Erros</h4>
-                </div>
-                <div class="card-body">
-                    <strong>
-                        <div asp-validation-summary="ModelOnly" class="alert alert-warning" role="alert"></div>
-                    </strong>
-                </div>
+@await Html.PartialAsync("_SenhaPatternAndroid", new SenhaPatternViewModel())
+<form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post"
+    novalidate>
+    <input asp-for="servico.sv_senha_pattern" type="hidden" id="ImageData" name="ImageData">
+    <input asp-for="servico.sv_id" type="hidden" />
+    <!-- Errors -->
+    <div class="card d-none" id="errorCard">
+        <div class="card-header align-items-center d-flex">
+            <h4 class="card-title mb-0 flex-grow-1">Erros</h4>
+        </div>
+        <div class="card-body">
+            <strong>
+                <div asp-validation-summary="ModelOnly" class="alert alert-warning" role="alert"></div>
+            </strong>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-sm-12">
+        <div class="card">
+            <!--Header Informacoes do Aparelho-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Informações do aparelho</h4>
+                <div class="flex-shrink-0"></div>
             </div>
-        
-            <div class="col-6 ">
-                <div class="card">
-                    <!--Header Informacoes do Aparelho-->
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Informações aparelho</h4>
-                        <div class="flex-shrink-0"></div>
+
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <!--Primeira linha-->
+                    <div class="row g-3">
+
+                        <!--DATA SERVICO-->
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-date">Data</label>
+                                <input asp-for="servico.sv_data" class="form-control" id="cleave-date"
+                                    placeholder="DD-MM-YYYY" type="text" />
+                            </div>
+                        </div>
+
+                        <!--MARCA-->
+                        <div class="col-md-3">
+                            <label class="form-label" for="">Marca</label>
+                            <select asp-for="servico.sv_marca" class="form-select" id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                <option>SAMSUNG</option>
+                                <option>LG</option>
+                                <option>IPHONE</option>
+                            </select>
+                        </div>
+
+                        <!--MODELO-->
+                        <div class="col-md-6">
+                            <label class="form-label" for="validationCustom01">Modelo</label>
+                            <input asp-for="servico.sv_aparelho" class="form-control" id="validationCustom01"
+                                placeholder="Digite o nome do cliente" required type="text" />
+                            <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                            <div class="invalid-feedback">Por favor, digite um nome!</div>
+                        </div>
                     </div>
 
-                    
-                    <div class="card-body">
-                        <div class="live-preview">
-                            <!--Primeira linha-->
-                            <div class="row g-3">
-                                
-                                <!--DATA SERVICO-->
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="cleave-date">Data</label>
-                                        <input asp-for="sv_data" class="form-control" id="cleave-date" placeholder="DD-MM-YYYY"
-                                            type="text" />
-                                    </div>
-                                </div>
-
-                                <!--MARCA-->
-                                <div class="col-md-3">
-                                    <label class="form-label" for="">Marca</label>
-                                    <select asp-for="sv_marca" class="form-select" id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        <option>SAMSUNG</option>
-                                        <option>LG</option>
-                                        <option>IPHONE</option>
-                                    </select>
-                                </div>
-
-                                <!--MODELO-->
-                                <div class="col-md-6">
-                                    <label class="form-label" for="validationCustom01">Aparelho</label>
-                                    <input asp-for="sv_aparelho" class="form-control" id="validationCustom01"
-                                        placeholder="Digite o nome do cliente" required type="text" />
-                                    <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                    <div class="invalid-feedback">Por favor, digite um nome!</div>
-                                </div>
+                    <!-- Segunda linha-->
+                    <div class="row g-3">
+                        <!-- COR -->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Cor</label>
+                                <select asp-for="servico.sv_cor" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>PRETO</option>
+                                    <option>VERMELHO</option>
+                                    <option>AZUL</option>
+                                </select>
                             </div>
+                        </div>
 
-                            <!-- Segunda linha-->
-                            <div class="row g-3">
-                                <!--CPF-->
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="cleave-cpf">Cor</label>
-                                        <select asp-for="sv_cor" class="form-select" id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        <option>PRETO</option>
-                                        <option>VERMELHO</option>
-                                        <option>AZUL</option>
-                                    </select>
-                                    </div>
-                                </div>
+                        <!-- Serial Number -->
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Serial Number (MEI)</label>
+                                <input asp-for="servico.sv_mei_serialnumber" class="form-control" id="cleave-cpf"
+                                    placeholder="" required type="text" />
+                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                                <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
+                            </div>
+                        </div>
 
-                                <div class="col-md-5">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="cleave-cpf">Serial Number (MEI)</label>
-                                        <input asp-for="sv_mei_serialnumber" class="form-control" id="cleave-cpf" placeholder=""
-                                            required type="text" />
-                                        <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                        <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
-                                    </div>
-                                </div>
+                        <!-- SENHA -->
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Senha</label>
+                                <input asp-for="servico.sv_senha" class="form-control" id="senha" placeholder=""
+                                    required type="text" />
+                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                                <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
+                            </div>
+                        </div>
 
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="cleave-cpf">Senha</label>
-                                        <input asp-for="sv_senha" class="form-control" id="cleave-cpf" placeholder=""
-                                            required type="text" />
-                                        <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                        <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
-                                    </div>
-                                </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Padrão</label>
+                                @if(Model.servico.sv_senha_pattern != null){
+                                <a class="ri-lock-line btn btn-secondary col-md-4 d-block form-control"
+                                    style="height: 39px ;" onclick="return loadModal()">
+                                </a>
+                                }else{
+                                <a class="ri-lock-line btn btn-danger col-md-4 d-block form-control"
+                                    style="height: 39px ;" onclick="return loadModal()">
+                                </a>
+                                }
 
-                                <div class="row-6 text-center">
-                                    @* <label class="form-label " for="cleave-cpf">
-                                        Ver senha de Padrão
-                                    </label>
-                                    <a class="btn btn-primary col-md-12 d-block mx-auto" onclick="return loadModal()">
-                                        Atualizar SV
-                                        </a>
-                                        @await Html.PartialAsync("_SenhaPatternAndroid", new SenhaPatternModel()) *@
-                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-    
-    
-            <div class="col-6 ">
-                <div class="card">
-                    <!--Header Condicoes Fisicas-->
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Informações pessoais</h4>
-                        <div class="flex-shrink-0"></div>
-                    </div>
-                
-                    <div class="card-body">
-                        <div class="live-preview">
-                            <div class="row g-3">
+        </div>
+    </div>
 
-                                <!--NOME COMPLETO-->
-                                <div class="col-md-4">
-                                    <label class="form-label" for="validationCustom01">Nome completo</label>
-                                    <input asp-for="sv_defeito" class="form-control" id="validationCustom01"
-                                        placeholder="Digite o nome do cliente" required type="text" />
-                                    <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                    <div class="invalid-feedback">Por favor, digite um nome!</div>
-                                </div>
-                
-                                <!--CPF-->
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="cleave-cpf">CPF/CNPJ</label>
-                                        <input class="form-control" id="cleave-cpf" placeholder="000.000.000-00"
-                                            required type="text" />
-                                        <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                        <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
-                                    </div>
-                                </div>
-                
-                                <!--DATA NASCIMENTO-->
-                                <div class="col-md-3">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="cleave-date">Data de nascimento</label>
-                                        <input  class="form-control" id="cleave-date" placeholder="DD-MM-YYYY"
-                                            type="text" />
-                                    </div>
-                                </div>
+
+    <div class="col-md-6 col-sm-12">
+        <div class="card">
+            <!--Header Condicoes Fisicas-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Condições fisicas</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row g-3">
+                        <!---->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Película</label>
+                                <select asp-for="condicaoFisica.cf_pelicula" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>FUNCIONANDO</option>
+                                    <option>RUIM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!---->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Tela</label>
+                                <select asp-for="condicaoFisica.cf_tela" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>FUNCIONANDO</option>
+                                    <option>RUIM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!---->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Tampa</label>
+                                <select asp-for="condicaoFisica.cf_tampa" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>FUNCIONANDO</option>
+                                    <option>RUIM</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row g-3">
+                        <!---->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Aro</label>
+                                <select asp-for="condicaoFisica.cf_aro" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>FUNCIONANDO</option>
+                                    <option>RUIM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!---->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Botões</label>
+                                <select asp-for="condicaoFisica.cf_botoes" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>FUNCIONANDO</option>
+                                    <option>RUIM</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!---->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Lente da Camêra</label>
+                                <select asp-for="condicaoFisica.cf_lente_camera" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>FUNCIONANDO</option>
+                                    <option>RUIM</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
 
-            <div class="col-4 ">
-                <div class="card">
-                    <!--Header Condicoes Fisicas-->
-                    <div class="card-header align-items-center d-flex">
-                        <h4 class="card-title mb-0 flex-grow-1">Informações pessoais</h4>
-                        <div class="flex-shrink-0"></div>
-                    </div>
-                
-                    <div class="card-body">
-                        <div class="live-preview">
-                            <div class="row">
-
-                                
-                                @* <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit" id="capture-button">Print</a> *@
-                                
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                @* <button type="button" class="btn btn-primary" onclick="return loadModal()">
-                Abrir Modal
-            </button> *@
-            
-
-
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Observações - Situação</h4>
+                <div class="flex-shrink-0"></div>
             </div>
 
-            
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_situacao" class="form-control textarea-resize" id="textarea1"
+                            rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            
-        @* </div> *@
+
+
+
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Solução</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_servico" class="form-control textarea-resize" id="textarea2"
+                            rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Relato do Cliente</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_relato_cliente" class="form-control"
+                            id="exampleFormControlTextarea1" rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Defeito</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_defeito" class="form-control" id="exampleFormControlTextarea1"
+                            rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 col-12">
+        <div class="card">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Condições do aparelho no balcão</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_condicoes_balcao" class="form-control"
+                            id="exampleFormControlTextarea1" rows="5"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit">Atualizar SERV</button>
-    </form>
-</div>
-
-<label class="form-label " for="cleave-cpf">
-                                        Ver senha de Padrão
-                                    </label>
-                                    <a class="btn btn-primary col-md-12 d-block mx-auto" onclick="return loadModal()">
-                                        Atualizar SV
-                                        </a>
-                                        @await Html.PartialAsync("_SenhaPatternAndroid", new SenhaPatternModel())
+    </div>
+</form>
 
                                         
 @section Scripts {
@@ -244,7 +374,7 @@
 
 
 
-<script>
+<script> //Chama a modal de patternPassword
     function loadModal(){
         $('#exibirPatternPassword').modal('show')
     }
@@ -253,7 +383,7 @@
 
 
 
-<script>
+<script> //Enviar imagem convertida quando enviar o formulario
   document.querySelector("formulario").addEventListener("submit", function(event) {
     console.log("submit");
     event.preventDefault();
@@ -270,21 +400,7 @@
 
 
 
-<script>
-    function teste(){
-    console.log("TESTE");
-    html2canvas(document.querySelector("#root")).then(function(canvas) {
-        console.log("render canvas");
-      var canvasImage = canvas.toDataURL();
-      document.querySelector("#ImageData").value = canvasImage
-
-
-      console.log("CanvasImage: ", canvasImage);
-      });
-    }
-</script>
-
-<script>
+<script>//Tirar print da div
   document.getElementById("capture-button").addEventListener("click", function() {
     html2canvas(document.querySelector("#root")).then(function(canvas) {
       var canvasImage = canvas.toDataURL();
@@ -300,51 +416,4 @@
     });
   });
 </script>
-
-
-
-@* <script> //Tirar print da div
-    document.getElementById("capture-button").addEventListener("click", function() {
-    var canvas = document.querySelector("canvas");
-    var canvasImage = canvas.toDataURL();
-
-    var link = document.createElement("a");
-    link.download = "imagem.png";
-    link.href = canvasImage;
-
-    document.body.appendChild(link);
-    link.click();
-
-    document.body.removeChild(link);
-});
-</script> *@
-
-
-
-    @* <script>
-        document.getElementById("capture-button").addEventListener("click", function() {
-        var target = document.querySelector(".mhn-ui-wrap");
-        var canvas = document.createElement("canvas");
-
-        html2canvas(target, {
-            canvas: canvas,
-        }).then(function (canvas) {
-            var targetImage = canvas.toDataURL();
-
-            // Cria um elemento "a" com a imagem base64 como link
-            var link = document.createElement("a");
-            link.download = "imag.png";
-            link.href = targetImage;
-
-            // Adiciona o elemento "a" ao documento e clica nele para fazer o download da imagem
-            document.body.appendChild(link);
-            link.click();
-
-            // Remove o elemento "a" do documento
-            document.body.removeChild(link);
-        });
-    });
-
-    </script> *@
-
 }

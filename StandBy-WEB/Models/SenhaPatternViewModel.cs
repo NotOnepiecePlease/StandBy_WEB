@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace StandBy_WEB.Models
 {
-  public class SenhaPatternModel
+  public class SenhaPatternViewModel
   {
     public string senhaPattern { get; set; } = string.Empty;
   }

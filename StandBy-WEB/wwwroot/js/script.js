@@ -470,7 +470,7 @@ var primaryColor = "#ffffff"; //Cor das bolinhas
         gridIndex: 1,
         themeIndex: 0,
         themeStateIndex: 0,
-        password: [1, 2, 3],
+        password: "",
         showControls: !0,
         width: 300,
         height: 430,

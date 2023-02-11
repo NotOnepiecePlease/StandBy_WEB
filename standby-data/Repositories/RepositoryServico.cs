@@ -1,5 +1,6 @@
 ﻿using standby_data.Interfaces;
 using standby_data.Models;
+using standby_data.Models.UtilModels;
 
 namespace standby_data.Repositories
 {
@@ -85,5 +86,19 @@ namespace standby_data.Repositories
       return result;
     }
 
+    public ServicoCompletoModel BuscarServicoCompleto(int _id)
+    {
+      var result = context.tb_servicos.Join(context.tb_clientes,
+                                            servico => servico.sv_cl_idcliente,
+                                            cliente => cliente.cl_id,
+                                            (servico, cliente) => new ServicoCompletoModel
+                                            {
+                                              servico = servico,
+                                              cliente = cliente,
+                                              condicaoFisica = context.tb_condicoes_fisicas.Where(x => x.cf_sv_idservico == servico.sv_id).FirstOrDefault(),
+                                              checkList = context.tb_checklist.Where(x => x.ch_sv_idservico == servico.sv_id).FirstOrDefault()
+                                            }).Where(x => x.servico.sv_id == _id).FirstOrDefault();
+      return result;
+    }
   }
 }

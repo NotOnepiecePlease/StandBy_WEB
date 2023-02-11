@@ -1,5 +1,5 @@
 @using StandBy_WEB.Models;
-@model SenhaPatternModel
+@model SenhaPatternViewModel
 @{
     ViewData["Title"] = "_SenhaPatternAndroid";
 }
@@ -7,27 +7,42 @@
 
 <!-- Modal -->
 
-<div class="modal fade" id="exibirPatternPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="exibirPatternPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Senha Pattern</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
+                <h5 class="modal-title" id="exampleModalLabel">Senha Pattern: @ViewData["Senha"]</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                    id="close-modal"></button>
             </div>
             <form>
                 <div class="modal-body">
                     <div class="card">
-                        
+
                         <div class="card-body">
                             <div class="live-preview">
                                 <div class="row">
 
-                                    <div class='pattern-container'>
-                                        <div id='root'>
+                                    @if (ViewData["Senha"].ToString() == "123452")
+                                    {
+                                        <div class='pattern-container'>
+                                            <div id='root'>
+                                            </div>
                                         </div>
-                                    </div>
-                                    @* <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit" id="capture-button">Print</a> *@
-                                    
+
+                                    }else{
+                                        <div class='pattern-container1'>
+                                            <div id='root1'>
+                                                <img src="@ViewData["imageSrc"]" />
+                                            </div>
+                                        </div>
+
+                                    }
+
+                                    @* <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit"
+                                        id="capture-button">Print</a> *@
+
                                 </div>
                             </div>
                         </div>
@@ -35,9 +50,12 @@
                 </div>
             </form>
             <div class="modal-footer align-items-center ">
-                <button type="button" class="btn btn-secondary" onclick="return teste()" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="return EnviarSenhaPatternParaViewPai()" id="submitButton">Sim</button>
-                <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit" id="capture-button">Print</a>
+                <button type="button" class="btn btn-secondary" onclick="return teste()"
+                    data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="return EnviarSenhaPatternParaViewPai()"
+                    id="submitButton">Sim</button>
+                <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit"
+                    id="capture-button">Print</a>
             </div>
         </div>
     </div>

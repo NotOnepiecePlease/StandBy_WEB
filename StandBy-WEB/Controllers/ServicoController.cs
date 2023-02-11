@@ -28,7 +28,7 @@ namespace StandBy_WEB.Controllers
     }
 
     [Route("Servico/Editar/{id?}")]
-    public IActionResult EditarServico(int? id, tb_servicos _servico, IFormCollection form)
+    public IActionResult EditarServico(int? id, ServicoCompletoModel _servicoCompleto, IFormCollection form)
     {
       try
       {
@@ -44,8 +44,6 @@ namespace StandBy_WEB.Controllers
         servico.sv_senha_pattern = senhaPattern;
         servicoService.repositoryServico.Atualizar(servico);
         servicoService.repositoryServico.SalvarModificacoes();
-
-
       }
       catch (System.Exception ex)
       {
@@ -56,27 +54,34 @@ namespace StandBy_WEB.Controllers
 
       if (id.HasValue)
       {
-        _servico = servicoService.repositoryServico.BuscarPorID(id.Value);
-        return View(_servico);
+        _servicoCompleto = servicoService.repositoryServico.BuscarServicoCompleto(id.Value);
+
+        byte[] imageBytes = (byte[])_servicoCompleto.servico.sv_senha_pattern;
+        string base64String = Convert.ToBase64String(imageBytes);
+        string imageSrc = String.Format("data:image/jpg;base64,{0}", base64String);
+
+        ViewData["imageSrc"] = imageSrc;
+
+        return View(_servicoCompleto);
       }
 
       if (!ModelState.IsValid)
       {
         ModelState.AddModelError(string.Empty, GetModelStateErrorString());
-        return View("EditarServico", _servico);
+        return View("EditarServico", _servicoCompleto);
       }
 
       try
       {
-        Convert.ToInt16("ae");
-        servicoService.repositoryServico.Atualizar(_servico);
+        //Futuramente vai quer te atualizar Cond e CH
+        servicoService.repositoryServico.Atualizar(_servicoCompleto.servico);
         servicoService.repositoryServico.SalvarModificacoes();
       }
       catch (Exception ex)
       {
         ModelState.AddModelError(string.Empty, ex.Message);
         System.Console.WriteLine(ex.Message);
-        return View("EditarServico", _servico);
+        return View("EditarServico", _servicoCompleto);
       }
 
       return RedirectToAction("Index");
