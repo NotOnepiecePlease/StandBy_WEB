@@ -4,7 +4,9 @@
     ViewData["Title"] = "_SenhaPatternAndroid";
 }
 
+@section Styles{
 
+}
 <!-- Modal -->
 
 <div class="modal fade" id="exibirPatternPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
@@ -12,57 +14,106 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Senha Pattern: @ViewData["Senha"]</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                    id="close-modal"></button>
+                <h5 class="modal-title text-info" id="tituloModal">Senha atual do cliente</h5>
+                @* <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button> *@
             </div>
             <form>
                 <div class="modal-body">
-                    <div class="card">
+                    <div class="card" id="lockCard">
 
-                        <div class="card-body">
+                        <div class="card-body" id="lockCardBody">
                             <div class="live-preview">
-                                <div class="row">
+                                @* <div class="row" id="LockScreen"> *@
 
-                                    @if (ViewData["Senha"].ToString() == "123452")
+                                    @if (ViewData["imageSrc"] == null)
                                     {
-                                        <div class='pattern-container'>
-                                            <div id='root'>
+                                        
+                                        <div class='senhaAparelho-container' id="senhaAparelho-container">
+                                            <div id='senhaAparelho' class="">
+                                                @* <img class="" style="margin-top: 60px; width: 100%; height: auto; max-width: 425.8px; max-height: 295.15px;" src="@ViewData["imageSrc"]" /> *@
+                                                <div class="containerPasswordLock" id="containerPasswordLock">
+                                                    <svg class="patternlock" id="lock" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" >
+                                                        <g class="lock-actives"></g>
+                                                        <g class="lock-lines"></g>
+                                                        <g class="lock-dots">
+                                                            <circle cx="20" cy="20" r="2"/>
+                                                            <circle cx="50" cy="20" r="2"/>
+                                                            <circle cx="80" cy="20" r="2"/>
+
+                                                            <circle cx="20" cy="50" r="2"/>
+                                                            <circle cx="50" cy="50" r="2"/>
+                                                            <circle cx="80" cy="50" r="2"/>
+
+                                                            <circle cx="20" cy="80" r="2"/>
+                                                            <circle cx="50" cy="80" r="2"/>
+                                                            <circle cx="80" cy="80" r="2"/>
+                                                        </g>
+                                                        <div class="password"><label class="senha">Senha: </label>
+                                                        <input id="inputPassPattern" class="senhaPattern" readonly="true"></div> 
+                                                    <svg>
+                                                </div>
                                             </div>
                                         </div>
-
                                     }else{
-                                        <div class='pattern-container1'>
-                                            <div id='root1'>
-                                                <img src="@ViewData["imageSrc"]" />
+
+                                    <div class="container">
+                                        <div class="containerPasswordLock d-none" style="background-color: var(--vz-modal-bg);" id="containerPasswordLock">
+                                            <svg class="patternlock" id="lock" viewBox="0 0 100 100">
+                                                <g class="lock-actives"></g>
+                                                <g class="lock-lines"></g>
+                                                <g class="lock-dots">
+                                                    <circle cx="20" cy="20" r="2"/>
+                                                    <circle cx="50" cy="20" r="2"/>
+                                                    <circle cx="80" cy="20" r="2"/>
+
+                                                    <circle cx="20" cy="50" r="2"/>
+                                                    <circle cx="50" cy="50" r="2"/>
+                                                    <circle cx="80" cy="50" r="2"/>
+
+                                                    <circle cx="20" cy="80" r="2"/>
+                                                    <circle cx="50" cy="80" r="2"/>
+                                                    <circle cx="80" cy="80" r="2"/>
+                                                </g><svg>
+                                                    <div class="password text-center"><label class="senha">Senha: </label>
+                                                <input id="inputPassPattern" class="form-control senhaPattern" readonly="true"></div> 
+                                        </div>
+
+
+
+
+                                         <div class='senhaAparelho-container' id="senhaAparelho-container">
+                                            <div id='senhaAparelho' style="margin-left: 5%;">
+                                                <div>
+                                                <img src="@ViewData["imageSrc"]" style="transform: scale(1.1);" />
+                                                </div>
                                             </div>
                                         </div>
 
+                                    </div>
+                                        
                                     }
-
-                                    @* <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit"
-                                        id="capture-button">Print</a> *@
-
-                                </div>
+                                @* </div> *@
                             </div>
                         </div>
                     </div>
                 </div>
             </form>
             <div class="modal-footer align-items-center ">
-                <button type="button" class="btn btn-secondary" onclick="return teste()"
-                    data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger" onclick="return EnviarSenhaPatternParaViewPai()"
-                    id="submitButton">Sim</button>
-                <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit"
-                    id="capture-button">Print</a>
+                @if (ViewData["imageSrc"] != null)
+                {
+                    <button type="button" class="btn btn-info" id="btnMudarSenha" onclick="return MudarSenha()">Mudar senha</button>
+                }
+                <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="return EnviarSenhaPatternParaViewPai()"
+                    id="submitButton">Ok</button>
+                @* <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit"
+                    id="capture-button">Print</a> *@
             </div>
+
+            <div id="png-container">
+
+            </div>
+
         </div>
     </div>
 </div>
-
-
-@section Scripts {
-    <script crossorigin="anonymous" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" src="~/js/script.js"></script>
-}

@@ -25,16 +25,38 @@
         textarea::-webkit-resizer {
             background-color: var(--vz-input-bg);
         }
+
+        
     </style>
+     <link rel="stylesheet" href="~/js/novo/styles.css">
 }
 
 @await Html.PartialAsync("_SenhaPatternAndroid", new SenhaPatternViewModel())
 <form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post"
     novalidate>
-    <input asp-for="servico.sv_senha_pattern" type="hidden" id="ImageData" name="ImageData">
-    <input asp-for="servico.sv_id" type="hidden" />
+    <input type="hidden" id="ImageData" name="ImageData" value="">
+    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente" value="@ViewData["imageSrc"]">
+    <input asp-for="servico.sv_id" type="hidden" value="@Model.servico.sv_id"/>
+    <input asp-for="servico.sv_cl_idcliente" type="hidden" value="@Model.servico.sv_cl_idcliente"/>
+    <input asp-for="servico.sv_ordem_serv" type="hidden" value="@Model.servico.sv_ordem_serv"/>
+    
+    <!--Input Hidden Cliente-->
+    <input asp-for="cliente.cl_id" type="hidden" value="@Model.cliente.cl_id"/>
+    <input asp-for="cliente.cl_nome" type="hidden" value="@Model.cliente.cl_nome"/>
+    @* <input asp-for="cliente.cl_telefone" type="hidden" value="@Model.cliente.cl_telefone"/> *@
+    <input asp-for="cliente.cl_cpf" type="hidden" value="@Model.cliente.cl_cpf"/>
+    @* <input asp-for="cliente.cl_telefone_recado" type="hidden" value="@Model.cliente.cl_telefone_recado"/> *@
+
+    <!--Input Hidden CondFisicas-->
+    @if(@Model.condicaoFisica != null){
+        <input asp-for="condicaoFisica.cf_id" type="hidden" value="@Model.condicaoFisica.cf_id"/>
+        <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA"/>
+    }
+
+
+
     <!-- Errors -->
-    <div class="card d-none" id="errorCard">
+    <div class="card" id="errorCard">
         <div class="card-header align-items-center d-flex">
             <h4 class="card-title mb-0 flex-grow-1">Erros</h4>
         </div>
@@ -320,7 +342,7 @@
     </div>
 
 
-    <div class="col-md-12 col-12">
+    <div class="col-md-12 col-12 d-none">
         <div class="card">
             <!--Situação-->
             <div class="card-header align-items-center d-flex">
@@ -344,76 +366,171 @@
     </div>
 </form>
 
+
+
+
+    <div class="col-12">
+
+    </div>
+
+
+
                                         
 @section Scripts {
     <script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
     <script src="~/assets/js/pages/form-masks.init.js"></script>
-    <script src="~/js/lockscreen.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+    @* <script src="~/js/lockscreen.js"></script> *@
+    @* <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script> *@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
+    <script type="text/javascript" src="~/js/script.js"></script>
+    <script src="~/js/novo/patternlock.js"></script>
+
+    <!-- NOVOS -->
+    <script>
+        function ReceberSenhaPatternDaPartial(inputValue) {
+            // Aqui você pode usar o valor digitado pelo usuário
+            console.log("Senha recebida:", inputValue);
+        }
+    </script>
+
+    <!-- NOVOS -->
+    <script>
+        function EnviarSenhaPatternParaViewPai(){
+            console.log("Enviando senha");
+            var inputValue = document.getElementById("inputPassPattern").value;
+            console.log("senha enviada: ", inputValue);
+            // Envia o valor digitado pelo usuário para a View principal
+            window.parent.ReceberSenhaPatternDaPartial(inputValue);
+            VerCodigoImagem();
+        }
+    </script>
+
+    <!-- NOVOS -->
+    <script>
+        function VerCodigoImagem(){
+
+            //document.querySelector("#containerPasswordLock").style.backgroundColor = "red";
+
+            html2canvas(document.querySelector("#containerPasswordLock")).then(canvas => {
+                console.log("Enviou o formulario");
+                var base64Image = canvas.toDataURL();
+                console.log("Base64 image: " + base64Image);
+                document.querySelector("#ImageData").value = base64Image;
+            });
+
+            //console.log("Enviou o formulario");
+           // setTimeout(() => {
+            //html2canvas(document.getElementById('containerPasswordLock'), {
+           //         logging: false,
+           //         profile: true,
+            //        useCORS: true}).then(function(canvas) {
+            //    var data = canvas.toDataURL('image/jpeg', 1);
+           //     var src = encodeURI(data);
+           //     console.log("Codigo imagem: " + src)
+           //     document.querySelector("#ImageData").value = src;
+           // }); }, 500);
+
+
+
+
+            //console.log("Enviou o formulario");
+           // html2canvas(document.getElementById("lock")).then(function(canvas) {
+            //    var canvasImage = canvas.toDataURL();
+            //    document.querySelector("#ImageData").value = canvasImage;
+            //    @* document.querySelector("#ImageData").value = canvasImage; *@
+           //     console.log("Codigo imagem: " + canvasImage)
+            //});
+        }
+    </script>
+
+
+    <script> //Chama a modal de patternPassword
+        function loadModal(){
+            TituloModalSenhaAtual();
+            $('#exibirPatternPassword').modal('show')
+        }
+    </script>
+
+
+
+    <script>
+        function MudarSenha() {
+            var root = document.getElementById("containerPasswordLock");
+            console.log("root:" , root);
+            root.classList.remove("d-none");
+            
+            TituloModalEditandoSenha();
+
+            var senhaAparelho = document.getElementById("senhaAparelho-container");
+            senhaAparelho.classList.add("d-none");
+            var btnMudarSenha = document.getElementById("btnMudarSenha");
+            btnMudarSenha.classList.add("d-none");
+        }
+    </script>
+
+     <script> //Quando o usuario clicar em cancelar no modal de patternPassword, ele volta a senha do aparelho
+        $('#exibirPatternPassword').on('hidden.bs.modal', function (e) {
+            Cancelar();
+        });
+    </script>
+
+    <script>
+        function Cancelar() {
+            var root = document.getElementById("containerPasswordLock");
+            root.classList.add("d-none");
+
+            var senhaAparelho = document.getElementById("senhaAparelho-container");
+            senhaAparelho.classList.remove("d-none");
+            var btnMudarSenha = document.getElementById("btnMudarSenha");
+            btnMudarSenha.classList.remove("d-none");
+        }
+    </script>
+
+<!------------- Fim novos--------------->
+
+    <script>
+        var e = document.getElementById('lock')
+        var p = new PatternLock(e, {
+            onPattern: function() {
+                this.success()
+            }
+        });
+
+
+        function pegarPadrao(){
+            console.log(p.getPattern());
+            p.clear();
+        }
+    </script>
+
     
 
-    <script type="text/javascript" src="~/js/script.js"></script>
 
-<script>
-  function ReceberSenhaPatternDaPartial(inputValue) {
-    // Aqui você pode usar o valor digitado pelo usuário
-    console.log("Senha recebida:", inputValue);
-  }
-</script>
+    <script>
+        function TituloModalSenhaAtual(){
+            var root = document.getElementById("tituloModal");
+            root.classList.remove("text-warning");
+            root.classList.add("text-primary");
+            root.innerHTML = "Senha atual do aparelho";
+        }
 
+        function TituloModalEditandoSenha(){
+            var root = document.getElementById("tituloModal");
+            root.classList.remove("text-primary");
+            root.classList.add("text-warning");
+            root.innerHTML = "Desenhe a nova senha do aparelho";
+        }
+    </script>
 
-<script>
-    function EnviarSenhaPatternParaViewPai(){
-        console.log("Enviando senha");
-        var inputValue = $(".senhaPattern").val();
+    
 
-        // Envia o valor digitado pelo usuário para a View principal
-        window.parent.ReceberSenhaPatternDaPartial(inputValue);
-    }
-</script>
-
-
-
-<script> //Chama a modal de patternPassword
-    function loadModal(){
-        $('#exibirPatternPassword').modal('show')
-    }
-</script>
+   
 
 
+    
+
+    
 
 
-<script> //Enviar imagem convertida quando enviar o formulario
-  document.querySelector("formulario").addEventListener("submit", function(event) {
-    console.log("submit");
-    event.preventDefault();
-
-    html2canvas(document.querySelector("#root")).then(function(canvas) {
-        console.log("render canvas");
-      var canvasImage = canvas.toDataURL();
-      document.querySelector("#ImageData").value = canvasImage;
-
-      this.submit();
-    }.bind(this));
-  });
-</script>
-
-
-
-<script>//Tirar print da div
-  document.getElementById("capture-button").addEventListener("click", function() {
-    html2canvas(document.querySelector("#root")).then(function(canvas) {
-      var canvasImage = canvas.toDataURL();
-
-      var link = document.createElement("a");
-      link.download = "imagem.png";
-      link.href = canvasImage;
-
-      document.body.appendChild(link);
-      link.click();
-
-      document.body.removeChild(link);
-    });
-  });
-</script>
+    
 }

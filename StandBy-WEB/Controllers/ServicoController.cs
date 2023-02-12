@@ -27,109 +27,105 @@ namespace StandBy_WEB.Controllers
       _logger = logger;
     }
 
-    [Route("Servico/Editar/{id?}")]
-    public IActionResult EditarServico(int? id, ServicoCompletoModel _servicoCompleto, IFormCollection form)
-    {
-      try
-      {
-        var imageData = form["ImageData"].ToString();
-
-        // Converte a string base64 em um array de bytes
-        byte[] imageBytes = Convert.FromBase64String(imageData.Split(',')[1]);
-
-        // Armazena a imagem na coluna sv_senha_pattern
-        var senhaPattern = imageBytes;
-
-        tb_servicos servico = servicoService.repositoryServico.BuscarPorID(33943);
-        servico.sv_senha_pattern = senhaPattern;
-        servicoService.repositoryServico.Atualizar(servico);
-        servicoService.repositoryServico.SalvarModificacoes();
-      }
-      catch (System.Exception ex)
-      {
-        System.Console.WriteLine(ex.Message);
-      }
-
-
-
-      if (id.HasValue)
-      {
-        _servicoCompleto = servicoService.repositoryServico.BuscarServicoCompleto(id.Value);
-
-        byte[] imageBytes = (byte[])_servicoCompleto.servico.sv_senha_pattern;
-        string base64String = Convert.ToBase64String(imageBytes);
-        string imageSrc = String.Format("data:image/jpg;base64,{0}", base64String);
-
-        ViewData["imageSrc"] = imageSrc;
-
-        return View(_servicoCompleto);
-      }
-
-      if (!ModelState.IsValid)
-      {
-        ModelState.AddModelError(string.Empty, GetModelStateErrorString());
-        return View("EditarServico", _servicoCompleto);
-      }
-
-      try
-      {
-        //Futuramente vai quer te atualizar Cond e CH
-        servicoService.repositoryServico.Atualizar(_servicoCompleto.servico);
-        servicoService.repositoryServico.SalvarModificacoes();
-      }
-      catch (Exception ex)
-      {
-        ModelState.AddModelError(string.Empty, ex.Message);
-        System.Console.WriteLine(ex.Message);
-        return View("EditarServico", _servicoCompleto);
-      }
-
-      return RedirectToAction("Index");
-    }
-
-    // [Route("Servico/Editar/{id?}")]
-    // public IActionResult EditarServico(int? id, tb_servicos servico = null)
-    // {
-    //   if (!id.HasValue && servico == null)
-    //   {
-    //     return RedirectToAction("Index");
-    //   }
-
-    //   servico = ObterServicoPorId(id.Value);
-
-    //   if (!ModelState.IsValid)
-    //   {
-    //     ModelState.AddModelError(string.Empty, GetModelStateErrorString());
-    //     return View("EditarServico", servico);
-    //   }
-
-    //   try
-    //   {
-    //     servico.sv_ordem_serv = 000;
-    //     servico.sv_cl_idcliente = 22;
-    //     servico.sv_aparelho = "Ae boy";
-    //     servico.sv_ativo = 1;
-    //     servicoService.repositoryServico.Atualizar(servico);
-    //     servicoService.repositoryServico.SalvarModificacoes();
-    //   }
-    //   catch (Exception ex)
-    //   {
-    //     ModelState.AddModelError(string.Empty, ex.Message);
-    //     return View("EditarServico", servico);
-    //   }
-
-    //   return RedirectToAction("Index");
-    // }
     public IActionResult Index()
     {
       var servicos = servicoService.repositoryServico.BuscarTodos();
       return View("Index", servicos);
     }
 
+    [Route("Servico/Editar/{id?}")]
+    public IActionResult EditarServico(int? id, ServicoCompletoModel _servicoCompleto, IFormCollection form)
+    {
+      #region Essa é a parte que o usuario clicou em editar no grid e vai chamar a view para edição
+      if (id.HasValue) //
+      {
+        ServicoCompletoModel servicoEditar = new ServicoCompletoModel();
+        servicoEditar = servicoService.repositoryServico.BuscarServicoCompleto(id.Value);
+        System.Console.WriteLine("Cliente ja tem senha pattern? : " + (servicoEditar.servico.sv_senha_pattern != null));
+        if (servicoEditar.servico.sv_senha_pattern != null)
+        {
+          byte[] imageBytes = (byte[])servicoEditar.servico.sv_senha_pattern;
+          string base64String = Convert.ToBase64String(imageBytes);
+          string imageSrc = String.Format("data:image/jpg;base64,{0}", base64String);
+          ViewData["imageSrc"] = imageSrc;
+          System.Console.WriteLine("ViewData['imageSrc']: " + imageSrc.Length);
+          System.Console.WriteLine("------------------------------------");
+        }
+
+
+        return View(servicoEditar);
+      }
+      #endregion
+
+      #region Essa parte já é a final, o usuario ja editou as informações e deu submit no formulario
+
+      ModelState.Remove("cliente.cl_telefone");
+      ModelState.Remove("cliente.cl_telefone_recado");
+
+      if (!ModelState.IsValid)
+      {
+        ModelState.AddModelError(string.Empty, GetModelStateErrorString());
+        System.Console.WriteLine("Erro no ModelState");
+        return View("EditarServico", _servicoCompleto);
+      }
+
+      try
+      {
+        //Futuramente vai quer te atualizar Cond e Checklist
+        var imageData = form["ImageData"].ToString();
+        if (imageData != "" && imageData != null)
+        {
+          System.Console.WriteLine("ImageData TEM: " + imageData.Split(',')[0]);
+        }
+        else
+        {
+          System.Console.WriteLine("ImageData N - TEM: " + imageData);
+        }
+
+        if (imageData != "" && imageData != null)
+        {
+          System.Console.WriteLine("Inserindo nova senha, usuario trocou.");
+          // Converte a string base64 em um array de bytes
+          byte[] imageBytes = Convert.FromBase64String(imageData.Split(',')[1]);
+          // Armazena a imagem na coluna sv_senha_pattern
+          var senhaPattern = imageBytes;
+          _servicoCompleto.servico.sv_senha_pattern = senhaPattern;
+        }
+        else
+        {
+          var senhaPatternAtualDoCliente = form["senhaPatternCliente"].ToString();
+          if (senhaPatternAtualDoCliente != null && senhaPatternAtualDoCliente != null)
+          {
+            System.Console.WriteLine("Cliente ja possui uma senha, usuario nao tentou trocar.");
+            byte[] imageBytes = Convert.FromBase64String(senhaPatternAtualDoCliente.Split(',')[1]);
+            var senhaPattern = imageBytes;
+            _servicoCompleto.servico.sv_senha_pattern = senhaPattern;
+          }
+        }
+
+        _servicoCompleto.servico.sv_status = 1;
+        _servicoCompleto.servico.sv_ativo = 1;
+        _servicoCompleto.servico.sv_previsao_entrega = DateTime.Now.AddDays(-150);
+        System.Console.WriteLine("Pattern do cliente antes de salvar: " + (_servicoCompleto.servico.sv_senha_pattern == null));
+        Console.WriteLine("Salvando Servico");
+        System.Console.WriteLine("------------------------------------");
+        servicoService.repositoryServico.Atualizar(_servicoCompleto.servico);
+        servicoService.repositoryServico.SalvarModificacoes();
+      }
+      catch (Exception ex)
+      {
+        ModelState.AddModelError(string.Empty, ex.Message);
+        System.Console.WriteLine("Erro ao salvar: " + ex.Message);
+        return View("EditarServico", _servicoCompleto);
+      }
+      #endregion
+
+      return RedirectToAction("Index");
+    }
+
     [HttpGet]
     public JsonResult ListaServicos()
     {
-      System.Console.WriteLine("ListaServicos");
       List<ServicoComNomeClienteStruct> listServicos = ListaServico();
       return Json(listServicos);
     }

@@ -1,5 +1,5 @@
 //Documentação original: https://www.cssscript.com/android-like-pattern-lock-vanilla-javascript/
-
+//function IniciarLockScreen(e) {
 var backColor = "#212529"; //Cor de fundo
 var accentColor = "#4f47b3"; //Cor das linhas
 var primaryColor = "#ffffff"; //Cor das bolinhas
@@ -519,7 +519,10 @@ var primaryColor = "#ffffff"; //Cor das bolinhas
             // (0, r.h)("div",{ class: "subtitle" },"Draw unlock pattern to generate a hash"),
             (0, r.h)(
               "div",
-              { class: "canvas-wrapper", style: "width: 100%; height: 200px;" },
+              {
+                class: "canvas-wrapper",
+                style: "width: 100%; height: 200px;",
+              },
               (0, r.h)(a.default, {
                 width: 200,
                 height: 200,
@@ -539,7 +542,8 @@ var primaryColor = "#ffffff"; //Cor das bolinhas
               })
             ),
             (0, r.h)("div", { class: "password" }, [
-              "Senha: ",
+              // "Senha: ",
+              (0, r.h)("label", { class: "senha", innerHTML: "Senha: " }),
               (0, r.h)("input", {
                 class: "form-control senhaPattern",
                 value: e.password,
@@ -1887,7 +1891,10 @@ var primaryColor = "#ffffff"; //Cor das bolinhas
                         x: t.row * n.interval.x,
                         y: t.col * n.interval.y,
                       },
-                      a = { x: e.row * n.interval.x, y: e.col * n.interval.y };
+                      a = {
+                        x: e.row * n.interval.x,
+                        y: e.col * n.interval.y,
+                      };
                     n.drawNode(r.x, r.y, o, i, u + 3),
                       n.drawNode(a.x, a.y, o, i, u + 3),
                       n.joinNodes(e.row, e.col, t.row, t.col);
@@ -1895,7 +1902,10 @@ var primaryColor = "#ffffff"; //Cor das bolinhas
                   return t;
                 }, null);
                 if (c && n.coordinates) {
-                  var s = { x: c.row * n.interval.x, y: c.col * n.interval.y };
+                  var s = {
+                    x: c.row * n.interval.x,
+                    y: c.col * n.interval.y,
+                  };
                   n.drawNode(s.x, s.y, o, i, u + 6),
                     n.joinNodes(s.x, s.y, n.coordinates.x, n.coordinates.y, !0);
                 }
@@ -2309,3 +2319,4 @@ function getValue(data) {
     }
   });
 }
+//}
