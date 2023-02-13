@@ -3938,6 +3938,7 @@
   right: 20px;
   z-index: 1000;
 }
+
 code {
   user-select: all;
 }
@@ -11940,12 +11941,12 @@ span.flatpickr-weekday {
   }
 }
 .auth-one-bg {
-  background-image: url("../images/auth-one-bg.jpg");
+  background-image: url("../images/bg/bg1.jpg");
   background-position: center;
   background-size: cover;
 }
 .auth-one-bg .bg-overlay {
-  background: linear-gradient(to right, #4f42ec, #695eef);
+  background: linear-gradient(to right, #4f42ec, #000000);
   opacity: 0.9;
 }
 .auth-one-bg .shape {

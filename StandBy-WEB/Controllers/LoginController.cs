@@ -62,7 +62,7 @@ namespace StandBy_WEB.Controllers
         AuthenticationProperties properties = new AuthenticationProperties()
         {
           AllowRefresh = true,
-          IsPersistent = model.lembrarInfos
+          IsPersistent = model.lembrarInfos,
         };
 
         System.Console.WriteLine("Chamando SigninAsync");

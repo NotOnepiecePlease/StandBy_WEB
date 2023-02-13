@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using standby_data.Models;
 using standby_data.Models.UtilModels;
 using standby_data.Services;
@@ -13,9 +7,8 @@ using static standby_data.Repositories.RepositoryServico;
 
 namespace StandBy_WEB.Controllers
 {
-  // [Route("[controller]/[action]")]
-  // [Route("[controller]/[action]")]
   [Authorize]
+  // [Authorize(Roles = "Administrador, Gerente, Operador")]
   public class ServicoController : Controller
   {
     private ServicoService servicoService = new ServicoService();
@@ -41,18 +34,27 @@ namespace StandBy_WEB.Controllers
       {
         ServicoCompletoModel servicoEditar = new ServicoCompletoModel();
         servicoEditar = servicoService.repositoryServico.BuscarServicoCompleto(id.Value);
-        System.Console.WriteLine("Cliente ja tem senha pattern? : " + (servicoEditar.servico.sv_senha_pattern != null));
+        // System.Console.WriteLine("Cliente ja tem senha pattern? : " + (servicoEditar.servico.sv_senha_pattern != null));
         if (servicoEditar.servico.sv_senha_pattern != null)
         {
           byte[] imageBytes = (byte[])servicoEditar.servico.sv_senha_pattern;
           string base64String = Convert.ToBase64String(imageBytes);
           string imageSrc = String.Format("data:image/jpg;base64,{0}", base64String);
           ViewData["imageSrc"] = imageSrc;
-          System.Console.WriteLine("ViewData['imageSrc']: " + imageSrc.Length);
-          System.Console.WriteLine("------------------------------------");
+          // System.Console.WriteLine("ViewData['imageSrc']: " + imageSrc.Length);
+          // System.Console.WriteLine("------------------------------------");
         }
 
+        // if (servicoEditar.servico.sv_previsao_entrega != null)
+        // {
+        //   ViewData["PrevisaoEntrega"] = servicoEditar.servico.sv_previsao_entrega.Value.ToString("yyyy-MM-dd hh:mm:ss");
+        // }
+        // else
+        // {
+        //   ViewData["PrevisaoEntrega"] = "";
+        // }
 
+        Console.WriteLine("Prev de entrega do serv: " + servicoEditar.servico.sv_previsao_entrega);
         return View(servicoEditar);
       }
       #endregion
@@ -61,6 +63,7 @@ namespace StandBy_WEB.Controllers
 
       ModelState.Remove("cliente.cl_telefone");
       ModelState.Remove("cliente.cl_telefone_recado");
+      ModelState.Remove("servico.sv_previsao_entrega");
 
       if (!ModelState.IsValid)
       {
@@ -105,8 +108,10 @@ namespace StandBy_WEB.Controllers
 
         _servicoCompleto.servico.sv_status = 1;
         _servicoCompleto.servico.sv_ativo = 1;
-        _servicoCompleto.servico.sv_previsao_entrega = DateTime.Now.AddDays(-150);
-        System.Console.WriteLine("Pattern do cliente antes de salvar: " + (_servicoCompleto.servico.sv_senha_pattern == null));
+        var data = Convert.ToDateTime(form["PrevisaoEntrega"].ToString());
+        // _servicoCompleto.servico.sv_previsao_entrega = DateTime.Now.AddDays(-150);
+        _servicoCompleto.servico.sv_previsao_entrega = data;
+        Console.WriteLine("PrevEntrega da View: " + data);
         Console.WriteLine("Salvando Servico");
         System.Console.WriteLine("------------------------------------");
         servicoService.repositoryServico.Atualizar(_servicoCompleto.servico);

@@ -6,3 +6,59 @@ Contact: support@themesbrand.com
 File: Custom Css File
 */
 
+.card-body-checklist {
+  flex: 0 1 auto;
+}
+
+.card-checklist {
+  --vz-card-spacer-y: 0.2rem;
+  --vz-card-spacer-x: 0.2rem;
+}
+
+.card-header-valores {
+  margin-top: -15px;
+}
+
+.form-label-servicos {
+  margin-bottom: 0.05rem;
+}
+
+.input-servicos-text {
+  padding: 0.1rem 0.9rem;
+}
+
+.input-servicos-select {
+  padding: 0.1rem 2.7rem 0.1rem 0.9rem;
+}
+
+.btn-servicos {
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
+}
+
+.botao-servico-flutuante {
+  position: fixed;
+  top: calc(50% - (100% / 2));
+  bottom: 40px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.animation-btn-service {
+  animation: pulseBtnService 2s ease-in-out infinite;
+  height: 100% !important;
+  border: none !important;
+}
+
+.icon-service-fs {
+  font-size: 60px;
+  color: #fff;
+}
+
+/* Evento que faz a animação do botao na tela de serviços */
+@keyframes pulseBtnService {
+  50% {
+    /* do 0% ao 50% o botao vai de -0px ate -20px */
+    transform: translatex(-20px);
+  }
+}

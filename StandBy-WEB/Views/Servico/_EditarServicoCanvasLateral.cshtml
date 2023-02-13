@@ -1,0 +1,124 @@
+@model ServicoCompletoModel
+@{
+    ViewData["Title"] = "_EditarServicoCanvasLateral";
+}
+@* 
+<h1>@ViewData["Title"]</h1> *@
+
+<div class="botao-servico-flutuante d-md-block">
+    <div class="btn btn-icon btn-lg p-2 animation-btn-service" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="theme-settings-offcanvas">
+        <i class='ri-arrow-left-s-line icon-service-fs'></i>
+    </div>
+</div>
+
+<!-- right offcanvas -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header border-bottom">
+        <h5 class="offcanvas-title" id="offcanvasRightLabel">Recent Acitivity</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-0 overflow-hidden">
+        <div data-simplebar style="height: calc(100vh - 112px);">
+            
+
+            <div class="card">
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <!--Primeira linha-->
+                    <div class="row g-3">
+
+                        <!--DATA SERVICO-->
+                        <div class="col-md-12">
+                            <div class="">
+                                <label class="form-label" for="cleave-date">Data</label>
+                                <input asp-for="servico.sv_data" class="form-control" id="cleave-date"
+                                    placeholder="DD-MM-YYYY" type="text" />
+                            </div>
+                        </div>
+
+                        <!--MARCA-->
+                        <div class="col-md-12">
+                            <label class="form-label" for="">Marca</label>
+                            <select asp-for="servico.sv_marca" class="form-select" id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                <option>SAMSUNG</option>
+                                <option>LG</option>
+                                <option>IPHONE</option>
+                            </select>
+                        </div>
+
+                        <!--MODELO-->
+                        <div class="col-md-12">
+                            <label class="form-label" for="validationCustom01">Modelo</label>
+                            <input asp-for="servico.sv_aparelho" class="form-control" id="validationCustom01"
+                                placeholder="Digite o nome do cliente" required type="text" />
+                            <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                            <div class="invalid-feedback">Por favor, digite um nome!</div>
+                        </div>
+                    </div>
+
+                    <!-- Segunda linha-->
+                    <div class="row g-3">
+                        <!-- COR -->
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Cor</label>
+                                <select asp-for="servico.sv_cor" class="form-select" id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>PRETO</option>
+                                    <option>VERMELHO</option>
+                                    <option>AZUL</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Serial Number -->
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Serial Number (MEI)</label>
+                                <input asp-for="servico.sv_mei_serialnumber" class="form-control" id="cleave-cpf"
+                                    placeholder="" required type="text" />
+                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                                <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
+                            </div>
+                        </div>
+
+                        <!-- SENHA -->
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Senha</label>
+                                <input asp-for="servico.sv_senha" class="form-control" id="senha" placeholder=""
+                                    required type="text" />
+                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                                <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label class="form-label" for="cleave-cpf">Padrão</label>
+                                @if(Model.servico.sv_senha_pattern != null){
+                                <a class="ri-lock-line btn btn-secondary col-md-4 d-block form-control"
+                                    style="height: 39px ;" onclick="return loadModal()">
+                                </a>
+                                }else{
+                                <a class="ri-lock-line btn btn-danger col-md-4 d-block form-control"
+                                    style="height: 39px ;" onclick="return loadModal()">
+                                </a>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        </div>
+    </div>
+    <div class="offcanvas-foorter border p-3 text-center">
+        <a href="javascript:void(0);" class="link-success">View All Acitivity <i class="ri-arrow-right-s-line align-middle ms-1"></i></a>
+    </div>
+</div>
