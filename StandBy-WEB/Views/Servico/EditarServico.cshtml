@@ -8,7 +8,7 @@
     DateTime ae = Convert.ToDateTime(previsaoEntrega);
     Console.WriteLine("Previsao Entrega dentro da View: " + previsaoEntrega);
     ViewData["desconto"] = 20;
-    if(ViewData["PrevisaoEntrega"] != ""){
+    if(ViewData["PrevisaoEntrega"].ToString() != ""){
     previsaoEntrega = Convert.ToDateTime(ViewData["PrevisaoEntrega"]);
     }else{
     previsaoEntrega = null;
@@ -51,6 +51,8 @@
     <input asp-for="servico.sv_id" type="hidden" value="@Model.servico.sv_id" />
     <input asp-for="servico.sv_cl_idcliente" type="hidden" value="@Model.servico.sv_cl_idcliente" />
     <input asp-for="servico.sv_ordem_serv" type="hidden" value="@Model.servico.sv_ordem_serv" />
+    <input asp-for="servico.sv_status" type="hidden" value="@Model.servico.sv_status" />
+    <input asp-for="servico.sv_ativo" type="hidden" value="@Model.servico.sv_ativo" />
 
     <!--Input Hidden Cliente-->
     <input asp-for="cliente.cl_id" type="hidden" value="@Model.cliente.cl_id" />

@@ -101,7 +101,7 @@ namespace StandBy_WEB.Controllers
 
 
     [Route("Cliente/Editar/{id?}")]
-    public IActionResult EditarCliente1(int? id, tb_clientes _cliente = null)
+    public IActionResult EditarCliente1(int? id, tb_clientes? _cliente = null)
     {
       #region Essa parte é chamada quando o usuário clica no botão de editar na tabela
       System.Console.WriteLine("ID: " + id);
@@ -192,7 +192,10 @@ namespace StandBy_WEB.Controllers
     {
       using (var client = new HttpClient())
       {
-        var response = await client.GetAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-br&dt=t&q={Uri.EscapeUriString(text)}");
+        // var response = await client.GetAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-br&dt=t&q={Uri.EscapeUriString(text)}");
+
+        var response = await client.GetAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-br&dt=t&q={Uri.EscapeDataString(text)}");
+
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadAsStringAsync();
         var startIndex = result.IndexOf("\"") + 1;

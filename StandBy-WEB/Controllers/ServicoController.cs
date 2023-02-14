@@ -66,15 +66,6 @@ namespace StandBy_WEB.Controllers
       {
         //Futuramente vai quer te atualizar Cond e Checklist
         var imageData = form["ImageData"].ToString();
-        //  if (imageData != "" && imageData != null)
-        // {
-        //   System.Console.WriteLine("ImageData TEM: " + imageData.Split(',')[0]);
-        // }
-        // else
-        // {
-        //   System.Console.WriteLine("ImageData N - TEM: " + imageData);
-        // } 
-
         if (imageData != "" && imageData != null)
         {
           System.Console.WriteLine("Inserindo nova senha, usuario trocou.");
@@ -96,14 +87,7 @@ namespace StandBy_WEB.Controllers
           }
         }
 
-        _servicoCompleto.servico.sv_status = 1;
-        _servicoCompleto.servico.sv_ativo = 1;
-        //var data = Convert.ToDateTime(form["PrevisaoEntrega"].ToString());
-        // _servicoCompleto.servico.sv_previsao_entrega = DateTime.Now.AddDays(-150);
-        //_servicoCompleto.servico.sv_previsao_entrega = data;
-        Console.WriteLine("PrevEntrega da View: " + _servicoCompleto.servico.sv_previsao_entrega);
-        Console.WriteLine("Salvando Servico");
-        System.Console.WriteLine("------------------------------------");
+
         servicoService.repositoryServico.Atualizar(_servicoCompleto.servico);
         servicoService.repositoryServico.SalvarModificacoes();
       }

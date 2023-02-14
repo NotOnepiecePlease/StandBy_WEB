@@ -9,11 +9,12 @@
     var lucroPorcentagem = ViewData["LucroPorcentagem"] as string;
     var valorPecasSemana = ViewData["PecasValor"] as string;
     int contador = 1;
-MessageAlertModel mensagemErro = new MessageAlertModel();
+    
+    MessageAlertModel mensagemErro = new MessageAlertModel();
     if (ViewData["Message"] != null)
-            {
-                mensagemErro = ViewData["Message"] as MessageAlertModel;
-            }
+    {
+        mensagemErro = ViewData["Message"] as MessageAlertModel;
+    }
 
     string usuarioLogado = @ViewData["Usuario"] as string;
 }

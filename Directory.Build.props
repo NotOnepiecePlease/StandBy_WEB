@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CS8600;</NoWarn>
+    <NoWarn>$(NoWarn);CS8601;</NoWarn>
+    <NoWarn>$(NoWarn);CS8602;</NoWarn>
+    <NoWarn>$(NoWarn);CS8603;</NoWarn>
+    <NoWarn>$(NoWarn);CS8618;</NoWarn>
+    <NoWarn>$(NoWarn);CS8629;</NoWarn>
+  </PropertyGroup>
+</Project>
