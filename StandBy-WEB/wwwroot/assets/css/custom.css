@@ -5,6 +5,56 @@ Website: https://themesbrand.com/
 Contact: support@themesbrand.com
 File: Custom Css File
 */
+/* Estilos para telas de navegador */
+@media only screen and (min-width: 768px) {
+  .img-responsive-patternbtn {
+    display: block;
+    height: auto;
+    padding-right: 100%;
+    transform: scale(1);
+    margin-left: -5%;
+  }
+}
+
+/* Estilos para dispositivos móveis */
+@media only screen and (max-width: 767px) {
+  .img-responsive-patternbtn {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    transform: scale(1.1);
+    margin-left: -2%;
+    margin-bottom: 10%;
+  }
+}
+
+/* Estilos para telas de navegador */
+@media only screen and (min-width: 768px) {
+  .img-responsive-patternview {
+    display: block;
+    height: auto;
+    /* padding-right: 100%; */
+    transform: scale(0.8);
+    margin-left: -30%;
+  }
+}
+
+/* Estilos para dispositivos móveis */
+@media only screen and (max-width: 767px) {
+  .img-responsive-patternview {
+    display: block;
+    height: auto;
+    /* padding-right: 100%; */
+    transform: scale(0.8);
+    margin-left: -10%;
+  }
+}
+
+input[name="input-telefone"]:hover {
+  color: var(--vz-white);
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 .card-body-checklist {
   flex: 0 1 auto;
@@ -25,6 +75,12 @@ File: Custom Css File
 
 .input-servicos-text {
   padding: 0.1rem 0.9rem;
+}
+.input-orcamento-text {
+  padding: 0.5rem 0.1rem;
+}
+.input-orcamento-text-parc {
+  padding-left: 39%;
 }
 
 .input-servicos-select {

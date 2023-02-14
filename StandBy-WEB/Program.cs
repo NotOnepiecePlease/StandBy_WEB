@@ -24,6 +24,8 @@ builder.Services.AddControllersWithViews();
 //   // options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
 
 // });
+
+
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {
   option.AccessDeniedPath = "/Error/Negado";

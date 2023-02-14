@@ -1,17 +1,18 @@
 @using System.Globalization;
 @model ServicoCompletoModel
 @{
-ViewData["Title"] = "EditarServico";
-ViewData["Senha"] = @Model.servico.sv_senha;
-string marginBottom = "mb-3";
-DateTime? previsaoEntrega = @Model.servico.sv_previsao_entrega;
-DateTime ae = Convert.ToDateTime(previsaoEntrega);
-Console.WriteLine("Previsao Entrega dentro da View: " + previsaoEntrega);
-if(ViewData["PrevisaoEntrega"] != ""){
-previsaoEntrega = Convert.ToDateTime(ViewData["PrevisaoEntrega"]);
-}else{
-previsaoEntrega = null;
-}
+    ViewData["Title"] = "EditarServico";
+    ViewData["Senha"] = @Model.servico.sv_senha;
+    string marginBottom = "mb-3";
+    DateTime? previsaoEntrega = @Model.servico.sv_previsao_entrega;
+    DateTime ae = Convert.ToDateTime(previsaoEntrega);
+    Console.WriteLine("Previsao Entrega dentro da View: " + previsaoEntrega);
+    ViewData["desconto"] = 20;
+    if(ViewData["PrevisaoEntrega"] != ""){
+    previsaoEntrega = Convert.ToDateTime(ViewData["PrevisaoEntrega"]);
+    }else{
+    previsaoEntrega = null;
+    }
 }
 
 @section Styles {
@@ -39,14 +40,14 @@ previsaoEntrega = null;
 }
 
 @await Html.PartialAsync("_SenhaPatternAndroid", new SenhaPatternViewModel())
-@* @await Html.PartialAsync("_EditarServicoCanvasLateral") *@
+@await Html.PartialAsync("_EditarServicoCanvasLateral", @Model)
 
-<form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post"
-    novalidate>
-    <input type="hidden" id="ImageData" name="ImageData" value="@ViewData[" imageSrc"]">
+
+
+<form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post" novalidate>
+    <input type="hidden" id="ImageData" name="ImageData" value="@ViewData["imageSrc"]">
     <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega" value="">
-    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente"
-        value="@ViewData[" imageSrc"]">
+    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente" value="@ViewData["imageSrc"]">
     <input asp-for="servico.sv_id" type="hidden" value="@Model.servico.sv_id" />
     <input asp-for="servico.sv_cl_idcliente" type="hidden" value="@Model.servico.sv_cl_idcliente" />
     <input asp-for="servico.sv_ordem_serv" type="hidden" value="@Model.servico.sv_ordem_serv" />
@@ -54,25 +55,26 @@ previsaoEntrega = null;
     <!--Input Hidden Cliente-->
     <input asp-for="cliente.cl_id" type="hidden" value="@Model.cliente.cl_id" />
     <input asp-for="cliente.cl_nome" type="hidden" value="@Model.cliente.cl_nome" />
-    @* <input asp-for="cliente.cl_telefone" type="hidden" value="@Model.cliente.cl_telefone" /> *@
     <input asp-for="cliente.cl_cpf" type="hidden" value="@Model.cliente.cl_cpf" />
-    @* <input asp-for="cliente.cl_telefone_recado" type="hidden" value="@Model.cliente.cl_telefone_recado" /> *@
 
     <!--Input Hidden CondFisicas-->
     @if(@Model.condicaoFisica != null){
-    <input asp-for="condicaoFisica.cf_id" type="hidden" value="@Model.condicaoFisica.cf_id" />
-    <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
+        <input asp-for="condicaoFisica.cf_id" type="hidden" value="@Model.condicaoFisica.cf_id" />
+        <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
     }
 
 
     <!-- Errors -->
-
     <div class="row">
         <div class="col-md-12 col-sm-12">
 
             <div class="card " style="height: 50px">
                 <div class="card-body ">
-                    <h4 class="card-title text-center">Edição - Serviços</h4>
+                    
+                    <h4 class="card-title text-center">
+                        Cliente: @Model.cliente.cl_nome
+                    </h4>
+
                 </div>
             </div>
 
@@ -88,6 +90,8 @@ previsaoEntrega = null;
             </div>
         </div>
     </div>
+
+
 
     <div class="row" id="linha-1">
         <div class="col-md-5 col-sm-12">
@@ -378,8 +382,7 @@ previsaoEntrega = null;
                             <div class="@marginBottom">
                                 <label class="form-label-servicos" for="validationCustom01">Previsão de
                                     Entrega/Analise</label>
-                                <input asp-for="servico.sv_previsao_entrega" type="text" class="form-control"
-                                    id="flatpickr">
+                                <input asp-for="servico.sv_previsao_entrega" type="text" class="form-control" id="flatpickr">
                                 <div class="valid-feedback">Campo obrigatorio inserido!</div>
                                 <div class="invalid-feedback">Por favor, digite um nome!</div>
                             </div>
@@ -497,7 +500,7 @@ previsaoEntrega = null;
                     <div class="live-preview">
                         <div class="row">
                             <textarea asp-for="servico.sv_situacao" class="form-control textarea-resize" id="textarea1"
-                                rows="5"></textarea>
+                                rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -506,20 +509,19 @@ previsaoEntrega = null;
 
 
 
-
-        <div class="col-md-4 col-12">
+         <div class="col-md-4 col-12">
             <div class="card">
-                <!---->
+                <!--Situação-->
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Solução</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Acessorios do aparelho</h4>
                     <div class="flex-shrink-0"></div>
                 </div>
 
                 <div class="card-body">
                     <div class="live-preview">
                         <div class="row">
-                            <textarea asp-for="servico.sv_servico" class="form-control textarea-resize" id="textarea2"
-                                rows="5"></textarea>
+                            <textarea asp-for="servico.sv_acessorios" class="form-control"
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
@@ -540,12 +542,16 @@ previsaoEntrega = null;
                     <div class="live-preview">
                         <div class="row">
                             <textarea asp-for="servico.sv_servico" class="form-control textarea-resize" id="textarea2"
-                                rows="5"></textarea>
+                                rows="3"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
+        
 
 
 
@@ -568,39 +574,17 @@ previsaoEntrega = null;
                     <div class="live-preview">
                         <div class="row">
                             <textarea asp-for="servico.sv_relato_cliente" class="form-control"
-                                id="exampleFormControlTextarea1" rows="5"></textarea>
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
+
 
         <div class="col-md-4 col-12">
-            <div class="card">
-                <!--Situação-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Defeito</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="row">
-                            <textarea asp-for="servico.sv_defeito" class="form-control" id="exampleFormControlTextarea1"
-                                rows="5"></textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><!-- Fim da Row 3 - Relato do Cliente e Defeito -->
-
-
-
-    <div class="row" id="linha-4">
-
-
-        <div class="col-md-5 col-12">
             <div class="card">
                 <!--Situação-->
                 <div class="card-header align-items-center d-flex">
@@ -619,27 +603,27 @@ previsaoEntrega = null;
             </div>
         </div>
 
-        <div class="col-md-4 col-12">
+
+
+        <div class="col-md-3 col-12">
             <div class="card">
                 <!--Situação-->
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Acessorios do aparelho</h4>
+                    <h4 class="card-title mb-0 flex-grow-1">Defeito</h4>
                     <div class="flex-shrink-0"></div>
                 </div>
 
                 <div class="card-body">
                     <div class="live-preview">
                         <div class="row">
-                            <textarea asp-for="servico.sv_acessorios" class="form-control"
-                                id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea asp-for="servico.sv_defeito" class="form-control" id="exampleFormControlTextarea1"
+                                rows="3"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
-    </div><!-- Fim da Row 4 - Condições do aparelho no balcão e Acessorios do aparelho -->
+    </div><!-- Fim da Row 3 - Relato do Cliente e Defeito -->
 
 
 
@@ -670,6 +654,30 @@ previsaoEntrega = null;
 @*
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/pt-br.min.js"></script> *@
+
+
+
+<script>
+    $("#cleave-valor-cartao, #cleave-valor-avista, #cleave-valor-parcelas, #cleave-valor-vparcela").on("input", function() {
+        var valorCartao = parseFloat($("#cleave-valor-cartao").val().replace("R$", "").replace(",", "."));
+        var valorParcelas = parseFloat($("#cleave-valor-parcelas").val().replace("R$", "").replace(",", "."));
+        var desconto = '@ViewData["desconto"]';
+        var valorAVista = (valorCartao - (valorCartao * desconto) / 100).toFixed(2);
+        var valorVParcela = (valorCartao / valorParcelas).toFixed(2);
+
+        if(valorVParcela == "NaN" || valorVParcela == "") {
+            $("#cleave-valor-vparcela").val("R$0");
+        }else{
+            $("#cleave-valor-vparcela").val("R$"+valorVParcela.toString().replace(".", ","));
+            $("#cleave-valor-avista").val("R$"+valorAVista.toString().replace(".", ","));
+        }
+        console.log("valorCartao: ", valorCartao);
+        console.log("valorParcelas: ", valorParcelas);
+        console.log("valorVParcela: ", valorVParcela);
+    });
+</script>
+
+
 
 <!-- NOVOS - Inicializa o pattern screen password-->
 <script>

@@ -34,25 +34,14 @@ namespace StandBy_WEB.Controllers
       {
         ServicoCompletoModel servicoEditar = new ServicoCompletoModel();
         servicoEditar = servicoService.repositoryServico.BuscarServicoCompleto(id.Value);
-        // System.Console.WriteLine("Cliente ja tem senha pattern? : " + (servicoEditar.servico.sv_senha_pattern != null));
+
         if (servicoEditar.servico.sv_senha_pattern != null)
         {
           byte[] imageBytes = (byte[])servicoEditar.servico.sv_senha_pattern;
           string base64String = Convert.ToBase64String(imageBytes);
           string imageSrc = String.Format("data:image/jpg;base64,{0}", base64String);
           ViewData["imageSrc"] = imageSrc;
-          // System.Console.WriteLine("ViewData['imageSrc']: " + imageSrc.Length);
-          // System.Console.WriteLine("------------------------------------");
         }
-
-        // if (servicoEditar.servico.sv_previsao_entrega != null)
-        // {
-        //   ViewData["PrevisaoEntrega"] = servicoEditar.servico.sv_previsao_entrega.Value.ToString("yyyy-MM-dd hh:mm:ss");
-        // }
-        // else
-        // {
-        //   ViewData["PrevisaoEntrega"] = "";
-        // }
 
         Console.WriteLine("Prev de entrega do serv: " + servicoEditar.servico.sv_previsao_entrega);
         return View(servicoEditar);
@@ -61,6 +50,7 @@ namespace StandBy_WEB.Controllers
 
       #region Essa parte já é a final, o usuario ja editou as informações e deu submit no formulario
 
+      //Removendo esses itens da verificação porque alterando o serviço, pouco importa se esses campos estão vazios.
       ModelState.Remove("cliente.cl_telefone");
       ModelState.Remove("cliente.cl_telefone_recado");
       ModelState.Remove("servico.sv_previsao_entrega");
@@ -76,14 +66,14 @@ namespace StandBy_WEB.Controllers
       {
         //Futuramente vai quer te atualizar Cond e Checklist
         var imageData = form["ImageData"].ToString();
-        if (imageData != "" && imageData != null)
-        {
-          System.Console.WriteLine("ImageData TEM: " + imageData.Split(',')[0]);
-        }
-        else
-        {
-          System.Console.WriteLine("ImageData N - TEM: " + imageData);
-        }
+        //  if (imageData != "" && imageData != null)
+        // {
+        //   System.Console.WriteLine("ImageData TEM: " + imageData.Split(',')[0]);
+        // }
+        // else
+        // {
+        //   System.Console.WriteLine("ImageData N - TEM: " + imageData);
+        // } 
 
         if (imageData != "" && imageData != null)
         {
@@ -97,7 +87,7 @@ namespace StandBy_WEB.Controllers
         else
         {
           var senhaPatternAtualDoCliente = form["senhaPatternCliente"].ToString();
-          if (senhaPatternAtualDoCliente != null && senhaPatternAtualDoCliente != null)
+          if (senhaPatternAtualDoCliente != "" && senhaPatternAtualDoCliente != null)
           {
             System.Console.WriteLine("Cliente ja possui uma senha, usuario nao tentou trocar.");
             byte[] imageBytes = Convert.FromBase64String(senhaPatternAtualDoCliente.Split(',')[1]);
@@ -108,10 +98,10 @@ namespace StandBy_WEB.Controllers
 
         _servicoCompleto.servico.sv_status = 1;
         _servicoCompleto.servico.sv_ativo = 1;
-        var data = Convert.ToDateTime(form["PrevisaoEntrega"].ToString());
+        //var data = Convert.ToDateTime(form["PrevisaoEntrega"].ToString());
         // _servicoCompleto.servico.sv_previsao_entrega = DateTime.Now.AddDays(-150);
-        _servicoCompleto.servico.sv_previsao_entrega = data;
-        Console.WriteLine("PrevEntrega da View: " + data);
+        //_servicoCompleto.servico.sv_previsao_entrega = data;
+        Console.WriteLine("PrevEntrega da View: " + _servicoCompleto.servico.sv_previsao_entrega);
         Console.WriteLine("Salvando Servico");
         System.Console.WriteLine("------------------------------------");
         servicoService.repositoryServico.Atualizar(_servicoCompleto.servico);

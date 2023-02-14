@@ -1,124 +1,203 @@
 @model ServicoCompletoModel
 @{
     ViewData["Title"] = "_EditarServicoCanvasLateral";
+
+    //Calcular valor a vista
+    var valorAvista = 
+    Convert.ToDouble(@Model.servico.sv_valorservico) - 
+    (Convert.ToDouble(@Model.servico.sv_valorservico) * 
+    Convert.ToDouble(@ViewData["desconto"]) / 100);
+
+    //Mensagem padrao whatsapp
+    var mensagem = "StandBy Assistencia Tecnica, Boa noite!";
 }
 @* 
 <h1>@ViewData["Title"]</h1> *@
 
 <div class="botao-servico-flutuante d-md-block">
-    <div class="btn btn-icon btn-lg p-2 animation-btn-service" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="theme-settings-offcanvas">
+    <div class="btn btn-icon btn-lg p-2 animation-btn-service" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasRight" aria-controls="theme-settings-offcanvas">
         <i class='ri-arrow-left-s-line icon-service-fs'></i>
     </div>
 </div>
 
 <!-- right offcanvas -->
 <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+
     <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title" id="offcanvasRightLabel">Recent Acitivity</h5>
+        <h5 class="card-title mb-0 flex-grow-1" id="offcanvasRightLabel">
+            Dados do cliente
+        </h5>
         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
+
     <div class="offcanvas-body p-0 overflow-hidden">
         <div data-simplebar style="height: calc(100vh - 112px);">
-            
 
             <div class="card">
+                <div class="card-body">
+                    <div class="live-preview">
 
-            <div class="card-body">
-                <div class="live-preview">
-                    <!--Primeira linha-->
-                    <div class="row g-3">
+                        <!--Primeira linha-->
+                        <div class="row">
 
-                        <!--DATA SERVICO-->
-                        <div class="col-md-12">
-                            <div class="">
-                                <label class="form-label" for="cleave-date">Data</label>
-                                <input asp-for="servico.sv_data" class="form-control" id="cleave-date"
-                                    placeholder="DD-MM-YYYY" type="text" />
+                            <!---->
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-date">Nome cliente</label>
+                                    <input asp-for="cliente.cl_nome" class="form-control" type="text" readonly />
+                                </div>
                             </div>
-                        </div>
+                        </div><!-- Fim da linha 1 -->
 
-                        <!--MARCA-->
-                        <div class="col-md-12">
-                            <label class="form-label" for="">Marca</label>
-                            <select asp-for="servico.sv_marca" class="form-select" id="cleave-estado">
-                                <option disabled selected value=""></option>
-                                <option>SAMSUNG</option>
-                                <option>LG</option>
-                                <option>IPHONE</option>
-                            </select>
-                        </div>
+                        <div class="row">
 
-                        <!--MODELO-->
-                        <div class="col-md-12">
-                            <label class="form-label" for="validationCustom01">Modelo</label>
-                            <input asp-for="servico.sv_aparelho" class="form-control" id="validationCustom01"
-                                placeholder="Digite o nome do cliente" required type="text" />
-                            <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                            <div class="invalid-feedback">Por favor, digite um nome!</div>
-                        </div>
-                    </div>
-
-                    <!-- Segunda linha-->
-                    <div class="row g-3">
-                        <!-- COR -->
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label class="form-label" for="cleave-cpf">Cor</label>
-                                <select asp-for="servico.sv_cor" class="form-select" id="cleave-estado">
-                                    <option disabled selected value=""></option>
-                                    <option>PRETO</option>
-                                    <option>VERMELHO</option>
-                                    <option>AZUL</option>
-                                </select>
+                            <!---->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-date">CPF</label>
+                                    <input asp-for="cliente.cl_cpf" class="form-control" type="text" readonly />
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Serial Number -->
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <label class="form-label" for="cleave-cpf">Serial Number (MEI)</label>
-                                <input asp-for="servico.sv_mei_serialnumber" class="form-control" id="cleave-cpf"
-                                    placeholder="" required type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
+                            <!---->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-date">Telefone</label><i class="ri-whatsapp-line text-success text-right" style="padding-left: 2%;"></i>
+                                    <a href="https://wa.me/@Model.cliente.cl_telefone?text=@mensagem" target="_blank">
+                                        <input asp-for="cliente.cl_telefone" name="input-telefone" class="form-control" type="text" style="cursor: pointer;" readonly />
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- SENHA -->
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <label class="form-label" for="cleave-cpf">Senha</label>
-                                <input asp-for="servico.sv_senha" class="form-control" id="senha" placeholder=""
-                                    required type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
+                        </div><!-- Fim da linha 2 -->
+
+                        <div class="row">
+                            <!---->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-date">Telefone Recado</label><i class="ri-whatsapp-line text-success text-right" style="padding-left: 2%;"></i>
+                                    <a href="https://wa.me/@Model.cliente.cl_telefone?text=@mensagem" target="_blank">
+                                        <input asp-for="cliente.cl_telefone_recado" name="input-telefone" class="form-control" type="text" style="cursor: pointer;"
+                                            readonly />
+                                    </a>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-2">
-                            <div class="mb-3">
-                                <label class="form-label" for="cleave-cpf">Padrão</label>
-                                @if(Model.servico.sv_senha_pattern != null){
-                                <a class="ri-lock-line btn btn-secondary col-md-4 d-block form-control"
-                                    style="height: 39px ;" onclick="return loadModal()">
-                                </a>
-                                }else{
-                                <a class="ri-lock-line btn btn-danger col-md-4 d-block form-control"
-                                    style="height: 39px ;" onclick="return loadModal()">
-                                </a>
-                                }
-
+                            <!---->
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-date">Parentesco</label>
+                                    <input asp-for="cliente.cl_parentesco_recado" class="form-control" type="text"
+                                        readonly />
+                                </div>
                             </div>
-                        </div>
+
+                        </div><!-- Fim da linha 3 -->
+
+
                     </div>
                 </div>
-            </div>
-        </div>
+            </div><!-- Fim do card 1 -->
 
+
+            <div class="card">
+                <!--Header Informacoes do Aparelho-->
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Orçamento</h4>
+                    <div class="flex-shrink-0"></div>
+                </div>
+                <div class="card-body">
+                    <div class="live-preview">
+
+                        <!--Primeira linha-->
+                        <div class="row">
+
+                            <!---->
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-valor-cartao">CARTÃO</label>
+                                    <input asp-for="servico.sv_valorservico"  value="@Model.servico.sv_valorservico" id="cleave-valor-cartao" class="form-control input-orcamento-text text-danger" type="text" ></input>
+                                </div>
+                            </div>
+
+                            
+                            <!---->
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-valor-avista">À VISTA</label><label class="form-label text-success" for="cleave-valor-avista" style="font-size: 80%;">@ViewData["desconto"]%</label>
+                                    <input id="cleave-valor-avista" class="form-control input-orcamento-text text-secondary" value="@valorAvista.ToString("N2")" type="text"></input>
+                                </div>
+                            </div>
+
+
+                            <!---->
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-valor-parcelas">PARC</label>
+                                    <input id="cleave-valor-parcelas" class="form-control input-orcamento-text-parc" type="text"></input>
+                                </div>
+                            </div>
+
+
+                            <!---->
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="cleave-valor-vparcela">V.PARC</label>
+                                    <input id="cleave-valor-vparcela" class="form-control input-orcamento-text text-success" type="text"></input>
+                                </div>
+                            </div>
+
+                        </div><!-- Fim da linha 1 -->
+
+
+                    </div>
+                </div>
+            </div><!-- Fim do card 2 -->
+
+
+             <div class="card">
+                <!--Header Informacoes do Aparelho-->
+                <div class="card-header align-items-center d-flex">
+                    <h4 class="card-title mb-0 flex-grow-1">Senha do Serviço</h4>
+                    <div class="flex-shrink-0"></div>
+                </div>
+                <div class="card-body">
+                    <div class="live-preview">
+
+                        <!--Primeira linha-->
+                        <div class="row">
+
+                            <!---->
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    @if (ViewData["imageSrc"] != null)
+                                    {
+                                        <div class='senhaAparelho-container' id="senhaAparelho-container">
+                                            <div id='senhaAparelho' style="margin-left: 5%;">
+                                                <div>
+                                                <img class="img-responsive-patternview" src="@ViewData["imageSrc"]" style="" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                        </div><!-- Fim da linha 1 -->
+
+
+                    </div>
+                </div>
+            </div><!-- Fim do card 3 -->
 
         </div>
     </div>
+
     <div class="offcanvas-foorter border p-3 text-center">
-        <a href="javascript:void(0);" class="link-success">View All Acitivity <i class="ri-arrow-right-s-line align-middle ms-1"></i></a>
+        <a href="javascript:void(0);" class="link-success">View All Acitivity 
+            <i class="ri-arrow-right-s-line align-middle ms-1"></i>
+        </a>
     </div>
 </div>
+

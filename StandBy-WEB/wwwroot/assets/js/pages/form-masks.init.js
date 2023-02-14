@@ -1,3 +1,35 @@
+if (document.querySelector("#cleave-valor-cartao")) {
+  var cleavePrefix = new Cleave("#cleave-valor-cartao", {
+    delimiters: ["R$", ","],
+    blocks: [0, 3, 2],
+    numericOnly: true,
+  });
+}
+
+if (document.querySelector("#cleave-valor-avista")) {
+  var cleaveDate = new Cleave("#cleave-valor-avista", {
+    delimiters: ["R$", ","],
+    blocks: [0, 3, 2],
+    numericOnly: true,
+  });
+}
+
+if (document.querySelector("#cleave-valor-parcelas")) {
+  var cleaveDate = new Cleave("#cleave-valor-parcelas", {
+    delimiter: "",
+    blocks: [2],
+    numericOnly: true,
+  });
+}
+
+if (document.querySelector("#cleave-valor-vparcela")) {
+  var cleavePrefix = new Cleave("#cleave-valor-vparcela", {
+    delimiters: ["R$", ","],
+    blocks: [0, 3, 2],
+    numericOnly: true,
+  });
+}
+
 if (document.querySelector("#cleave-cep")) {
   var cleaveDate = new Cleave("#cleave-cep", {
     delimiters: ["-"],
