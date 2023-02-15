@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using standby_data.Context;
 using standby_data.Models;
 using standby_data.Models.UtilModels;
 using standby_data.Services;
@@ -13,7 +14,10 @@ namespace StandBy_WEB.Controllers
   {
     private ServicoService servicoService = new ServicoService();
     private ClienteService clienteService = new ClienteService();
+    private ItemService itemService = new ItemService();
     private readonly ILogger<ServicoController> _logger;
+
+
 
     public ServicoController(ILogger<ServicoController> logger)
     {
@@ -25,6 +29,29 @@ namespace StandBy_WEB.Controllers
       var servicos = servicoService.repositoryServico.BuscarTodos();
       return View("Index", servicos);
     }
+
+    // [Route("Servico/Adicionar")]
+    public IActionResult Adicionar()
+    {
+      var modelTeste = CarregarListagemItems();
+      Console.WriteLine(modelTeste.ListasItems.InCorItemsList.Count);
+      // modelTeste.ListasItems.InMarcaItemsList.ForEach(x => Console.WriteLine(x));
+      modelTeste.ListasItems.InCorItemsList.ForEach(x => Console.WriteLine(x));
+      return View("Adicionar", modelTeste);
+    }
+
+
+    public AdicionarServicoModel CarregarListagemItems()
+    {
+      var model = new AdicionarServicoModel();
+      model.ListasItems.InMarcaItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "INFOS_APARELHO_ITEM", "Marca");
+      model.ListasItems.InCorItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "INFOS_APARELHO_ITEM", "Cor");
+
+
+
+      return model;
+    }
+
 
     [Route("Servico/Editar/{id?}")]
     public IActionResult EditarServico(int? id, ServicoCompletoModel _servicoCompleto, IFormCollection form)
@@ -109,30 +136,6 @@ namespace StandBy_WEB.Controllers
       return Json(listServicos);
     }
 
-    [HttpGet]
-    public JsonResult ListaTb_Servicos()
-    {
-      List<ServicosColunasSelecionadas> listServicos = new List<ServicosColunasSelecionadas>();
-      try
-      {
-        System.Console.WriteLine("ListaServicos");
-        listServicos = servicoService.repositoryServico.BuscarServicosSelecionados();
-
-      }
-      catch (Exception e)
-      {
-        _logger.LogError(e.Message);
-      }
-      return Json(listServicos);
-    }
-
-    [HttpGet]
-    public JsonResult ListaServicosTeste()
-    {
-      // System.Console.WriteLine("ListaServicos");
-      List<ServicoComNomeClienteStruct> listServicos = ListaServico();
-      return Json(listServicos);
-    }
 
     public List<ServicoComNomeClienteStruct> ListaServico()
     {

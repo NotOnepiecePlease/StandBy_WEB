@@ -118,3 +118,20 @@ input[name="input-telefone"]:hover {
     transform: translatex(-20px);
   }
 }
+
+/* Cantinhos das textareas e o scroll bar tambem */
+textarea::-webkit-scrollbar {
+  background-color: var(--vz-input-bg);
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: var(--vz-body-bg);
+}
+
+textarea::-webkit-scrollbar-corner {
+  background-color: var(--vz-input-bg);
+}
+
+textarea::-webkit-resizer {
+  background-color: var(--vz-input-bg);
+}

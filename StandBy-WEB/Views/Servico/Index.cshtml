@@ -33,12 +33,12 @@
 
                 <div class="col-sm-auto mb-3">
                     <div>
-                        <a asp-action="AddCliente" asp-controller="Servico" class="btn btn-primary add-btn me-1">
-                            <i class="ri-smartphone-line align-bottom me-1"></i>Celular</a>
-                            <a asp-action="AddCliente" asp-controller="Servico" class="btn btn-primary add-btn me-1">
+                        <a asp-action="Adicionar" asp-controller="Servico" class="btn btn-primary add-btn me-1">
+                            <i class="ri-smartphone-line align-bottom me-1"></i>Adicionar</a>
+                            @* <a asp-action="AddCliente" asp-controller="Servico" class="btn btn-primary add-btn me-1">
                             <i class="ri-macbook-line align-bottom me-1"></i>Notebook</a>
                             <a asp-action="AddCliente" asp-controller="Servico" class="btn btn-primary add-btn me-1">
-                            <i class="ri-computer-line align-bottom me-1"></i>Computador</a>
+                            <i class="ri-computer-line align-bottom me-1"></i>Computador</a> *@
 
                         <button class="btn btn-secondary" id="deleteSelecionadosButton" onclick="return deleteTodosRegistrosSelecionados()" type="button"><i class="ri-delete-bin-5-line align-bottom me-1"></i>Excluir selecionados</button>
                     </div>
@@ -127,7 +127,7 @@
 
 <script>
 $(document).ready(function () {
-    $.fn.dataTable.moment('DD/MM/YYYY');
+    $.fn.dataTable.moment('DD/MM/YYYY HH:mm:ss');
     var table = $('#tabelaClientes').DataTable({
         dom: 'Bfrtip',
         buttons: [
@@ -186,7 +186,9 @@ $(document).ready(function () {
                 render: function (data, type, row) {
                     if (data) {
                         var date = new Date(data);
-                        return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric', year: 'numeric' });
+                        return moment(date).format('DD/MM/YYYY HH:mm:ss');
+                        //var date = new Date(data);
+                        //return date.toLocaleDateString('pt-BR', { day: 'numeric', month: 'numeric', year: 'numeric' });
                     } else {
                         return "";
                     }

@@ -1,55 +1,32 @@
-@using System.Globalization;
-@model ServicoCompletoModel
+@using standby_data.Models.UtilModels
+@model AdicionarServicoModel
 @{
-    ViewData["Title"] = "EditarServico";
-    ViewData["Senha"] = @Model.servico.sv_senha;
+    ViewData["Title"] = "Adicionar";
     string marginBottom = "mb-3";
-    DateTime? previsaoEntrega = @Model.servico.sv_previsao_entrega;
-    DateTime ae = Convert.ToDateTime(previsaoEntrega);
-    Console.WriteLine("Previsao Entrega dentro da View: " + previsaoEntrega);
-    ViewData["desconto"] = 20;
-    
-    if(ViewData["PrevisaoEntrega"] != null && ViewData["PrevisaoEntrega"].ToString() != ""){
-    previsaoEntrega = Convert.ToDateTime(ViewData["PrevisaoEntrega"]);
-    }else{
-    previsaoEntrega = null;
-    }
 }
-
-@section Styles {
-<link href="~/css/lockscreen.css" rel="stylesheet" />
-<link rel="stylesheet" href="~/css/style.css" />
-<link rel="stylesheet" href="~/js/novo/styles.css">
-}
-
-@await Html.PartialAsync("_SenhaPatternAndroid", new SenhaPatternViewModel())
-@await Html.PartialAsync("_EditarServicoCanvasLateral", @Model)
-
-
 
 <form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post" novalidate>
-    <input type="hidden" id="ImageData" name="ImageData" value="@ViewData["imageSrc"]">
+    @* <input type="hidden" id="ImageData" name="ImageData" value="">
     <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega" value="">
-    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente" value="@ViewData["imageSrc"]">
-    <input asp-for="servico.sv_id" type="hidden" value="@Model.servico.sv_id" />
-    <input asp-for="servico.sv_cl_idcliente" type="hidden" value="@Model.servico.sv_cl_idcliente" />
-    <input asp-for="servico.sv_ordem_serv" type="hidden" value="@Model.servico.sv_ordem_serv" />
-    <input asp-for="servico.sv_status" type="hidden" value="@Model.servico.sv_status" />
-    <input asp-for="servico.sv_ativo" type="hidden" value="@Model.servico.sv_ativo" />
+    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente" value="">
+    <input asp-for="servico.sv_id" type="hidden" value="" />
+    <input asp-for="servico.sv_cl_idcliente" type="hidden" value="" />
+    <input asp-for="servico.sv_ordem_serv" type="hidden" value="" />
+    <input asp-for="servico.sv_status" type="hidden" value="" />
+    <input asp-for="servico.sv_ativo" type="hidden" value="" />
 
     <!--Input Hidden Cliente-->
-    <input asp-for="cliente.cl_id" type="hidden" value="@Model.cliente.cl_id" />
-    <input asp-for="cliente.cl_nome" type="hidden" value="@Model.cliente.cl_nome" />
-    <input asp-for="cliente.cl_cpf" type="hidden" value="@Model.cliente.cl_cpf" />
+    <input asp-for="cliente.cl_id" type="hidden" value="" />
+    <input asp-for="cliente.cl_nome" type="hidden" value="" />
+    <input asp-for="cliente.cl_cpf" type="hidden" value="" /> *@
 
     <!--Input Hidden CondFisicas-->
-    @if(@Model.condicaoFisica != null){
+    @* @if(@Model.condicaoFisica != null){
         <input asp-for="condicaoFisica.cf_id" type="hidden" value="@Model.condicaoFisica.cf_id" />
         <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
-    }
+    } *@
 
 
-    <!-- Errors -->
     <div class="row">
         <div class="col-md-12 col-sm-12">
 
@@ -57,12 +34,13 @@
                 <div class="card-body ">
                     
                     <h4 class="card-title text-center">
-                        Cliente: @Model.cliente.cl_nome
+                        Adicionando Serviço
                     </h4>
 
                 </div>
             </div>
 
+            <!-- Errors -->
             <div class="card" id="errorCard">
                 <div class="card-header align-items-center d-flex">
                     <h4 class="card-title mb-0 flex-grow-1">Erros</h4>
@@ -97,7 +75,7 @@
                                 <div class="@marginBottom">
                                     <label class="form-label-servicos" for="cleave-date-servicos">Data</label>
                                     <input asp-for="servico.sv_data" class="form-control input-servicos-text"
-                                        id="cleave-date-servicos" placeholder="DD-MM-YYYY" type="text" />
+                                        id="cleave-date-servicos" placeholder="DD-MM-YYYY" type="text" value="@DateTime.Now.ToShortDateString()" readonly/>
                                 </div>
                             </div>
 
@@ -109,9 +87,10 @@
                                     <select asp-for="servico.sv_marca" class="form-select input-servicos-select"
                                         id="cleave-estado">
                                         <option disabled selected value=""></option>
-                                        <option>SAMSUNG</option>
-                                        <option>LG</option>
-                                        <option>IPHONE</option>
+                                        @foreach (var item in @Model.ListasItems.InMarcaItemsList)
+                                        {
+                                            <option>@item</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -139,9 +118,10 @@
                                     <select asp-for="servico.sv_cor" class="form-select input-servicos-select"
                                         id="cleave-estado">
                                         <option disabled selected value=""></option>
-                                        <option>PRETO</option>
-                                        <option>VERMELHO</option>
-                                        <option>AZUL</option>
+                                        @foreach (var item in @Model.ListasItems.InCorItemsList)
+                                        {
+                                            <option>@item</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -175,15 +155,11 @@
                                 <div class="col-md-4">
                                     <div class="@marginBottom">
                                         <label class="form-label-servicos" for="cleave-cpf">Padrão</label>
-                                        @if(Model.servico.sv_senha_pattern != null){
-                                        <a class="btn-servicos ri-lock-line btn btn-secondary col-md-4 d-block form-control"
-                                            onclick="return loadModal()">
-                                        </a>
-                                        }else{
+                                        
                                         <a class="btn-servicos ri-lock-line btn btn-danger col-md-4 d-block form-control"
                                             onclick="return loadModal()">
                                         </a>
-                                        }
+                                        
 
                                     </div>
                                 </div>
@@ -214,8 +190,10 @@
                                     <select asp-for="condicaoFisica.cf_pelicula"
                                         class="form-select input-servicos-select " id="cleave-estado">
                                         <option disabled selected value=""></option>
-                                        <option>FUNCIONANDO</option>
-                                        <option>RUIM</option>
+                                        @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
+                                        {
+                                            <option>@item</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -227,8 +205,10 @@
                                     <select asp-for="condicaoFisica.cf_tela" class="form-select input-servicos-select "
                                         id="cleave-estado">
                                         <option disabled selected value=""></option>
-                                        <option>FUNCIONANDO</option>
-                                        <option>RUIM</option>
+                                        @foreach (var item in @Model.ListasItems.CfTelaItemsList)
+                                        {
+                                            <option>@item</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -240,8 +220,10 @@
                                     <select asp-for="condicaoFisica.cf_tampa" class="form-select input-servicos-select "
                                         id="cleave-estado">
                                         <option disabled selected value=""></option>
-                                        <option>FUNCIONANDO</option>
-                                        <option>RUIM</option>
+                                        @foreach (var item in @Model.ListasItems.CfTampaItemsList)
+                                        {
+                                            <option>@item</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -257,8 +239,10 @@
                                     <select asp-for="condicaoFisica.cf_aro" class="form-select input-servicos-select "
                                         id="cleave-estado">
                                         <option disabled selected value=""></option>
-                                        <option>FUNCIONANDO</option>
-                                        <option>RUIM</option>
+                                        @foreach (var item in @Model.ListasItems.CfAroItemsList)
+                                        {
+                                            <option>@item</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -270,8 +254,10 @@
                                     <select asp-for="condicaoFisica.cf_botoes"
                                         class="form-select input-servicos-select " id="cleave-estado">
                                         <option disabled selected value=""></option>
-                                        <option>FUNCIONANDO</option>
-                                        <option>RUIM</option>
+                                        @foreach (var item in @Model.ListasItems.CfBotoesItemsList)
+                                        {
+                                            <option>@item</option>
+                                        }
                                     </select>
                                 </div>
                             </div>
@@ -617,187 +603,3 @@
     </div>
 
 </form>
-
-
-
-
-
-
-
-@section Scripts {
-<script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
-<script src="~/assets/js/pages/form-masks.init.js"></script>
-@*
-<script src="~/js/lockscreen.js"></script> *@
-@*
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script> *@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
-<script type="text/javascript" src="~/js/script.js"></script>
-<script src="~/js/novo/patternlock.js"></script>
-@*
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/pt.min.js"></script> *@
-@*
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/pt-br.min.js"></script> *@
-
-
-
-<script>
-    $("#cleave-valor-cartao, #cleave-valor-avista, #cleave-valor-parcelas, #cleave-valor-vparcela").on("input", function() {
-        var valorCartao = parseFloat($("#cleave-valor-cartao").val().replace("R$", "").replace(",", "."));
-        var valorParcelas = parseFloat($("#cleave-valor-parcelas").val().replace("R$", "").replace(",", "."));
-        var desconto = '@ViewData["desconto"]';
-        var valorAVista = (valorCartao - (valorCartao * desconto) / 100).toFixed(2);
-        var valorVParcela = (valorCartao / valorParcelas).toFixed(2);
-
-        if(valorVParcela == "NaN" || valorVParcela == "") {
-            $("#cleave-valor-vparcela").val("R$0");
-        }else{
-            $("#cleave-valor-vparcela").val("R$"+valorVParcela.toString().replace(".", ","));
-            $("#cleave-valor-avista").val("R$"+valorAVista.toString().replace(".", ","));
-        }
-        console.log("valorCartao: ", valorCartao);
-        console.log("valorParcelas: ", valorParcelas);
-        console.log("valorVParcela: ", valorVParcela);
-    });
-</script>
-
-
-
-<!-- NOVOS - Inicializa o pattern screen password-->
-<script>
-    var lock = new PatternLock("#lock", {
-        onPattern: function (pattern) {
-            // Context is the pattern lock instance
-            console.log(pattern)
-        }
-    });
-</script>
-
-<!-- NOVOS - Inicializa o datepicker -->
-<script>
-    var teste = flatpickr("#flatpickr", {
-            @* locale: "pt", *@
-    locale: {
-        firstDayOfWeek: 1,
-            weekAbbreviation: "Sem",
-                weekdays: {
-            shorthand: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-                longhand: ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"]
-        },
-        rangeSeparator: " até ",
-            scrollTitle: "Clique para rolar",
-                toggleTitle: "Clique para alternar",
-                    time_24hr: true,
-                        months: {
-            shorthand: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
-                longhand: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
-        }
-    },
-    enableTime: true,
-        altInput: true,
-            weekNumbers: true,
-                altFormat: "d M, Y - H:i:S",
-                    dateFormat: "d/m/Y H:i:S",
-                        onChange: function(selectedDates, dateStr, instance) {
-                            //console.log(instance);
-                            document.querySelector("#PrevisaoEntrega").value = selectedDates[0].toLocaleString();
-                        }
-        });
-</script>
-
-<!-- NOVOS -->
-<script>
-    function ReceberSenhaPatternDaPartial(inputValue) {
-        // Aqui você pode usar o valor digitado pelo usuário
-        console.log("Senha recebida:", inputValue);
-    }
-</script>
-
-<!-- NOVOS -->
-<script>
-    function EnviarSenhaPatternParaViewPai() {
-        console.log("Enviando senha");
-        var inputValue = document.getElementById("inputPassPattern").value;
-        console.log("senha enviada: ", inputValue);
-        // Envia o valor digitado pelo usuário para a View principal
-        window.parent.ReceberSenhaPatternDaPartial(inputValue);
-        VerCodigoImagem();
-    }
-</script>
-
-<!-- NOVOS -->
-<script>
-    function VerCodigoImagem() {
-
-        //document.querySelector("#containerPasswordLock").style.backgroundColor = "red";
-
-        html2canvas(document.querySelector("#containerPasswordLock")).then(canvas => {
-            console.log("Enviou o formulario");
-            var base64Image = canvas.toDataURL();
-            console.log("Base64 image: " + base64Image);
-            document.querySelector("#ImageData").value = base64Image;
-        });
-    }
-</script>
-
-
-<script> //Chama a modal de patternPassword
-    function loadModal() {
-        TituloModalSenhaAtual();
-        $('#exibirPatternPassword').modal('show')
-    }
-</script>
-
-
-<script>
-    function MudarSenha() {
-        var root = document.getElementById("containerPasswordLock");
-        console.log("root:", root);
-        root.classList.remove("d-none");
-
-        TituloModalEditandoSenha();
-
-        var senhaAparelho = document.getElementById("senhaAparelho-container");
-        senhaAparelho.classList.add("d-none");
-        var btnMudarSenha = document.getElementById("btnMudarSenha");
-        btnMudarSenha.classList.add("d-none");
-    }
-</script>
-
-<script> //Quando o usuario clicar em cancelar no modal de patternPassword, ele volta a senha do aparelho
-    $('#exibirPatternPassword').on('hidden.bs.modal', function (e) {
-        Cancelar();
-    });
-</script>
-
-<script>
-    function Cancelar() {
-        var root = document.getElementById("containerPasswordLock");
-        root.classList.add("d-none");
-
-        var senhaAparelho = document.getElementById("senhaAparelho-container");
-        senhaAparelho.classList.remove("d-none");
-        var btnMudarSenha = document.getElementById("btnMudarSenha");
-        btnMudarSenha.classList.remove("d-none");
-    }
-</script>
-
-
-<script>
-    function TituloModalSenhaAtual() {
-        var root = document.getElementById("tituloModal");
-        root.classList.remove("text-warning");
-        root.classList.add("text-primary");
-        root.innerHTML = "Senha atual do aparelho";
-    }
-
-    function TituloModalEditandoSenha() {
-        var root = document.getElementById("tituloModal");
-        root.classList.remove("text-primary");
-        root.classList.add("text-warning");
-        root.innerHTML = "Desenhe a nova senha do aparelho";
-    }
-</script>
-<!------------- Fim novos--------------->
-}
