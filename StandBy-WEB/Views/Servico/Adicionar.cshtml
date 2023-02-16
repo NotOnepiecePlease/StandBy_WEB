@@ -1,14 +1,20 @@
 @using standby_data.Models.UtilModels
 @model AdicionarServicoModel
 @{
-    ViewData["Title"] = "Adicionar";
-    string marginBottom = "mb-3";
+ViewData["Title"] = "Adicionar";
+string marginBottom = "mb-3";
 }
 
-<form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post" novalidate>
+@section Styles{
+<link href="~/css/servico/AdicionarServico.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+}
+<form asp-action="Adicionar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post"
+    novalidate>
     @* <input type="hidden" id="ImageData" name="ImageData" value="">
     <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega" value="">
-    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente" value="">
+    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente"
+        value="">
     <input asp-for="servico.sv_id" type="hidden" value="" />
     <input asp-for="servico.sv_cl_idcliente" type="hidden" value="" />
     <input asp-for="servico.sv_ordem_serv" type="hidden" value="" />
@@ -22,584 +28,470 @@
 
     <!--Input Hidden CondFisicas-->
     @* @if(@Model.condicaoFisica != null){
-        <input asp-for="condicaoFisica.cf_id" type="hidden" value="@Model.condicaoFisica.cf_id" />
-        <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
+    <input asp-for="condicaoFisica.cf_id" type="hidden" value="@Model.condicaoFisica.cf_id" />
+    <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
     } *@
 
+    @* card-headerr d-flex flex flex-row align-items-center px-4 *@
+    <!-- <div class="row"> -->
+    <div class="col-md-12 col-sm-12 ">
 
-    <div class="row">
-        <div class="col-md-12 col-sm-12">
+        <div class="card d-flex flex-row align-items-center" style="height: 50px">
+            @* <div class="row card-body"> *@
 
-            <div class="card " style="height: 50px">
-                <div class="card-body ">
-                    
-                    <h4 class="card-title text-center">
-                        Adicionando Serviço
-                    </h4>
+                <label class="text-left badge badge-gradient-dark ordem-servico-badge"> OS 1900 </label>
+                <label class="card-title text-center" style="flex: 1;">
 
-                </div>
+                    Adicionando Serviço
+
+                </label>
+
+                @*
+            </div> *@
+        </div>
+
+        <!-- Errors -->
+        <div class="card d-none" id="errorCard">
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Erros</h4>
             </div>
-
-            <!-- Errors -->
-            <div class="card" id="errorCard">
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Erros</h4>
-                </div>
-                <div class="card-body">
-                    <strong>
-                        <div asp-validation-summary="ModelOnly" class="alert alert-warning" role="alert"></div>
-                    </strong>
-                </div>
+            <div class="card-body">
+                <strong>
+                    <div asp-validation-summary="ModelOnly" class="alert alert-warning" role="alert"></div>
+                </strong>
             </div>
         </div>
     </div>
+    <!-- </div> -->
+
+    @* <div class="col-md-12 col-sm-12 select-clientes-pai d-flex justify-content-center">
+        <select asp-for="condicaoFisica.cf_pelicula" class="form-select select-clientes-input" id="cleave-estado">
+            <option disabled selected value=""></option>
+            @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
+            {
+            <option>@item</option>
+            }
+        </select>
+    </div> *@
+    <section class="containerAdd">
 
 
-
-    <div class="row" id="linha-1">
-        <div class="col-md-5 col-sm-12">
-            <div class="card">
-                <!--Header Informacoes do Aparelho-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Informações do aparelho</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
+        <div class="card item">
+            <!--Header Informacoes do Aparelho-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Informações do aparelho</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
 
-                <div class="card-body">
-                    <div class="live-preview">
-                        <!--Primeira linha-->
-                        @* <div class="row g-3"> *@
-                            <!--DATA SERVICO-->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-date-servicos">Data</label>
-                                    <input asp-for="servico.sv_data" class="form-control input-servicos-text"
-                                        id="cleave-date-servicos" placeholder="DD-MM-YYYY" type="text" value="@DateTime.Now.ToShortDateString()" readonly/>
-                                </div>
+            <div class="card-body">
+                <div class="live-preview">
+                    <!--Primeira linha-->
+                    @* <div class="row g-3"> *@
+                        <!--DATA SERVICO-->
+                        <div class="col-md-12">
+                            <div class="@marginBottom">
+                                <label class="form-label-servicos" for="cleave-date-servicos">Data</label>
+                                <input asp-for="servico.sv_data" class="form-control input-servicos-text"
+                                    id="cleave-date-servicos" placeholder="DD-MM-YYYY" type="text"
+                                    value="@DateTime.Now.ToShortDateString()" readonly />
                             </div>
+                        </div>
 
 
-                            <!--MARCA-->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="">Marca</label>
-                                    <select asp-for="servico.sv_marca" class="form-select input-servicos-select"
-                                        id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        @foreach (var item in @Model.ListasItems.InMarcaItemsList)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </select>
-                                </div>
+                        <!--MARCA-->
+                        <div class="col-md-12">
+                            <div class="@marginBottom">
+                                <label class="form-label-servicos" for="">Marca</label>
+                                <select asp-for="servico.sv_marca" class="form-select input-servicos-select"
+                                    id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    @foreach (var item in @Model.ListasItems.InMarcaItemsList)
+                                    {
+                                    <option>@item</option>
+                                    }
+                                </select>
                             </div>
+                        </div>
 
-                            <!--MODELO-->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="validationCustom01">Modelo</label>
-                                    <input asp-for="servico.sv_aparelho" class="form-control input-servicos-text"
-                                        id="validationCustom01" placeholder="Digite o nome do cliente" required
-                                        type="text" />
-                                    <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                    <div class="invalid-feedback">Por favor, digite um nome!</div>
-                                </div>
+                        <!--MODELO-->
+                        <div class="col-md-12">
+                            <div class="@marginBottom">
+                                <label class="form-label-servicos" for="validationCustom01">Modelo</label>
+                                <input asp-for="servico.sv_aparelho" class="form-control input-servicos-text"
+                                    id="validationCustom01" placeholder="Digite o nome do cliente" required
+                                    type="text" />
+                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                                <div class="invalid-feedback">Por favor, digite um nome!</div>
                             </div>
-                            @*
-                        </div> *@
+                        </div>
+                        @*
+                    </div> *@
 
-                        <!-- Segunda linha-->
-                        @* <div class="row g-3"> *@
-                            <!-- COR -->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Cor</label>
-                                    <select asp-for="servico.sv_cor" class="form-select input-servicos-select"
-                                        id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        @foreach (var item in @Model.ListasItems.InCorItemsList)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </select>
-                                </div>
+                    <!-- Segunda linha-->
+                    @* <div class="row g-3"> *@
+                        <!-- COR -->
+                        <div class="col-md-12">
+                            <div class="@marginBottom">
+                                <label class="form-label-servicos" for="cleave-cpf">Cor</label>
+                                <select asp-for="servico.sv_cor" class="form-select input-servicos-select"
+                                    id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    @foreach (var item in @Model.ListasItems.InCorItemsList)
+                                    {
+                                    <option>@item</option>
+                                    }
+                                </select>
                             </div>
+                        </div>
 
-                            <!-- Serial Number -->
-                            <div class="col-md-12">
+                        <!-- Serial Number -->
+                        <div class="col-md-12">
+                            <div class="@marginBottom">
+                                <label class="form-label-servicos" for="cleave-cpf">Serial Number (MEI)</label>
+                                <input asp-for="servico.sv_mei_serialnumber" class="form-control input-servicos-text"
+                                    id="cleave-cpf" placeholder="" required type="text" />
+                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
+                                <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+
+                            <!-- SENHA -->
+                            <div class="col-md-8">
                                 <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Serial Number (MEI)</label>
-                                    <input asp-for="servico.sv_mei_serialnumber"
-                                        class="form-control input-servicos-text" id="cleave-cpf" placeholder="" required
-                                        type="text" />
+                                    <label class="form-label-servicos" for="cleave-cpf">Senha</label>
+                                    <input asp-for="servico.sv_senha" class="form-control input-servicos-text"
+                                        id="senha" placeholder="" required type="text" />
                                     <div class="valid-feedback">Campo obrigatorio inserido!</div>
                                     <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
                                 </div>
                             </div>
 
-
-                            <div class="row">
-
-                                <!-- SENHA -->
-                                <div class="col-md-8">
-                                    <div class="@marginBottom">
-                                        <label class="form-label-servicos" for="cleave-cpf">Senha</label>
-                                        <input asp-for="servico.sv_senha" class="form-control input-servicos-text"
-                                            id="senha" placeholder="" required type="text" />
-                                        <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                        <div class="invalid-feedback">Por favor, preencha um CPF ou CNPJ!</div>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="@marginBottom">
-                                        <label class="form-label-servicos" for="cleave-cpf">Padrão</label>
-                                        
-                                        <a class="btn-servicos ri-lock-line btn btn-danger col-md-4 d-block form-control"
-                                            onclick="return loadModal()">
-                                        </a>
-                                        
-
-                                    </div>
-                                </div>
-                            </div>
-                            @*
-                        </div> *@
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="col-md-4 col-sm-12">
-            <div class="card">
-                <!--Header Condicoes Fisicas-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Condições fisicas</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        @* <div class="row g-3"> *@
-                            <!---->
-                            <div class="col-md-12">
+                            <div class="col-md-4">
                                 <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Película</label>
-                                    <select asp-for="condicaoFisica.cf_pelicula"
-                                        class="form-select input-servicos-select " id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </select>
+                                    <label class="form-label-servicos" for="cleave-cpf">Padrão</label>
+
+                                    <a class="btn-servicos ri-lock-line btn btn-danger col-md-4 d-block form-control"
+                                        onclick="return loadModal()">
+                                    </a>
+
+
                                 </div>
                             </div>
-
-                            <!---->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Tela</label>
-                                    <select asp-for="condicaoFisica.cf_tela" class="form-select input-servicos-select "
-                                        id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        @foreach (var item in @Model.ListasItems.CfTelaItemsList)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!---->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Tampa</label>
-                                    <select asp-for="condicaoFisica.cf_tampa" class="form-select input-servicos-select "
-                                        id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        @foreach (var item in @Model.ListasItems.CfTampaItemsList)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            @*
-                        </div> *@
-
-
-                        @* <div class="row g-3"> *@
-                            <!---->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Aro</label>
-                                    <select asp-for="condicaoFisica.cf_aro" class="form-select input-servicos-select "
-                                        id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        @foreach (var item in @Model.ListasItems.CfAroItemsList)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!---->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Botões</label>
-                                    <select asp-for="condicaoFisica.cf_botoes"
-                                        class="form-select input-servicos-select " id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        @foreach (var item in @Model.ListasItems.CfBotoesItemsList)
-                                        {
-                                            <option>@item</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!---->
-                            <div class="col-md-12">
-                                <div class="@marginBottom">
-                                    <label class="form-label-servicos" for="cleave-cpf">Lente da Camêra</label>
-                                    <select asp-for="condicaoFisica.cf_lente_camera"
-                                        class="form-select input-servicos-select " id="cleave-estado">
-                                        <option disabled selected value=""></option>
-                                        <option>FUNCIONANDO</option>
-                                        <option>RUIM</option>
-                                    </select>
-                                </div>
-                            </div>
-                            @*
-                        </div> *@
-                    </div>
+                        </div>
+                        @*
+                    </div> *@
                 </div>
             </div>
-        </div>
+        </div><!-- Informacoes do aparelho -->
 
 
+        <div class="card item">
+            <!--Header Condicoes Fisicas-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Condições fisicas</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
-
-        <div class="row col-md-3 ms-0 ">
-            <div class="card card-checklist">
-                <!--Header Condicoes Fisicas-->
-                <div class="card-header align-items-center d-flex mb-3">
-                    <h4 class="card-title mb-0 flex-grow-1">Checklist / Valores e Entrega</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body card-body-checklist">
-                    <div class="live-preview">
-                        <a class="btn-servicos btn btn-primary col-md-12 d-block mx-auto mb-1" type="submit">Inserir
-                            Checklist - ENTRADA</a>
-                        <a class="btn-servicos btn btn-info col-md-12 d-block mx-auto" type="submit">Inserir Checklist -
-                            SAIDA</a>
-                    </div>
-                </div>
-
-                <!--Header Condicoes Fisicas-->
-                <div class="card-header align-items-center d-flex mb-4 card-header-valores">
-                    @* <h4 class="card-title mb-0 flex-grow-1">Valores</h4> *@
-                    <div class="flex-shrink-0"></div>
-                </div>
-                <div class="card-body mt-2">
-                    <div class="live-preview">
-
-                        <!------->
+            <div class="card-body">
+                <div class="live-preview">
+                    @* <div class="row g-3"> *@
+                        <!---->
                         <div class="col-md-12">
                             <div class="@marginBottom">
-                                <label class="form-label-servicos" for="validationCustom01">Serviço R$</label>
-                                <input asp-for="servico.sv_valorservico"
-                                    class="form-control input-servicos-text text-danger" id="validationCustom01"
-                                    placeholder="Digite o nome do cliente" required type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
+                                <label class="form-label-servicos" for="cleave-cpf">Película</label>
+                                <select asp-for="condicaoFisica.cf_pelicula" class="form-select input-servicos-select "
+                                    id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
+                                    {
+                                    <option>@item</option>
+                                    }
+                                </select>
                             </div>
                         </div>
 
-
-                        <!------->
+                        <!---->
                         <div class="col-md-12">
                             <div class="@marginBottom">
-                                <label class="form-label-servicos" for="validationCustom01">Peça R$</label>
-                                <input asp-for="servico.sv_valorpeca" class="form-control input-servicos-text"
-                                    id="validationCustom01" placeholder="Digite o nome do cliente" required
-                                    type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
+                                <label class="form-label-servicos" for="cleave-cpf">Tela</label>
+                                <select asp-for="condicaoFisica.cf_tela" class="form-select input-servicos-select "
+                                    id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    @foreach (var item in @Model.ListasItems.CfTelaItemsList)
+                                    {
+                                    <option>@item</option>
+                                    }
+                                </select>
                             </div>
                         </div>
 
-
-                        <!------->
+                        <!---->
                         <div class="col-md-12">
                             <div class="@marginBottom">
-                                <label class="form-label-servicos" for="validationCustom01">Lucro R$</label>
-                                <input asp-for="servico.sv_lucro" class="form-control input-servicos-text text-success"
-                                    id="validationCustom01" placeholder="Digite o nome do cliente" required
-                                    type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
+                                <label class="form-label-servicos" for="cleave-cpf">Tampa</label>
+                                <select asp-for="condicaoFisica.cf_tampa" class="form-select input-servicos-select "
+                                    id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    @foreach (var item in @Model.ListasItems.CfTampaItemsList)
+                                    {
+                                    <option>@item</option>
+                                    }
+                                </select>
                             </div>
                         </div>
+                        @*
+                    </div> *@
 
 
-                        <!------->
+                    @* <div class="row g-3"> *@
+                        <!---->
                         <div class="col-md-12">
                             <div class="@marginBottom">
-                                <label class="form-label-servicos" for="validationCustom01">Previsão de
-                                    Entrega/Analise</label>
-                                <input asp-for="servico.sv_previsao_entrega" type="text" class="form-control" id="flatpickr">
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
+                                <label class="form-label-servicos" for="cleave-cpf">Aro</label>
+                                <select asp-for="condicaoFisica.cf_aro" class="form-select input-servicos-select "
+                                    id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    @foreach (var item in @Model.ListasItems.CfAroItemsList)
+                                    {
+                                    <option>@item</option>
+                                    }
+                                </select>
                             </div>
                         </div>
 
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-
-        <div class="row col-md-3 ms-0 d-none">
-            <div class="card">
-                <!--Header Condicoes Fisicas-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Checklist</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <a class="btn-servicos btn btn-primary col-md-12 d-block mx-auto mb-1" type="submit">Inserir
-                            Checklist - ENTRADA</a>
-                        <a class="btn-servicos btn btn-info col-md-12 d-block mx-auto" type="submit">Inserir Checklist -
-                            SAIDA</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-2">
-                <label class="form-label-servicos" for="cleave-cpf">Senha</label>
-                <input asp-for="servico.sv_senha" class="form-control input-servicos-text" id="senha" placeholder=""
-                    required type="text" />
-            </div>
-
-
-
-
-
-            <div class="card">
-                <!--Header Condicoes Fisicas-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Valores</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-
-                        <!------->
+                        <!---->
                         <div class="col-md-12">
                             <div class="@marginBottom">
-                                <label class="form-label-servicos" for="validationCustom01">Serviço R$</label>
-                                <input asp-for="servico.sv_valorservico"
-                                    class="form-control input-servicos-text text-danger" id="validationCustom01"
-                                    placeholder="Digite o nome do cliente" required type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
+                                <label class="form-label-servicos" for="cleave-cpf">Botões</label>
+                                <select asp-for="condicaoFisica.cf_botoes" class="form-select input-servicos-select "
+                                    id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    @foreach (var item in @Model.ListasItems.CfBotoesItemsList)
+                                    {
+                                    <option>@item</option>
+                                    }
+                                </select>
                             </div>
                         </div>
 
-
-                        <!------->
+                        <!---->
                         <div class="col-md-12">
                             <div class="@marginBottom">
-                                <label class="form-label-servicos" for="validationCustom01">Peça R$</label>
-                                <input asp-for="servico.sv_valorpeca" class="form-control input-servicos-text"
-                                    id="validationCustom01" placeholder="Digite o nome do cliente" required
-                                    type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
+                                <label class="form-label-servicos" for="cleave-cpf">Lente da Camêra</label>
+                                <select asp-for="condicaoFisica.cf_lente_camera"
+                                    class="form-select input-servicos-select " id="cleave-estado">
+                                    <option disabled selected value=""></option>
+                                    <option>FUNCIONANDO</option>
+                                    <option>RUIM</option>
+                                </select>
                             </div>
                         </div>
+                        @*
+                    </div> *@
+                </div>
+            </div>
+        </div><!-- Condicoes Fisicas -->
 
 
-                        <!------->
-                        <div class="col-md-12">
-                            <div class="@marginBottom">
-                                <label class="form-label-servicos" for="validationCustom01">Lucro R$</label>
-                                <input asp-for="servico.sv_lucro" class="form-control input-servicos-text text-success"
-                                    id="validationCustom01" placeholder="Digite o nome do cliente" required
-                                    type="text" />
-                                <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
-                            </div>
-                        </div>
+        <div class="card item">
+            <!---->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Solução</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_servico" class="form-control textarea-resize" id="textarea2"
+                            rows="3"></textarea>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- Solucao -->
 
 
+        <div class="card item">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Defeito</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
-
-
-    </div> <!-- Fim da Row 1 - Informacoes aparelho -->
-
-
-
-    <div class="row" id="linha-2">
-        <div class="col-md-5 col-12">
-            <div class="card">
-                <!---->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Observações - Situação</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="row">
-                            <textarea asp-for="servico.sv_situacao" class="form-control textarea-resize" id="textarea1"
-                                rows="3"></textarea>
-                        </div>
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_defeito" class="form-control" id="exampleFormControlTextarea1"
+                            rows="3"></textarea>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- Defeito -->
 
 
+        <div class="card item">
+            <!---->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Observações - Situação</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
-         <div class="col-md-4 col-12">
-            <div class="card">
-                <!--Situação-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Acessorios do aparelho</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="row">
-                            <textarea asp-for="servico.sv_acessorios" class="form-control"
-                                id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_situacao" class="form-control textarea-resize" id="textarea1"
+                            rows="3"></textarea>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- Obs - Situacao -->
 
 
+        <div class="card item">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Acessorios do aparelho</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
-        <div class="col-md-3 col-12">
-            <div class="card">
-                <!---->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Solução</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="row">
-                            <textarea asp-for="servico.sv_servico" class="form-control textarea-resize" id="textarea2"
-                                rows="3"></textarea>
-                        </div>
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_acessorios" class="form-control" id="exampleFormControlTextarea1"
+                            rows="3"></textarea>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- Acessorios do aparelho -->
 
 
+        <div class="card item">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Relato do Cliente</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
-        
-
-
-
-    </div><!-- Fim da Row 2 - Observações e Solução -->
-
-
-
-    <div class="row" id="linha-3">
-
-
-        <div class="col-md-5 col-12">
-            <div class="card">
-                <!--Situação-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Relato do Cliente</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="row">
-                            <textarea asp-for="servico.sv_relato_cliente" class="form-control"
-                                id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_relato_cliente" class="form-control"
+                            id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- Relato do cliente -->
 
 
+        <div class="card item">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Condições do aparelho no balcão</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
-
-        <div class="col-md-4 col-12">
-            <div class="card">
-                <!--Situação-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Condições do aparelho no balcão</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="row">
-                            <textarea asp-for="servico.sv_condicoes_balcao" class="form-control"
-                                id="exampleFormControlTextarea1" rows="3"></textarea>
-                        </div>
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_condicoes_balcao" class="form-control"
+                            id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
                 </div>
             </div>
-        </div>
+        </div><!-- Condições do aparelho no balcão -->
 
 
+        <div class="card sidenav">
+            <!---->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Inicio</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
 
-        <div class="col-md-3 col-12">
-            <div class="card">
-                <!--Situação-->
-                <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1">Defeito</h4>
-                    <div class="flex-shrink-0"></div>
-                </div>
-
-                <div class="card-body">
-                    <div class="live-preview">
-                        <div class="row">
-                            <textarea asp-for="servico.sv_defeito" class="form-control" id="exampleFormControlTextarea1"
-                                rows="3"></textarea>
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        @* d-flex justify-content-center *@
+                        <div class="col-md-12 col-sm-12 select-clientes-pai ">
+                            @* select-clientes-input *@
+                            <label class="form-label-servicos" for="cleave-cpf">Cliente</label>
+                            <select asp-for="condicaoFisica.cf_pelicula" class="form-select select2" id="cleaveCliente">
+                                <option disabled selected value=""></option>
+                                @* @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
+                                {
+                                    <option>@item</option>
+                                } *@
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div><!-- Fim da Row 3 - Relato do Cliente e Defeito -->
+        </div><!-- Solucao -->
 
 
+    </section>
 
     <div class="row">
-        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit">Atualizar SERV</button>
+        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit">Inserir Serviço</button>
     </div>
 
 </form>
+
+
+<div class="row">
+        <a href="@Url.Action("BuscarClientes", "Servico", "Cleison")" class="btn btn-success col-md-4 d-block mx-auto" type="submit">teste</a>
+    </div>
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            console.log("teste")
+            $("#cleaveCliente").select2({
+            allowClear: true,
+            minimumInputLength: 1,
+            placeholder: "Digite o nome do cliente",
+            templateResult: function (data) {
+                console.log("data", data)
+                if (!data.loading) {
+                    var text = data.text;
+                    if (text.length > 20) {
+                        text = text.substring(0, 25) + "...";
+                    }
+
+                    var element = $("<span style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap;'>" + text  + "</span>");
+                    return element;
+                }
+                return data.text;
+            },
+            ajax: {
+                url: "/Servico/BuscarClientes",
+                dataType: "json",
+                delay: 250,
+                data: function (params) {
+                return {
+                    nome: params.term
+                };
+                },
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            //console.log("item", item)
+                            return {
+                                id: item.cl_id,
+                                text: item.cl_nome
+                            };
+                        })
+                    };
+                },
+                cache: true
+            }
+            });
+        });
+    </script>
+}

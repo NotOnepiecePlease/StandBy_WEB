@@ -1,0 +1,96 @@
+.select-clientes-pai {
+  margin-bottom: 0.5rem;
+}
+
+.select-clientes-input {
+  width: 30% !important;
+}
+
+.ordem-servico-badge {
+  transform: scale(1.5);
+  flex: 1;
+  position: absolute;
+  margin-left: 20px;
+  margin-top: 8px;
+}
+
+/* Tela Grande */
+@media only screen and (min-width: 1201px) {
+  .containerAdd {
+    display: grid;
+    grid-template-areas:
+      "item item sidenav"
+      "item item sidenav"
+      "item item sidenav"
+      "item item sidenav";
+  }
+
+  .sidenav {
+    width: 280px;
+    height: 700px;
+    grid-column: 1;
+    grid-area: "sidenav";
+    grid-row: sidenav;
+  }
+
+  .item {
+    width: 380px;
+    grid-area: "item";
+  }
+}
+
+/* Tela menor */
+@media only screen and (min-width: 800px) and (max-width: 1200px) {
+  .containerAdd {
+    display: grid;
+    grid-template-areas:
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav";
+  }
+
+  .sidenav {
+    width: 300px;
+    height: 700px;
+    grid-column: 1;
+    grid-area: "sidenav";
+    grid-row: sidenav;
+  }
+
+  .item {
+    width: 350px;
+    grid-area: "item";
+  }
+}
+
+@media only screen and (min-width: 400px) and (max-width: 799px) {
+  .containerAdd {
+    /* display: grid;
+    grid-template-areas:
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"
+      "item  sidenav"; */
+  }
+
+  .sidenav {
+    /* width: 300px;
+    height: 700px;
+    grid-area: "sidenav";
+    grid-row: sidenav; */
+  }
+
+  .item {
+    /* width: 350px;
+    grid-area: "item"; */
+  }
+}

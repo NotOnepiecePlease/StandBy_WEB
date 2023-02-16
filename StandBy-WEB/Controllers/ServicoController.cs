@@ -34,18 +34,30 @@ namespace StandBy_WEB.Controllers
     public IActionResult Adicionar()
     {
       var modelTeste = CarregarListagemItems();
-      Console.WriteLine(modelTeste.ListasItems.InCorItemsList.Count);
       // modelTeste.ListasItems.InMarcaItemsList.ForEach(x => Console.WriteLine(x));
-      modelTeste.ListasItems.InCorItemsList.ForEach(x => Console.WriteLine(x));
+      // modelTeste.ListasItems.InCorItemsList.ForEach(x => Console.WriteLine(x));
       return View("Adicionar", modelTeste);
     }
 
 
+    [Route("Servico/BuscarClientes/{nome?}")]
+    public JsonResult BuscarClientes(string? nome)
+    {
+      var clientes = clienteService.repositoryCliente.BuscarPorNome(nome);
+      Console.WriteLine("Clientes: " + clientes.Count());
+      return Json(clientes);
+    }
     public AdicionarServicoModel CarregarListagemItems()
     {
       var model = new AdicionarServicoModel();
       model.ListasItems.InMarcaItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "INFOS_APARELHO_ITEM", "Marca");
       model.ListasItems.InCorItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "INFOS_APARELHO_ITEM", "Cor");
+      model.ListasItems.CfPeliculaItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "Pelicula");
+      model.ListasItems.CfTelaItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "Tela");
+      model.ListasItems.CfTampaItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "Tampa");
+      model.ListasItems.CfAroItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "Aro");
+      model.ListasItems.CfBotoesItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "Botoes");
+      model.ListasItems.CfLenteCamItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "LenteCamera");
 
 
 

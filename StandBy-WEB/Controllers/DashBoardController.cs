@@ -57,6 +57,7 @@ namespace StandBy_WEB.Controllers
         //standby_orgContextProcedures _context = new standby_orgContextProcedures(context);
         //var dados = await _context.ServicosUltimos7DiasV2Async();
         var dados = await context.ServicosUltimaSemana.FromSqlRaw(Querys.ServicoUltimos7Dias).ToListAsync();
+        
         return Json(dados);
       }
       catch (Exception e)

@@ -43,10 +43,10 @@ function getChartColorsArray(chartId) {
 // Stacked Columns Charts
 var chartColumnStackedColors = getChartColorsArray("column_stacked");
 if (chartColumnStackedColors) {
-  //console.log(chartColumnStackedColors);
+  console.log("Preencher grafico");
   $.ajax({
     type: "GET",
-    url: "DashBoard/PreencherGraficoSemanal",
+    url: "/DashBoard/PreencherGraficoSemanal",
     success: function (data) {
       var chartData = [
         {
