@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using standby_data.AutoMapper;
 using standby_data.Context;
 using standby_data.Interfaces;
 using standby_data.Repositories;
@@ -8,9 +9,15 @@ using standby_data.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+
 string? connection = builder.Configuration.GetConnectionString("DataBase");
-builder.Services.AddDbContext<standby_orgContext>(options => options.UseSqlServer(connection, b => b.MigrationsAssembly("standby-data")));
+
+builder.Services.AddDbContext<standby_orgContext>(options =>
+    options.UseSqlServer(connection, b => b.MigrationsAssembly("standby-data")));
+
 //options.UseSqlServer(builder.Configuration.GetConnectionString("DataBase")));
 
 builder.Services.AddControllersWithViews();
@@ -36,24 +43,27 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
   option.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
   option.ExpireTimeSpan = TimeSpan.FromMinutes(60);
   option.SlidingExpiration = true;
+
   // option.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
 });
-
 
 
 builder.Services.AddScoped<IRepositoryCliente, RepositoryCliente>();
 builder.Services.AddScoped<IRepositoryServico, RepositoryServico>();
 builder.Services.AddScoped<IRepositoryLogin, RepositoryLogin>();
+builder.Services.AddAutoMapper(typeof(MappingModels));
 
 builder.Services.AddSession();
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Mgo+DSMBMAY9C3t2VVhkQlFadVdJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkdjUX9YcHdVQWhdUk0=");
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
+    "Mgo+DSMBMAY9C3t2VVhkQlFadVdJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkdjUX9YcHdVQWhdUk0=");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
   app.UseExceptionHandler("/Home/Error");
+
   //app.UseBrowserLink();
 }
 

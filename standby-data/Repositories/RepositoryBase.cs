@@ -5,65 +5,66 @@ using standby_data.Models;
 
 namespace standby_data.Repositories
 {
-  public class RepositoryBase<T> : IRepositoryModel<T>, IDisposable where T : class
-  {
-    protected standby_orgContext context;
-    public bool saveChanges = true;
-
-    public RepositoryBase(bool _saveChanges = true)
+    public class RepositoryBase<T> : IRepositoryModel<T>, IDisposable where T : class
     {
-      saveChanges = _saveChanges;
-      context = new standby_orgContext();
-    }
+        protected standby_orgContext context;
+        public bool saveChanges = true;
 
-    public T Adicionar(T entity)
-    {
-      context.Set<T>().Add(entity);
-      if (saveChanges)
-      {
-        context.SaveChanges();
-      }
+        public RepositoryBase(bool _saveChanges = true)
+        {
+            saveChanges = _saveChanges;
+            context     = new standby_orgContext();
+        }
 
-      return entity;
-    }
+        public T Adicionar(T entity)
+        {
+            context.Set<T>().Add(entity);
+            if (saveChanges)
+            {
+                context.SaveChanges();
+            }
 
-    public T Atualizar(T entity)
-    {
-      context.Entry(entity).State = EntityState.Modified;
-      if (saveChanges)
-      {
-        context.SaveChanges();
-      }
+            return entity;
+        }
 
-      return entity;
-    }
+        public T Atualizar(T entity)
+        {
+            context.Entry(entity).State = EntityState.Modified;
+            if (saveChanges)
+            {
+                context.SaveChanges();
+            }
 
-    public T BuscarPorID(int id)
-    {
-      return context.Set<T>().Find(id);
-    }
+            return entity;
+        }
 
-    public List<T> BuscarTodos()
-    {
-      return context.Set<T>().ToList();
-    }
-    public void Deletar(T entity)
-    {
-      context.Set<T>().Remove(entity);
-      if (saveChanges)
-      {
-        context.SaveChanges();
-      }
-    }
+        public T BuscarPorID(int id)
+        {
+            return context.Set<T>().Find(id);
+        }
 
-    public void Dispose()
-    {
-      context.Dispose();
-    }
+        public List<T> BuscarTodos()
+        {
+            return context.Set<T>().ToList();
+        }
 
-    public void SalvarModificacoes()
-    {
-      context.SaveChanges();
+        public void Deletar(T entity)
+        {
+            context.Set<T>().Remove(entity);
+            if (saveChanges)
+            {
+                context.SaveChanges();
+            }
+        }
+
+        public void Dispose()
+        {
+            context.Dispose();
+        }
+
+        public void SalvarModificacoes()
+        {
+            context.SaveChanges();
+        }
     }
-  }
 }

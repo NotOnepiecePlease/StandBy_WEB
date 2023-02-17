@@ -6,17 +6,20 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace standby_data.Models
+namespace standby_data.Models;
+
+[Keyless]
+public partial class tb_garantias
 {
-    [Keyless]
-    public partial class tb_garantias
-    {
-        public int gar_id { get; set; }
-        public int fk_servico_id { get; set; }
-        public int fk_cliente_id { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime gar_data_inicial { get; set; }
-        [Column(TypeName = "date")]
-        public DateTime gar_data_final { get; set; }
-    }
+    public int gar_id { get; set; }
+
+    public int fk_servico_id { get; set; }
+
+    public int fk_cliente_id { get; set; }
+
+    [Column(TypeName = "date")]
+    public DateTime gar_data_inicial { get; set; }
+
+    [Column(TypeName = "date")]
+    public DateTime gar_data_final { get; set; }
 }

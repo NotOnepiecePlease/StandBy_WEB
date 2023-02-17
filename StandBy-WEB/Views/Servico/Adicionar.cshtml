@@ -186,7 +186,7 @@ string marginBottom = "mb-3";
                     </div> *@
                 </div>
             </div>
-        </div><!-- Informacoes do aparelho -->
+        </div><!-- Informacoes do aparelho-->
 
 
         <div class="card item">
@@ -300,42 +300,6 @@ string marginBottom = "mb-3";
         <div class="card item">
             <!---->
             <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Solução</h4>
-                <div class="flex-shrink-0"></div>
-            </div>
-
-            <div class="card-body">
-                <div class="live-preview">
-                    <div class="row">
-                        <textarea asp-for="servico.sv_servico" class="form-control textarea-resize" id="textarea2"
-                            rows="3"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div><!-- Solucao -->
-
-
-        <div class="card item">
-            <!--Situação-->
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Defeito</h4>
-                <div class="flex-shrink-0"></div>
-            </div>
-
-            <div class="card-body">
-                <div class="live-preview">
-                    <div class="row">
-                        <textarea asp-for="servico.sv_defeito" class="form-control" id="exampleFormControlTextarea1"
-                            rows="3"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div><!-- Defeito -->
-
-
-        <div class="card item">
-            <!---->
-            <div class="card-header align-items-center d-flex">
                 <h4 class="card-title mb-0 flex-grow-1">Observações - Situação</h4>
                 <div class="flex-shrink-0"></div>
             </div>
@@ -349,24 +313,6 @@ string marginBottom = "mb-3";
                 </div>
             </div>
         </div> <!-- Obs - Situacao -->
-
-
-        <div class="card item">
-            <!--Situação-->
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1">Acessorios do aparelho</h4>
-                <div class="flex-shrink-0"></div>
-            </div>
-
-            <div class="card-body">
-                <div class="live-preview">
-                    <div class="row">
-                        <textarea asp-for="servico.sv_acessorios" class="form-control" id="exampleFormControlTextarea1"
-                            rows="3"></textarea>
-                    </div>
-                </div>
-            </div>
-        </div><!-- Acessorios do aparelho -->
 
 
         <div class="card item">
@@ -405,6 +351,24 @@ string marginBottom = "mb-3";
         </div><!-- Condições do aparelho no balcão -->
 
 
+        <div class="card item">
+            <!--Situação-->
+            <div class="card-header align-items-center d-flex">
+                <h4 class="card-title mb-0 flex-grow-1">Acessorios do aparelho</h4>
+                <div class="flex-shrink-0"></div>
+            </div>
+
+            <div class="card-body">
+                <div class="live-preview">
+                    <div class="row">
+                        <textarea asp-for="servico.sv_acessorios" class="form-control" id="exampleFormControlTextarea1"
+                            rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div><!-- Acessorios do aparelho -->
+
+
         <div class="card sidenav">
             <!---->
             <div class="card-header align-items-center d-flex">
@@ -423,7 +387,7 @@ string marginBottom = "mb-3";
                                 <option disabled selected value=""></option>
                                 @* @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 } *@
                             </select>
                         </div>
@@ -442,29 +406,25 @@ string marginBottom = "mb-3";
 </form>
 
 
-<div class="row">
-        <a href="@Url.Action("BuscarClientes", "Servico", "Cleison")" class="btn btn-success col-md-4 d-block mx-auto" type="submit">teste</a>
-    </div>
-
 @section scripts{
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            console.log("teste")
-            $("#cleaveCliente").select2({
+
+<script>
+    $(document).ready(function () {
+        $("#cleaveCliente").select2({
             allowClear: true,
-            minimumInputLength: 1,
+            minimumInputLength: 4,
             placeholder: "Digite o nome do cliente",
             templateResult: function (data) {
-                console.log("data", data)
+                //console.log("data", data)
                 if (!data.loading) {
                     var text = data.text;
                     if (text.length > 20) {
-                        text = text.substring(0, 25) + "...";
+                        text = text.substring(0, 20) + "...";
                     }
 
-                    var element = $("<span style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap;'>" + text  + "</span>");
+                    var element = $("<span>" + data.id + " - </span><span style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap;'>" + text + "</span>");
                     return element;
                 }
                 return data.text;
@@ -474,9 +434,9 @@ string marginBottom = "mb-3";
                 dataType: "json",
                 delay: 250,
                 data: function (params) {
-                return {
-                    nome: params.term
-                };
+                    return {
+                        nome: params.term
+                    };
                 },
                 processResults: function (data) {
                     return {
@@ -490,8 +450,52 @@ string marginBottom = "mb-3";
                     };
                 },
                 cache: true
+            },
+            language: {
+                inputTooShort: function (args) {
+                    var remainingChars = args.minimum - args.input.length;
+                    var message = "Digite " + remainingChars + " ou mais caracteres";
+
+                    return message;
+                },
+                inputTooLong: function (args) {
+                    var overChars = args.input.length - args.maximum;
+                    var message = 'Apague ' + overChars + ' caracter';
+
+                    if (overChars != 1) {
+                        message += 'es';
+                    }
+
+                    return message;
+                },
+                errorLoading: function () {
+                    return 'Os resultados não puderam ser carregados.';
+                },
+                loadingMore: function () {
+                    return 'Carregando mais resultados…';
+                },
+                maximumSelected: function (args) {
+                    var message = 'Você só pode selecionar ' + args.maximum + ' ite';
+
+                    if (args.maximum == 1) {
+                        message += 'm';
+                    } else {
+                        message += 'ns';
+                    }
+
+                    return message;
+                },
+                noResults: function () {
+                    return 'Nenhum resultado encontrado';
+                },
+                searching: function () {
+                    return 'Buscando…';
+                },
+                removeAllItems: function () {
+                    return 'Remover todos os itens';
+                }
             }
-            });
         });
-    </script>
+    });
+</script>
 }

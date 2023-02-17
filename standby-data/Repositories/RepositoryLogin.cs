@@ -8,19 +8,18 @@ using standby_data.Interfaces;
 
 namespace standby_data.Repositories
 {
-  public class RepositoryLogin : RepositoryBase<tb_login>, IRepositoryLogin
-  {
-    public RepositoryLogin(bool _saveChanges = true) : base(_saveChanges)
+    public class RepositoryLogin : RepositoryBase<tb_login>, IRepositoryLogin
     {
+        public RepositoryLogin(bool _saveChanges = true) : base(_saveChanges)
+        {
+        }
 
+        public bool ValidarLogin(InformacoesLoginModel model)
+        {
+            var usuarioExistente = context.tb_login
+                .Where(x => x.lg_usuario == model.lg_usuario && x.lg_senha == model.lg_senha)
+                .Any();
+            return usuarioExistente;
+        }
     }
-
-    public bool ValidarLogin(InformacoesLoginModel model)
-    {
-      var usuarioExistente = context.tb_login
-      .Where(x => x.lg_usuario == model.lg_usuario && x.lg_senha == model.lg_senha)
-      .Any();
-      return usuarioExistente;
-    }
-  }
 }

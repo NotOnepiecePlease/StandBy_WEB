@@ -6,23 +6,26 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace standby_data.Models
-{
-    public partial class tb_pagamento
-    {
-        [Key]
-        public int pag_id { get; set; }
-        public int pag_sv_id { get; set; }
-        [Required]
-        [StringLength(100)]
-        [Unicode(false)]
-        public string pag_forma { get; set; }
-        public int pag_parcelas { get; set; }
-        [Column(TypeName = "decimal(10, 2)")]
-        public decimal pag_valor { get; set; }
+namespace standby_data.Models;
 
-        [ForeignKey("pag_sv_id")]
-        [InverseProperty("tb_pagamento")]
-        public virtual tb_servicos pag_sv { get; set; }
-    }
+public partial class tb_pagamento
+{
+    [Key]
+    public int pag_id { get; set; }
+
+    public int pag_sv_id { get; set; }
+
+    [Required]
+    [StringLength(100)]
+    [Unicode(false)]
+    public string pag_forma { get; set; }
+
+    public int pag_parcelas { get; set; }
+
+    [Column(TypeName = "decimal(10, 2)")]
+    public decimal pag_valor { get; set; }
+
+    [ForeignKey("pag_sv_id")]
+    [InverseProperty("tb_pagamento")]
+    public virtual tb_servicos pag_sv { get; set; }
 }

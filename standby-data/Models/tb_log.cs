@@ -6,12 +6,12 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace standby_data.Models
+namespace standby_data.Models;
+
+public partial class tb_log
 {
-    public partial class tb_log
-    {
-        [Key]
-        public int log_id { get; set; }
-        public int log_ultima_ordem_servico { get; set; }
-    }
+    [Key]
+    public int log_id { get; set; }
+
+    public int log_ultima_ordem_servico { get; set; }
 }

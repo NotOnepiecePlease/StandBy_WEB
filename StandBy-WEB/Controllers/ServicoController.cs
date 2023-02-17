@@ -34,8 +34,6 @@ namespace StandBy_WEB.Controllers
     public IActionResult Adicionar()
     {
       var modelTeste = CarregarListagemItems();
-      // modelTeste.ListasItems.InMarcaItemsList.ForEach(x => Console.WriteLine(x));
-      // modelTeste.ListasItems.InCorItemsList.ForEach(x => Console.WriteLine(x));
       return View("Adicionar", modelTeste);
     }
 
@@ -43,9 +41,17 @@ namespace StandBy_WEB.Controllers
     [Route("Servico/BuscarClientes/{nome?}")]
     public JsonResult BuscarClientes(string? nome)
     {
-      var clientes = clienteService.repositoryCliente.BuscarPorNome(nome);
-      Console.WriteLine("Clientes: " + clientes.Count());
-      return Json(clientes);
+      try
+      {
+        var clientes = clienteService.repositoryCliente.BuscarPorNome(nome);
+        Console.WriteLine("Clientes: " + clientes.Count());
+        return Json(clientes);
+      }
+      catch (System.Exception)
+      {
+        System.Console.WriteLine("Erro ao buscar clientes");
+      }
+      return Json("Nao encontrou clientes");
     }
     public AdicionarServicoModel CarregarListagemItems()
     {

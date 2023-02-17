@@ -6,24 +6,28 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace standby_data.Models
+namespace standby_data.Models;
+
+public partial class tb_comp_items
 {
-    public partial class tb_comp_items
-    {
-        [Key]
-        public int item_id { get; set; }
-        [StringLength(50)]
-        [Unicode(false)]
-        public string item_tela { get; set; }
-        [StringLength(50)]
-        [Unicode(false)]
-        public string item_grupo { get; set; }
-        [StringLength(50)]
-        [Unicode(false)]
-        public string item_nome { get; set; }
-        public bool? item_editavel { get; set; }
-        [StringLength(50)]
-        [Unicode(false)]
-        public string item_texto { get; set; }
-    }
+    [Key]
+    public int item_id { get; set; }
+
+    [StringLength(50)]
+    [Unicode(false)]
+    public string item_tela { get; set; }
+
+    [StringLength(50)]
+    [Unicode(false)]
+    public string item_grupo { get; set; }
+
+    [StringLength(50)]
+    [Unicode(false)]
+    public string item_nome { get; set; }
+
+    public bool? item_editavel { get; set; }
+
+    [StringLength(50)]
+    [Unicode(false)]
+    public string item_texto { get; set; }
 }

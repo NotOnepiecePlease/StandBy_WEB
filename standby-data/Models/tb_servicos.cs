@@ -6,30 +6,19 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace standby_data.Models
-{
-  [Index("sv_cl_idcliente", Name = "tb_servicos_fk0")]
-  public partial class tb_servicos
-  {
-    public tb_servicos()
-    {
-      tb_checklist = new HashSet<tb_checklist>();
-      tb_compras = new HashSet<tb_compras>();
-      tb_condicoes_fisicas = new HashSet<tb_condicoes_fisicas>();
-      tb_pagamento = new HashSet<tb_pagamento>();
-    }
+namespace standby_data.Models;
 
+[Index("sv_cl_idcliente", Name = "tb_servicos_fk0")]
+public partial class tb_servicos
+{
     [Key]
     public int sv_id { get; set; }
 
-    [Required]
     public int sv_ordem_serv { get; set; }
 
-    [Required(ErrorMessage = "Insira uma data de cadastro")]
     [Column(TypeName = "datetime")]
     public DateTime sv_data { get; set; }
 
-    [Required(ErrorMessage = "Precisa selecionar o cliente responsavel pelo serviço.")]
     public int sv_cl_idcliente { get; set; }
 
     [StringLength(50)]
@@ -40,7 +29,7 @@ namespace standby_data.Models
     [Unicode(false)]
     public string sv_marca { get; set; }
 
-    [Required(ErrorMessage = "Insira o nome do aparelho.")]
+    [Required]
     [StringLength(50)]
     [Unicode(false)]
     public string sv_aparelho { get; set; }
@@ -81,7 +70,9 @@ namespace standby_data.Models
 
     [Column(TypeName = "decimal(10, 2)")]
     public decimal? sv_lucro { get; set; }
+
     public int? sv_status { get; set; }
+
     public int sv_ativo { get; set; }
 
     [Column(TypeName = "datetime")]
@@ -89,10 +80,12 @@ namespace standby_data.Models
 
     [Column(TypeName = "datetime")]
     public DateTime? sv_previsao_entrega { get; set; }
+
     public int? sv_existe_um_prazo { get; set; }
 
     [Column(TypeName = "image")]
     public byte[] sv_senha_pattern { get; set; }
+
     public int? sv_cor_tempo { get; set; }
 
     [StringLength(10)]
@@ -116,15 +109,14 @@ namespace standby_data.Models
     public virtual tb_clientes sv_cl_idclienteNavigation { get; set; }
 
     [InverseProperty("ch_sv_idservicoNavigation")]
-    public virtual ICollection<tb_checklist> tb_checklist { get; set; }
+    public virtual ICollection<tb_checklist> tb_checklist { get; } = new List<tb_checklist>();
 
     [InverseProperty("cp_sv")]
-    public virtual ICollection<tb_compras> tb_compras { get; set; }
+    public virtual ICollection<tb_compras> tb_compras { get; } = new List<tb_compras>();
 
     [InverseProperty("cf_sv_idservicoNavigation")]
-    public virtual ICollection<tb_condicoes_fisicas> tb_condicoes_fisicas { get; set; }
+    public virtual ICollection<tb_condicoes_fisicas> tb_condicoes_fisicas { get; } = new List<tb_condicoes_fisicas>();
 
     [InverseProperty("pag_sv")]
-    public virtual ICollection<tb_pagamento> tb_pagamento { get; set; }
-  }
+    public virtual ICollection<tb_pagamento> tb_pagamento { get; } = new List<tb_pagamento>();
 }

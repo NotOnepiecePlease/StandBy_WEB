@@ -1,8 +1,10 @@
 ﻿using System.Text;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using standby_data.Enums;
 using standby_data.Models;
+using standby_data.Models.DTOs;
 using standby_data.Models.UtilModels;
 using standby_data.Services;
 
@@ -12,7 +14,11 @@ namespace StandBy_WEB.Controllers
   public class ClienteController : Controller
   {
     private ClienteService clienteService = new ClienteService();
-
+    private readonly IMapper _mapper;
+    public ClienteController(IMapper mapper)
+    {
+      _mapper = mapper;
+    }
     public IActionResult Index()
     {
       return View("Index");
@@ -25,93 +31,19 @@ namespace StandBy_WEB.Controllers
     }
     #endregion
 
-    // #region Adicionar cliente com modal
-    // [HttpPost]
-    // public IActionResult AddCliente(tb_clientes _cliente)
-    // {
-    //   MessageAlertModel message = new MessageAlertModel();
-
-    //   if (!ModelState.IsValid)
-    //   {
-    //     foreach (var modelState in ViewData.ModelState.Values)
-    //     {
-    //       foreach (var error in modelState.Errors)
-    //       {
-    //         ModelState.AddModelError(string.Empty, error.ErrorMessage);
-    //       }
-    //     }
-
-
-    //     message.Type = MessageAlertEnum.Error;
-    //     message.Message = $"Erro ao cadastrar o cliente: {_cliente.cl_nome}";
-    //     message.Desc = "Verifique os campos e tente novamente";
-
-    //     ViewData["Message"] = message;
-
-    //     return View("AddCliente");
-    //     //View = Retorna uma view sem recarregar ela
-    //     //RedirectToAction = Retorna a view recarregando novamente os dados.
-    //   }
-
-    //   clienteService.repositoryCliente.Adicionar(_cliente);
-    //   clienteService.repositoryCliente.SalvarModificacoes();
-
-    //   message.Type = MessageAlertEnum.Success;
-    //   message.Message = $"{_cliente.cl_nome} foi inserido com sucesso!";
-    //   message.Desc = "";
-
-    //   ViewData["Message"] = message;
-
-    //   return RedirectToAction("Index");
-    // }
-    // #endregion
-
-    // #region Editar cliente com id
-    // [Route("Cliente/EditarCliente/{id}")]
-    // public IActionResult EditarCliente(int id)
-    // {
-    //   tb_clientes cliente = clienteService.repositoryCliente.BuscarPorID(id);
-    //   return View("EditClienteView", cliente);
-    // }
-    // #endregion
-
-    // #region Editar cliente com modal
-    // [HttpPost]
-    // public IActionResult Edit(tb_clientes _cliente)
-    // {
-    //   if (!ModelState.IsValid)
-    //   {
-    //     foreach (var modelState in ViewData.ModelState.Values)
-    //     {
-    //       foreach (var error in modelState.Errors)
-    //       {
-    //         ModelState.AddModelError(string.Empty, error.ErrorMessage);
-    //       }
-    //     }
-
-    //     return View("EditClienteView", _cliente);
-    //   }
-
-    //   clienteService.repositoryCliente.Atualizar(_cliente);
-    //   clienteService.repositoryCliente.SalvarModificacoes();
-    //   return RedirectToAction("Index");
-    // }
-    // #endregion
-
-
-
     [Route("Cliente/Editar/{id?}")]
-    public IActionResult EditarCliente1(int? id, tb_clientes? _cliente = null)
+    public IActionResult EditarCliente1(int? id, ClienteDTO? _cliente = null)
     {
       #region Essa parte é chamada quando o usuário clica no botão de editar na tabela
       System.Console.WriteLine("ID: " + id);
       System.Console.WriteLine("Cliente: " + _cliente.cl_id);
       if (id.HasValue && _cliente.cl_id == 0)
       {
-        _cliente = clienteService.repositoryCliente.BuscarPorID(id.Value);
+        var clienteEdit = clienteService.repositoryCliente.BuscarPorID(id.Value);
+        var clienteDTO = _mapper.Map<ClienteDTO>(clienteEdit); //Transformo tb_clientes em ClienteDTO
         System.Console.WriteLine("Editando cliente: " + _cliente.cl_nome);
         System.Console.WriteLine("-----------------------------");
-        return View("EditClienteView", _cliente);
+        return View("EditClienteView", clienteDTO);
       }
       #endregion
 
@@ -125,6 +57,7 @@ namespace StandBy_WEB.Controllers
             ModelState.AddModelError(string.Empty, error.ErrorMessage);
           }
         }
+
         System.Console.WriteLine("Segundo IF, deu erro");
         System.Console.WriteLine("-----------------------------");
         return View("EditClienteView", _cliente);
@@ -132,16 +65,14 @@ namespace StandBy_WEB.Controllers
       #endregion
 
       #region Essa parte é chamada quando o usuário clica no botão de salvar dentro da tela de edição e retorna sucesso
-      System.Console.WriteLine("Salvando cliente: " + _cliente.cl_nome);
+      var cliente = _mapper.Map<tb_clientes>(_cliente);//Transformo ClienteDTO em tb_clientes
+      System.Console.WriteLine("Salvando cliente: " + cliente.cl_nome);
       System.Console.WriteLine("-----------------------------");
-      clienteService.repositoryCliente.Atualizar(_cliente);
+      clienteService.repositoryCliente.Atualizar(cliente);
       clienteService.repositoryCliente.SalvarModificacoes();
       return RedirectToAction("Index");
       #endregion
     }
-
-
-
 
     #region Lista de clientes usado para popular o grid mas usando ajax
     public JsonResult ListaClientes()
@@ -169,7 +100,6 @@ namespace StandBy_WEB.Controllers
     #endregion
 
     #region Deletar registro especifico
-
     public async Task<IActionResult> Delete(int _id)
     {
       try
@@ -194,7 +124,9 @@ namespace StandBy_WEB.Controllers
       {
         // var response = await client.GetAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-br&dt=t&q={Uri.EscapeUriString(text)}");
 
-        var response = await client.GetAsync($"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-br&dt=t&q={Uri.EscapeDataString(text)}");
+        var response =
+            await client.GetAsync(
+                $"https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=pt-br&dt=t&q={Uri.EscapeDataString(text)}");
 
         response.EnsureSuccessStatusCode();
         var result = await response.Content.ReadAsStringAsync();
@@ -221,19 +153,19 @@ namespace StandBy_WEB.Controllers
       {
         var _cliente = clienteService.repositoryCliente.BuscarPorID(_id);
         listClienteNaoPodeSerDeletado.Add(_cliente);
+
         //return PartialView("_ClienteNaoPodeSerDeletadoModalPartialView", listClienteNaoPodeSerDeletado);
         return BadRequest($"{_cliente.cl_nome} possui serviços vinculados =( !");
       }
 
 
       return Ok($"{clienteDeletado} foi deletado com sucesso =D !");
+
       //return PartialView("_DeletadoSucessoModalPartialView");
     }
-
     #endregion
 
     #region Deletar registros selecionados
-
     public IActionResult DeleteSelected(int[] selectedIds)
     {
       try
@@ -260,6 +192,7 @@ namespace StandBy_WEB.Controllers
             listClienteNaoPodeSerDeletado.Add(clienteService.repositoryCliente.BuscarPorID(id));
           }
         }
+
         StringBuilder sb = new StringBuilder();
 
         sb.Append("Clientes deletados: ");
@@ -280,6 +213,7 @@ namespace StandBy_WEB.Controllers
         sb.AppendLine("<br>");
 
         //So vai acontecer se achar algum cliente q nao pode ser deletado
+
         #region Cliente nao pode ser deletado
         if (listClienteNaoPodeSerDeletado.Count > 0)
         {
@@ -292,6 +226,7 @@ namespace StandBy_WEB.Controllers
           }
 
           return Ok($"{sb}");
+
           //return PartialView("_ClienteNaoPodeSerDeletadoModalPartialView", listClienteNaoPodeSerDeletado);
         }
         #endregion
@@ -305,7 +240,6 @@ namespace StandBy_WEB.Controllers
         return StatusCode(500, "Ocorreu um erro interno no servidor.");
       }
     }
-
     #endregion
   }
 }
