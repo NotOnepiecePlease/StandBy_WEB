@@ -26,7 +26,7 @@
   }
 
   .sidenav {
-    width: 280px;
+    width: 380px;
     height: 700px;
     grid-column: 1;
     grid-area: "sidenav";
@@ -34,7 +34,7 @@
   }
 
   .item {
-    width: 380px;
+    width: 350px;
     grid-area: "item";
   }
 }

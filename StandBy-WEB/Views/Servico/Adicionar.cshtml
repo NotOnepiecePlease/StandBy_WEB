@@ -3,28 +3,39 @@
 @{
 ViewData["Title"] = "Adicionar";
 string marginBottom = "mb-3";
+int? idCliente = null;
+if(ViewData["ClienteSelecionado"] != null){
+    Console.WriteLine("Diferente de null");
+    idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
+}
+Console.WriteLine("ID CLIENTE: " + idCliente);
 }
 
 @section Styles{
 <link href="~/css/servico/AdicionarServico.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 }
+
+
 <form asp-action="Adicionar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post"
     novalidate>
-    @* <input type="hidden" id="ImageData" name="ImageData" value="">
-    <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega" value="">
-    <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente"
-        value="">
-    <input asp-for="servico.sv_id" type="hidden" value="" />
-    <input asp-for="servico.sv_cl_idcliente" type="hidden" value="" />
-    <input asp-for="servico.sv_ordem_serv" type="hidden" value="" />
-    <input asp-for="servico.sv_status" type="hidden" value="" />
-    <input asp-for="servico.sv_ativo" type="hidden" value="" />
+    @* <input type="hidden" id="ImageData" name="ImageData" value=""> *@
+    @* <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega" value=""> *@
+    @* <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente"
+        value=""> *@
+    @* <input asp-for="servico.sv_id" type="hidden" value="" /> *@
+
+    <input asp-for="servico.sv_cl_idcliente" type="hidden" id="clienteID" required/>
+
+    <input type="hidden" id="clienteNOME" name="clienteNOME" value="@ViewData["clienteNOME"]"/>
+    <input asp-for="servico.sv_status" type="hidden" />
+    <input asp-for="servico.sv_ativo" type="hidden" value="1" />
+    <input asp-for="servico.sv_avaliacao_servico" type="hidden" value="AVALIAÇÃO" />
+    <input asp-for="servico.sv_ordem_serv" type="hidden" value="@Convert.ToInt32(ViewData["OrdemServicoNova"])" />
+    <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
 
     <!--Input Hidden Cliente-->
-    <input asp-for="cliente.cl_id" type="hidden" value="" />
-    <input asp-for="cliente.cl_nome" type="hidden" value="" />
-    <input asp-for="cliente.cl_cpf" type="hidden" value="" /> *@
+    @* <input asp-for="cliente.cl_id" type="hidden" /> *@
 
     <!--Input Hidden CondFisicas-->
     @* @if(@Model.condicaoFisica != null){
@@ -39,7 +50,7 @@ string marginBottom = "mb-3";
         <div class="card d-flex flex-row align-items-center" style="height: 50px">
             @* <div class="row card-body"> *@
 
-                <label class="text-left badge badge-gradient-dark ordem-servico-badge"> OS 1900 </label>
+                <label class="text-left badge badge-gradient-dark ordem-servico-badge"> OS @ViewData["OrdemServicoNova"].ToString() </label>
                 <label class="card-title text-center" style="flex: 1;">
 
                     Adicionando Serviço
@@ -51,7 +62,7 @@ string marginBottom = "mb-3";
         </div>
 
         <!-- Errors -->
-        <div class="card d-none" id="errorCard">
+        <div class="card" id="errorCard">
             <div class="card-header align-items-center d-flex">
                 <h4 class="card-title mb-0 flex-grow-1">Erros</h4>
             </div>
@@ -62,17 +73,8 @@ string marginBottom = "mb-3";
             </div>
         </div>
     </div>
-    <!-- </div> -->
 
-    @* <div class="col-md-12 col-sm-12 select-clientes-pai d-flex justify-content-center">
-        <select asp-for="condicaoFisica.cf_pelicula" class="form-select select-clientes-input" id="cleave-estado">
-            <option disabled selected value=""></option>
-            @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
-            {
-            <option>@item</option>
-            }
-        </select>
-    </div> *@
+
     <section class="containerAdd">
 
 
@@ -376,14 +378,14 @@ string marginBottom = "mb-3";
                 <div class="flex-shrink-0"></div>
             </div>
 
-            <div class="card-body">
+            <div class="card-body card-body-checklist">
                 <div class="live-preview">
                     <div class="row">
                         @* d-flex justify-content-center *@
                         <div class="col-md-12 col-sm-12 select-clientes-pai ">
                             @* select-clientes-input *@
                             <label class="form-label-servicos" for="cleave-cpf">Cliente</label>
-                            <select asp-for="condicaoFisica.cf_pelicula" class="form-select select2" id="cleaveCliente">
+                            <select asp-for="condicaoFisica.cf_pelicula" class="form-select select2 input-servicos-select" id="cleaveCliente">
                                 <option disabled selected value=""></option>
                                 @* @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
                                 {
@@ -394,15 +396,239 @@ string marginBottom = "mb-3";
                     </div>
                 </div>
             </div>
+
+            <!---->
+            <div class="card-header align-items-center d-flex card-header-valores">
+                @* <h4 class="card-title mb-0 flex-grow-1">Valores</h4> *@
+                <div class="flex-shrink-0"></div>
+            </div>
+            <div class="card-body mt-2">
+                <div class="live-preview">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Biometria / Face-ID</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChBiometriaFaceItemsList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Microfone</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChMicrofoneItemsList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div> <!-- Linha biometrica -->
+
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Tela</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChTelaItemsList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Chip</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChChipItemsList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div><!-- Linha tela -->
+
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Botões</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChBotoesList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Sensor</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChSensorList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div><!-- Linha Botoes -->
+
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Câmeras</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChCamerasList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Auricular</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChAuricularList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div><!-- Linha Cameras -->
+
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Wi-Fi</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChWifiList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Alto Falante</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChAltoFalanteList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div><!-- Linha Wi-Fi -->
+
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Bluetooth</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChBluetoothList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+
+                        <div class="col-md-6 col-sm-6 select-clientes-pai ">
+                            
+                            <label class="form-label-servicos" for="cleave-cpf">Carregamento</label>
+                            <select asp-for="condicaoFisica.cf_lente_camera"
+                                class="form-select input-servicos-select " id="cleave-estado">
+                                <option disabled selected value=""></option>
+                                @foreach (var item in @Model.ListasItems.ChCarregamentoList)
+                                {
+                                    <option>@item</option>
+                                }
+                            </select>
+
+                        </div>
+                    </div><!-- Linha Wi-Fi -->
+
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 select-clientes-pai ">
+                            <label class="form-label-servicos mt-3" for="cleave-cpf">Carregamento</label>
+                            <textarea asp-for="checkList.ch_carregamento" class="form-control" id="exampleFormControlTextarea1"
+                            rows="3"></textarea>
+                        </div>
+                    </div>
+
+
+                    <!-- Switches Color -->
+                    <div class="form-check form-switch mt-4">
+                        <input asp-for="checkList.ch_ausente" class="form-check-input" type="checkbox" role="switch" id="SwitchCheck1" unchecked>
+                        <label class="form-check-label" for="SwitchCheck1">Impossivel fazer checklist</label>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 select-clientes-pai ">
+                            <label class="form-label-servicos mt-3" for="cleave-cpf">Motivo</label>
+                            <textarea asp-for="checkList.ch_motivo_ausencia" class="form-control" id="exampleFormControlTextarea1"
+                            rows="3"></textarea>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div><!-- Solucao -->
-
-
     </section>
+
 
     <div class="row">
         <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit">Inserir Serviço</button>
     </div>
-
 </form>
 
 
@@ -410,18 +636,20 @@ string marginBottom = "mb-3";
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
+
+
 <script>
     $(document).ready(function () {
         $("#cleaveCliente").select2({
             allowClear: true,
-            minimumInputLength: 4,
+            minimumInputLength: 2,
             placeholder: "Digite o nome do cliente",
             templateResult: function (data) {
                 //console.log("data", data)
                 if (!data.loading) {
                     var text = data.text;
-                    if (text.length > 20) {
-                        text = text.substring(0, 20) + "...";
+                    if (text.length > 35) {
+                        text = text.substring(0, 35) + "...";
                     }
 
                     var element = $("<span>" + data.id + " - </span><span style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap;'>" + text + "</span>");
@@ -451,6 +679,23 @@ string marginBottom = "mb-3";
                 },
                 cache: true
             },
+            // ajax:{
+            //     url: "/Servico/BuscarClientes",
+            //     dataType: "json",
+            //     data: { nome: "" },
+            //     success: function (data) {
+            //         $("#cleaveCliente").empty().select2({
+            //             data: $.map(data, function (item) {
+            //                 return {
+            //                     id: item.cl_id,
+            //                     text: item.cl_nome
+            //                 };
+            //             })
+            //         });
+            //         $("#cleaveCliente").val(clienteId).trigger("change");
+            //         console.log("Valor após definir o valor inicial: ", $("#cleaveCliente").val());
+            //     }
+            // },
             language: {
                 inputTooShort: function (args) {
                     var remainingChars = args.minimum - args.input.length;
@@ -497,5 +742,37 @@ string marginBottom = "mb-3";
             }
         });
     });
+
+
+    //var teste = $('#cleaveCliente').select2('data');
+   // console.log("teste", teste);
 </script>
+
+
+<script>
+    $(document).ready(function () {
+        var clienteNOME = document.getElementById("clienteNOME").value;
+        var clienteId = document.getElementById("clienteID").value;
+        var newOption = new Option(clienteNOME, clienteId, true, true);
+        
+        $('#cleaveCliente').append(newOption).trigger('change');
+    });
+</script>
+
+<script>
+    $("#cleaveCliente").on("change", function (e) {
+        // var clienteId = e.target.value;
+        // var clienteNOME = e.target.innerText;
+
+        var clienteId = $("#cleaveCliente option:last-child").val();
+        var clienteNOME = $("#cleaveCliente option:last-child").text();
+        
+        document.getElementById("clienteID").value = clienteId;
+        document.getElementById("clienteNOME").value = clienteNOME;
+
+        console.log("clienteId", clienteId);
+        console.log("clienteNOME", clienteNOME);
+    });
+</script>
+
 }

@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper.Configuration.Annotations;
 using Microsoft.EntityFrameworkCore;
 
 namespace standby_data.Models.DTOs
@@ -13,17 +8,17 @@ namespace standby_data.Models.DTOs
   {
     [Key]
     public int cl_id { get; set; }
-    [Required]
+    [Required(ErrorMessage = "Nome do cliente está vazio.")]
     [StringLength(100)]
     [MinLength(4, ErrorMessage = "O Nome deve ter no mínimo 3 caracteres.")]
     [Unicode(false)]
     public string cl_nome { get; set; }
-    [Required]
+    [Required(ErrorMessage = "Telefone principal está vazio.")]
     [StringLength(15)]
     [MinLength(15, ErrorMessage = "Preencha o telefone principal corretamente : (xx) x xxxx-xxxx")]
     [Unicode(false)]
     public string cl_telefone { get; set; }
-    [Required]
+    [Required(ErrorMessage = "CPF/CNPJ está vazio.")]
     [StringLength(18)]
     [MinLength(14, ErrorMessage = "O Campo de 'CPF/CNPJ' deve ter no minimo 14 digitos.")]
     [Unicode(false)]
@@ -44,7 +39,7 @@ namespace standby_data.Models.DTOs
     [StringLength(1)]
     [Unicode(false)]
     [MinLength(1, ErrorMessage = "Sexo deve possuir apenas 1 digito.")]
-    public string cl_sexo { get; set; }
+    public string? cl_sexo { get; set; }
     [Column(TypeName = "datetime")]
     public DateTime? cl_data_nascimento { get; set; }
     [StringLength(10)]

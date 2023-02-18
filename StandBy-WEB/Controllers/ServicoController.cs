@@ -1,7 +1,9 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using standby_data.Context;
 using standby_data.Models;
+using standby_data.Models.DTOs;
 using standby_data.Models.UtilModels;
 using standby_data.Services;
 using static standby_data.Repositories.RepositoryServico;
@@ -12,16 +14,20 @@ namespace StandBy_WEB.Controllers
   // [Authorize(Roles = "Administrador, Gerente, Operador")]
   public class ServicoController : Controller
   {
+    standby_orgContext context = new standby_orgContext();
     private ServicoService servicoService = new ServicoService();
     private ClienteService clienteService = new ClienteService();
+    CondicoesFisicasService condicoesFisicasService = new CondicoesFisicasService();
+    ChecklistService checkListService = new ChecklistService();
     private ItemService itemService = new ItemService();
     private readonly ILogger<ServicoController> _logger;
 
+    private readonly IMapper _mapper;
 
-
-    public ServicoController(ILogger<ServicoController> logger)
+    public ServicoController(ILogger<ServicoController> logger, IMapper mapper)
     {
       _logger = logger;
+      _mapper = mapper;
     }
 
     public IActionResult Index()
@@ -31,10 +37,78 @@ namespace StandBy_WEB.Controllers
     }
 
     // [Route("Servico/Adicionar")]
+    [HttpGet]
     public IActionResult Adicionar()
     {
-      var modelTeste = CarregarListagemItems();
+      AdicionarServicoModel modelTeste = CarregarListagemItems();
+      var OrdemServicoNova = context.tb_log.FirstOrDefault().log_ultima_ordem_servico + 1;
+      ViewData["OrdemServicoNova"] = OrdemServicoNova;
+      //ViewData["ClienteSelecionado"] = null;
       return View("Adicionar", modelTeste);
+    }
+
+    [HttpPost]
+    public IActionResult Adicionar(AdicionarServicoModel _clienteCompleto, IFormCollection form)
+    {
+      Console.WriteLine("Cliente: " + _clienteCompleto.servico.sv_cl_idcliente);
+      var nomeCliente = form["clienteNOME"].ToString();
+      ModelState.Remove("cliente.cl_cpf");
+      if (!ModelState.IsValid)
+      {
+        foreach (var modelState in ViewData.ModelState.Values)
+        {
+          foreach (var error in modelState.Errors)
+          {
+            ModelState.AddModelError(string.Empty, error.ErrorMessage);
+          }
+        }
+
+        AdicionarServicoModel modelTeste = CarregarListagemItems();
+        //modelTeste.servico = _clienteCompleto.servico;
+        //modelTeste.condicaoFisica = _clienteCompleto.condicaoFisica;
+        //modelTeste.checkList = _clienteCompleto.checkList;
+        var OrdemServicoNova = context.tb_log.FirstOrDefault().log_ultima_ordem_servico + 1;
+        ViewData["OrdemServicoNova"] = OrdemServicoNova;
+        ViewData["ClienteSelecionado"] = _clienteCompleto.servico.sv_cl_idcliente;
+        ViewData["clienteNOME"] = nomeCliente;
+        return View("Adicionar", modelTeste);
+        // return View("Adicionar", modelTeste);
+      }
+
+      try
+      {
+        var dataHoje = DateTime.Now;
+        var servico = _clienteCompleto.servico;
+        var servicoMapper = _mapper.Map<tb_servicos>(servico);
+
+        var condicaoFisica = _clienteCompleto.condicaoFisica;
+        var condicaoFisicaMapper = _mapper.Map<tb_condicoes_fisicas>(condicaoFisica);
+
+        var checkList = _clienteCompleto.checkList;
+        var checkListMapper = _mapper.Map<tb_checklist>(checkList);
+
+        servicoMapper.sv_data = dataHoje;
+        servicoService.repositoryServico.Adicionar(servicoMapper);
+
+        condicaoFisicaMapper.cf_sv_idservico = servicoMapper.sv_id;
+        condicaoFisicaMapper.cf_data = dataHoje;
+        condicoesFisicasService.repositoryCondicoesFisicas.Adicionar(condicaoFisicaMapper);
+
+        checkListMapper.ch_sv_idservico = servicoMapper.sv_id;
+        checkListMapper.ch_data = dataHoje;
+        checkListService.repositoryChecklist.Adicionar(checkListMapper);
+
+        servicoService.repositoryServico.SalvarModificacoes();
+        condicoesFisicasService.repositoryCondicoesFisicas.SalvarModificacoes();
+        checkListService.repositoryChecklist.SalvarModificacoes();
+      }
+      catch (System.Exception e)
+      {
+        Console.WriteLine("Erro ao adicionar servico: " + e);
+        return BadRequest("Erro ao adicionar servico: " + e);
+      }
+
+      return RedirectToAction("Adicionar");
     }
 
 
@@ -64,6 +138,20 @@ namespace StandBy_WEB.Controllers
       model.ListasItems.CfAroItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "Aro");
       model.ListasItems.CfBotoesItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "Botoes");
       model.ListasItems.CfLenteCamItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CONDICOES_FISICAS_ITEM", "LenteCamera");
+
+      //Checklist
+      model.ListasItems.ChBiometriaFaceItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Biometria");
+      model.ListasItems.ChMicrofoneItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Microfone");
+      model.ListasItems.ChTelaItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Tela");
+      model.ListasItems.ChChipItemsList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Chip");
+      model.ListasItems.ChBotoesList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Botoes");
+      model.ListasItems.ChSensorList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Sensor");
+      model.ListasItems.ChCamerasList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Cameras");
+      model.ListasItems.ChAuricularList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Auricular");
+      model.ListasItems.ChWifiList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Wifi");
+      model.ListasItems.ChAltoFalanteList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Altofalante");
+      model.ListasItems.ChBluetoothList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Bluetooth");
+      model.ListasItems.ChCarregamentoList = itemService.repositoryItem.BuscarItems("ORDEM_SERVICO", "CHECKLIST_ITEM", "Carregamento");
 
 
 

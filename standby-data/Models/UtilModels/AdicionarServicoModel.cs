@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+using standby_data.Models.DTOs;
 
 namespace standby_data.Models.UtilModels
 {
   //[Bind(include: "cl_id, cl_nome, cl_telefone, cl_telefone_recado")]
   public class AdicionarServicoModel
   {
-    public tb_servicos servico { get; set; }
-    public tb_clientes cliente { get; set; }
-    public tb_condicoes_fisicas condicaoFisica { get; set; }
+    public ServicoDTO servico { get; set; }
+    public ClienteDTO? cliente { get; set; }
+    public CondicoesFisicasDTO condicaoFisica { get; set; }
     public tb_checklist checkList { get; set; }
-
     public ListasItems ListasItems { get; set; } = new ListasItems();
   }
 

@@ -13,6 +13,8 @@ namespace standby_data.AutoMapper
     public MappingModels()
     {
       CreateMap<tb_clientes, ClienteDTO>().ReverseMap();
+      CreateMap<tb_condicoes_fisicas, CondicoesFisicasDTO>().ReverseMap();
+      CreateMap<tb_servicos, ServicoDTO>().ReverseMap();
     }
   }
 }
