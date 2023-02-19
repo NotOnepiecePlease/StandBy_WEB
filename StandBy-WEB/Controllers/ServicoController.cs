@@ -52,6 +52,7 @@ namespace StandBy_WEB.Controllers
     {
       Console.WriteLine("Cliente: " + _clienteCompleto.servico.sv_cl_idcliente);
       var nomeCliente = form["clienteNOME"].ToString();
+      var OrdemServicoNova = context.tb_log.FirstOrDefault().log_ultima_ordem_servico + 1;
       ModelState.Remove("cliente.cl_cpf");
       if (!ModelState.IsValid)
       {
@@ -64,21 +65,25 @@ namespace StandBy_WEB.Controllers
         }
 
         AdicionarServicoModel modelTeste = CarregarListagemItems();
-        //modelTeste.servico = _clienteCompleto.servico;
-        //modelTeste.condicaoFisica = _clienteCompleto.condicaoFisica;
-        //modelTeste.checkList = _clienteCompleto.checkList;
-        var OrdemServicoNova = context.tb_log.FirstOrDefault().log_ultima_ordem_servico + 1;
+
         ViewData["OrdemServicoNova"] = OrdemServicoNova;
         ViewData["ClienteSelecionado"] = _clienteCompleto.servico.sv_cl_idcliente;
         ViewData["clienteNOME"] = nomeCliente;
+
         return View("Adicionar", modelTeste);
-        // return View("Adicionar", modelTeste);
       }
 
       try
       {
+        string checkBoxSelecionadaByUser = form["PrevisaoEntrega"].ToString();
+        var previsaoEntrega = PegarPrevisaoEntrega(checkBoxSelecionadaByUser);
+
         var dataHoje = DateTime.Now;
         var servico = _clienteCompleto.servico;
+        servico.sv_ordem_serv = OrdemServicoNova;
+        servico.sv_previsao_entrega = previsaoEntrega;
+
+
         var servicoMapper = _mapper.Map<tb_servicos>(servico);
 
         var condicaoFisica = _clienteCompleto.condicaoFisica;
@@ -107,8 +112,38 @@ namespace StandBy_WEB.Controllers
         Console.WriteLine("Erro ao adicionar servico: " + e);
         return BadRequest("Erro ao adicionar servico: " + e);
       }
+      System.Console.WriteLine("Servico adicionado com sucesso");
+      return RedirectToAction("Index");
+    }
 
-      return RedirectToAction("Adicionar");
+    private DateTime? PegarPrevisaoEntrega(string _checkBoxSelecionada)
+    {
+      switch (_checkBoxSelecionada)
+      {
+        case "chkSemPrevia":
+          return null;
+
+        case "chk24":
+          return DateTime.Now.AddDays(1);
+
+        case "chk2":
+          return DateTime.Now.AddDays(2);
+
+        case "chk3":
+          return DateTime.Now.AddDays(3);
+
+        case "chk4":
+          return DateTime.Now.AddDays(4);
+
+        case "chk5":
+          return DateTime.Now.AddDays(5);
+
+        case "chk7":
+          return DateTime.Now.AddDays(7);
+
+        default:
+          return null;
+      }
     }
 
 

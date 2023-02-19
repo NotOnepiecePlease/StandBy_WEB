@@ -2,20 +2,21 @@
 $(document).ready(function () {
   $("#cleave-cep").change(function () {
     var cep = $(this).val().replace(/\D/g, "");
-    console.log(cep);
-    console.log("Length: " + cep.length);
+    // console.log(cep);
+    // console.log("Length: " + cep.length);
     if (cep.length == 8) {
-      console.log("Deu 9");
+      // console.log("Deu 9");
       $.ajax({
         url: "https://viacep.com.br/ws/" + cep + "/json/",
         type: "GET",
         success: function (dados) {
-          console.log("success:", dados);
+          // console.log("success:", dados);
           if (!("erro" in dados)) {
-            console.log("if:", dados);
+            // console.log("if:", dados);
             $("#badge-badRequest").addClass("d-none");
             $("#badge-avisoErro").addClass("d-none"); //Adiciona a classe d-none e faz a badge sumir
             $("#badge-avisoSucess").removeClass("d-none"); //Adiciona a classe d-none e faz a badge sumir
+
             $("input[id='cleave-rua']").val(dados.logradouro);
             $("input[id='cleave-comlemento']").val(dados.complemento);
             $("input[id='cleave-bairro']").val(dados.bairro);

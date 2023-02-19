@@ -1,0 +1,27 @@
+.containerChk {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#lblchecks {
+  width: 70px;
+  text-align: left;
+}
+#lblchecksSemPrevia {
+  width: 80px;
+  text-align: center;
+  margin-left: 5%;
+}
+
+#chkSemPrevia {
+  margin-left: 2%;
+}
+
+.teste {
+  width: 200px;
+  margin-left: 10.6% !important;
+}

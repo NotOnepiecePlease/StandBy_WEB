@@ -5,8 +5,8 @@ ViewData["Title"] = "Adicionar";
 string marginBottom = "mb-3";
 int? idCliente = null;
 if(ViewData["ClienteSelecionado"] != null){
-    Console.WriteLine("Diferente de null");
-    idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
+Console.WriteLine("Diferente de null");
+idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
 }
 Console.WriteLine("ID CLIENTE: " + idCliente);
 }
@@ -14,43 +14,37 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 @section Styles{
 <link href="~/css/servico/AdicionarServico.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Lockscreen -->
+<link href="~/css/lockscreen.css" rel="stylesheet" />
+<!-- <link rel="stylesheet" href="~/css/style.css" /> -->
+<link rel="stylesheet" href="~/js/novo/styles.css">
+<link rel="stylesheet" href="~/css/PrevisaoEntregaAlert.css">
 }
 
 
 <form asp-action="Adicionar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post"
     novalidate>
-    @* <input type="hidden" id="ImageData" name="ImageData" value=""> *@
-    @* <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega" value=""> *@
-    @* <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente"
-        value=""> *@
-    @* <input asp-for="servico.sv_id" type="hidden" value="" /> *@
 
-    <input asp-for="servico.sv_cl_idcliente" type="hidden" id="clienteID" required/>
+    <input type="hidden" id="ImageData" name="ImageData" value="@ViewData[" imageSrc"]">
+    <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega">
+    <input asp-for="servico.sv_cl_idcliente" type="hidden" id="clienteID" required />
 
-    <input type="hidden" id="clienteNOME" name="clienteNOME" value="@ViewData["clienteNOME"]"/>
+    <input type="hidden" id="clienteNOME" name="clienteNOME" value="@ViewData[" clienteNOME"]" />
     <input asp-for="servico.sv_status" type="hidden" />
     <input asp-for="servico.sv_ativo" type="hidden" value="1" />
     <input asp-for="servico.sv_avaliacao_servico" type="hidden" value="AVALIAÇÃO" />
-    <input asp-for="servico.sv_ordem_serv" type="hidden" value="@Convert.ToInt32(ViewData["OrdemServicoNova"])" />
+    <input asp-for="servico.sv_ordem_serv" type="hidden" value="@Convert.ToInt32(ViewData[" OrdemServicoNova"])" />
     <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
 
-    <!--Input Hidden Cliente-->
-    @* <input asp-for="cliente.cl_id" type="hidden" /> *@
 
-    <!--Input Hidden CondFisicas-->
-    @* @if(@Model.condicaoFisica != null){
-    <input asp-for="condicaoFisica.cf_id" type="hidden" value="@Model.condicaoFisica.cf_id" />
-    <input asp-for="condicaoFisica.cf_tipo" type="hidden" value="ENTRADA" />
-    } *@
 
-    @* card-headerr d-flex flex flex-row align-items-center px-4 *@
-    <!-- <div class="row"> -->
     <div class="col-md-12 col-sm-12 ">
-
         <div class="card d-flex flex-row align-items-center" style="height: 50px">
             @* <div class="row card-body"> *@
 
-                <label class="text-left badge badge-gradient-dark ordem-servico-badge"> OS @ViewData["OrdemServicoNova"].ToString() </label>
+                <label class="text-left badge badge-gradient-dark ordem-servico-badge"> OS
+                    @ViewData["OrdemServicoNova"].ToString() </label>
                 <label class="card-title text-center" style="flex: 1;">
 
                     Adicionando Serviço
@@ -59,7 +53,8 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
                 @*
             </div> *@
-        </div>
+        </div> <!-- Adicionando servico -->
+
 
         <!-- Errors -->
         <div class="card" id="errorCard">
@@ -68,6 +63,7 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
             </div>
             <div class="card-body">
                 <strong>
+                    <div id="validation"></div>
                     <div asp-validation-summary="ModelOnly" class="alert alert-warning" role="alert"></div>
                 </strong>
             </div>
@@ -177,9 +173,9 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
                                     <label class="form-label-servicos" for="cleave-cpf">Padrão</label>
 
                                     <a class="btn-servicos ri-lock-line btn btn-danger col-md-4 d-block form-control"
-                                        onclick="return loadModal()">
+                                        onclick="return loadModalNovaSenha()">
                                     </a>
-
+                                    @await Html.PartialAsync("_SenhaPatternAndroid", new SenhaPatternViewModel())
 
                                 </div>
                             </div>
@@ -385,7 +381,8 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
                         <div class="col-md-12 col-sm-12 select-clientes-pai ">
                             @* select-clientes-input *@
                             <label class="form-label-servicos" for="cleave-cpf">Cliente</label>
-                            <select asp-for="condicaoFisica.cf_pelicula" class="form-select select2 input-servicos-select" id="cleaveCliente">
+                            <select asp-for="condicaoFisica.cf_pelicula"
+                                class="form-select select2 input-servicos-select" id="cleaveCliente">
                                 <option disabled selected value=""></option>
                                 @* @foreach (var item in @Model.ListasItems.CfPeliculaItemsList)
                                 {
@@ -406,28 +403,28 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
                 <div class="live-preview">
                     <div class="row">
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Biometria / Face-ID</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChBiometriaFaceItemsList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
                         </div>
 
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Microfone</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChMicrofoneItemsList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
@@ -438,28 +435,28 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
                     <div class="row">
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Tela</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChTelaItemsList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
                         </div>
 
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Chip</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChChipItemsList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
@@ -470,28 +467,28 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
                     <div class="row">
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Botões</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChBotoesList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
                         </div>
 
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Sensor</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChSensorList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
@@ -502,28 +499,28 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
                     <div class="row">
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Câmeras</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChCamerasList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
                         </div>
 
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Auricular</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChAuricularList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
@@ -534,28 +531,28 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
                     <div class="row">
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Wi-Fi</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChWifiList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
                         </div>
 
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Alto Falante</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChAltoFalanteList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
@@ -566,28 +563,28 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
                     <div class="row">
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Bluetooth</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChBluetoothList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
                         </div>
 
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
-                            
+
                             <label class="form-label-servicos" for="cleave-cpf">Carregamento</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera"
-                                class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChCarregamentoList)
                                 {
-                                    <option>@item</option>
+                                <option>@item</option>
                                 }
                             </select>
 
@@ -598,15 +595,16 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
                     <div class="row">
                         <div class="col-md-12 col-sm-12 select-clientes-pai ">
                             <label class="form-label-servicos mt-3" for="cleave-cpf">Carregamento</label>
-                            <textarea asp-for="checkList.ch_carregamento" class="form-control" id="exampleFormControlTextarea1"
-                            rows="3"></textarea>
+                            <textarea asp-for="checkList.ch_carregamento" class="form-control"
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                     </div>
 
 
                     <!-- Switches Color -->
                     <div class="form-check form-switch mt-4">
-                        <input asp-for="checkList.ch_ausente" class="form-check-input" type="checkbox" role="switch" id="SwitchCheck1" unchecked>
+                        <input asp-for="checkList.ch_ausente" class="form-check-input" type="checkbox" role="switch"
+                            id="SwitchCheck1" unchecked>
                         <label class="form-check-label" for="SwitchCheck1">Impossivel fazer checklist</label>
                     </div>
 
@@ -614,8 +612,8 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
                     <div class="row">
                         <div class="col-md-12 col-sm-12 select-clientes-pai ">
                             <label class="form-label-servicos mt-3" for="cleave-cpf">Motivo</label>
-                            <textarea asp-for="checkList.ch_motivo_ausencia" class="form-control" id="exampleFormControlTextarea1"
-                            rows="3"></textarea>
+                            <textarea asp-for="checkList.ch_motivo_ausencia" class="form-control"
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                     </div>
 
@@ -627,30 +625,129 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
 
     <div class="row">
-        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit">Inserir Serviço</button>
+        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit" id="btnCadastrarServico">Inserir
+            Serviço</button>
     </div>
 </form>
 
 
 @section scripts{
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="~/js/novo/patternlock.js"></script>
+<script src="~/js/Add-Edit-Servico.js"></script>
 
 
+
+<script>
+    $(document).ready(function () {
+        $("#btnCadastrarServico").click(function (event) {
+            // $("#btnCadastrarServico").click(function (event) {
+            //console.log("Tentando exibir alerta")
+            event.preventDefault();
+
+            Swal.fire({
+                title: 'Qual a previsão de entrega?',
+                html: html,
+                showCancelButton: true,
+                confirmButtonText: 'Cadastrar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                    //pegar qual checkbox foi selecionada dentre as 5
+                    var checkboxes = document.getElementsByClassName("form-check-input");
+                    var selectedCheckbox = null;
+                    for (var i = 0; i < checkboxes.length; i++) {
+                        if (checkboxes[i].checked) {
+                            selectedCheckbox = checkboxes[i];
+                            break;
+                        }
+                    }
+                    console.log("chkSelecionada: ", selectedCheckbox);
+                    var PrevisaoEntrega = document.getElementById("PrevisaoEntrega");
+                    PrevisaoEntrega.value = selectedCheckbox.id;
+
+                    console.log("PrevisaoEntrega: ", PrevisaoEntrega.value);
+
+                    $("#formulario").submit();
+
+                }
+            });
+        });
+    });
+
+
+    //Bloco html com checkboxes de previsao de entrega exibido no sweetie alert
+    var html = `
+<div class="containerChk">
+    <div class="justify-content-between">
+        <div class="form-check form-check-inline teste">
+            <input class="form-check-input" type="checkbox" id="chkSemPrevia" checked>
+            <label class="form-check-label" id="lblchecksSemPrevia" for="chkSemPrevia">Sem Prévia</label>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="chk24" unchecked>
+            <label class="form-check-label" id="lblchecks" for="chk24">24 Horas</label>
+        </div>
+
+        <div class="form-check form-check-inline text-center">
+            <input class="form-check-input" type="checkbox" id="chk3" unchecked>
+            <label class="form-check-label" id="lblchecks" for="chk3">3 Dias</label>
+        </div>
+
+        <div class="form-check form-check-inline text-right">
+            <input class="form-check-input" type="checkbox" id="chk5" unchecked>
+            <label class="form-check-label" id="lblchecks" for="chk5">5 Dias</label>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="checkbox" id="chk2" unchecked>
+            <label class="form-check-label" id="lblchecks" for="chk2">2 Dias</label>
+        </div>
+
+        <div class="form-check form-check-inline text-center">
+            <input class="form-check-input" type="checkbox" id="chk4" unchecked>
+            <label class="form-check-label" id="lblchecks" for="chk4">4 Dias</label>
+        </div>
+
+        <div class="form-check form-check-inline text-right">
+            <input class="form-check-input" type="checkbox" id="chk7" unchecked>
+            <label class="form-check-label" id="lblchecks" for="chk7">7 Dias</label>
+        </div>
+    </div>
+</div>
+`;
+
+</script>
+
+
+<script>
+    $(document).on("change", ".form-check-input", function () {
+        console.log("Evento disparado");
+        $(".form-check-input").not(this).prop("checked", false);
+    });
+
+</script>
 
 
 <script>
     $(document).ready(function () {
         $("#cleaveCliente").select2({
             allowClear: true,
-            minimumInputLength: 2,
+            minimumInputLength: 3,
             placeholder: "Digite o nome do cliente",
             templateResult: function (data) {
-                //console.log("data", data)
                 if (!data.loading) {
                     var text = data.text;
                     if (text.length > 35) {
                         text = text.substring(0, 35) + "...";
                     }
+
 
                     var element = $("<span>" + data.id + " - </span><span style='text-overflow: ellipsis; overflow: hidden; white-space: nowrap;'>" + text + "</span>");
                     return element;
@@ -662,11 +759,13 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
                 dataType: "json",
                 delay: 250,
                 data: function (params) {
+
                     return {
                         nome: params.term
                     };
                 },
                 processResults: function (data) {
+                    //console.log("Qtd Clientes", data.length)
                     return {
                         results: $.map(data, function (item) {
                             //console.log("item", item)
@@ -679,23 +778,6 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
                 },
                 cache: true
             },
-            // ajax:{
-            //     url: "/Servico/BuscarClientes",
-            //     dataType: "json",
-            //     data: { nome: "" },
-            //     success: function (data) {
-            //         $("#cleaveCliente").empty().select2({
-            //             data: $.map(data, function (item) {
-            //                 return {
-            //                     id: item.cl_id,
-            //                     text: item.cl_nome
-            //                 };
-            //             })
-            //         });
-            //         $("#cleaveCliente").val(clienteId).trigger("change");
-            //         console.log("Valor após definir o valor inicial: ", $("#cleaveCliente").val());
-            //     }
-            // },
             language: {
                 inputTooShort: function (args) {
                     var remainingChars = args.minimum - args.input.length;
@@ -742,10 +824,6 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
             }
         });
     });
-
-
-    //var teste = $('#cleaveCliente').select2('data');
-   // console.log("teste", teste);
 </script>
 
 
@@ -754,7 +832,7 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
         var clienteNOME = document.getElementById("clienteNOME").value;
         var clienteId = document.getElementById("clienteID").value;
         var newOption = new Option(clienteNOME, clienteId, true, true);
-        
+
         $('#cleaveCliente').append(newOption).trigger('change');
     });
 </script>
@@ -766,12 +844,12 @@ Console.WriteLine("ID CLIENTE: " + idCliente);
 
         var clienteId = $("#cleaveCliente option:last-child").val();
         var clienteNOME = $("#cleaveCliente option:last-child").text();
-        
+
         document.getElementById("clienteID").value = clienteId;
         document.getElementById("clienteNOME").value = clienteNOME;
 
-        console.log("clienteId", clienteId);
-        console.log("clienteNOME", clienteNOME);
+        //console.log("clienteId", clienteId);
+        //console.log("clienteNOME", clienteNOME);
     });
 </script>
 

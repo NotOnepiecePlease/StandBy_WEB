@@ -627,19 +627,10 @@
 @section Scripts {
 <script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
 <script src="~/assets/js/pages/form-masks.init.js"></script>
-@*
-<script src="~/js/lockscreen.js"></script> *@
-@*
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script> *@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
 <script type="text/javascript" src="~/js/script.js"></script>
 <script src="~/js/novo/patternlock.js"></script>
-@*
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.13/l10n/pt.min.js"></script> *@
-@*
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/pt-br.min.js"></script> *@
-
+<script src="~/js/Add-Edit-Servico.js"></script>
 
 
 <script>
@@ -666,17 +657,17 @@
 
 <!-- NOVOS - Inicializa o pattern screen password-->
 <script>
-    var lock = new PatternLock("#lock", {
+    {/* var lock = new PatternLock("#lock", {
         onPattern: function (pattern) {
             // Context is the pattern lock instance
             console.log(pattern)
         }
-    });
+    }); */}
 </script>
 
 <!-- NOVOS - Inicializa o datepicker -->
 <script>
-    var teste = flatpickr("#flatpickr", {
+    {/* var teste = flatpickr("#flatpickr", {
             @* locale: "pt", *@
     locale: {
         firstDayOfWeek: 1,
@@ -703,32 +694,32 @@
                             //console.log(instance);
                             document.querySelector("#PrevisaoEntrega").value = selectedDates[0].toLocaleString();
                         }
-        });
+        }); */}
 </script>
 
 <!-- NOVOS -->
 <script>
-    function ReceberSenhaPatternDaPartial(inputValue) {
+    {/* function ReceberSenhaPatternDaPartial(inputValue) {
         // Aqui você pode usar o valor digitado pelo usuário
         console.log("Senha recebida:", inputValue);
-    }
+    } */}
 </script>
 
 <!-- NOVOS -->
 <script>
-    function EnviarSenhaPatternParaViewPai() {
+    {/* function EnviarSenhaPatternParaViewPai() {
         console.log("Enviando senha");
         var inputValue = document.getElementById("inputPassPattern").value;
         console.log("senha enviada: ", inputValue);
         // Envia o valor digitado pelo usuário para a View principal
         window.parent.ReceberSenhaPatternDaPartial(inputValue);
         VerCodigoImagem();
-    }
+    } */}
 </script>
 
 <!-- NOVOS -->
 <script>
-    function VerCodigoImagem() {
+    {/* function VerCodigoImagem() {
 
         //document.querySelector("#containerPasswordLock").style.backgroundColor = "red";
 
@@ -738,20 +729,20 @@
             console.log("Base64 image: " + base64Image);
             document.querySelector("#ImageData").value = base64Image;
         });
-    }
+    } */}
 </script>
 
 
 <script> //Chama a modal de patternPassword
-    function loadModal() {
+    {/* function loadModal() {
         TituloModalSenhaAtual();
         $('#exibirPatternPassword').modal('show')
-    }
+    } */}
 </script>
 
 
 <script>
-    function MudarSenha() {
+    {/* function MudarSenha() {
         var root = document.getElementById("containerPasswordLock");
         console.log("root:", root);
         root.classList.remove("d-none");
@@ -762,17 +753,17 @@
         senhaAparelho.classList.add("d-none");
         var btnMudarSenha = document.getElementById("btnMudarSenha");
         btnMudarSenha.classList.add("d-none");
-    }
+    } */}
 </script>
 
 <script> //Quando o usuario clicar em cancelar no modal de patternPassword, ele volta a senha do aparelho
-    $('#exibirPatternPassword').on('hidden.bs.modal', function (e) {
+    {/* $('#exibirPatternPassword').on('hidden.bs.modal', function (e) {
         Cancelar();
-    });
+    }); */}
 </script>
 
 <script>
-    function Cancelar() {
+    {/* function Cancelar() {
         var root = document.getElementById("containerPasswordLock");
         root.classList.add("d-none");
 
@@ -780,12 +771,12 @@
         senhaAparelho.classList.remove("d-none");
         var btnMudarSenha = document.getElementById("btnMudarSenha");
         btnMudarSenha.classList.remove("d-none");
-    }
+    } */}
 </script>
 
 
 <script>
-    function TituloModalSenhaAtual() {
+    {/* function TituloModalSenhaAtual() {
         var root = document.getElementById("tituloModal");
         root.classList.remove("text-warning");
         root.classList.add("text-primary");
@@ -797,7 +788,7 @@
         root.classList.remove("text-primary");
         root.classList.add("text-warning");
         root.innerHTML = "Desenhe a nova senha do aparelho";
-    }
+    } */}
 </script>
 <!------------- Fim novos--------------->
 }
