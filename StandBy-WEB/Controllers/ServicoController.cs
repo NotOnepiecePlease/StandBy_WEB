@@ -75,6 +75,18 @@ namespace StandBy_WEB.Controllers
 
       try
       {
+
+        var imageData = form["ImageData"].ToString();
+        if (imageData != "" && imageData != null)
+        {
+          System.Console.WriteLine("Cadastrando senha pattern no serviço.");
+          // Converte a string base64 em um array de bytes
+          byte[] imageBytes = Convert.FromBase64String(imageData.Split(',')[1]);
+          // Armazena a imagem na coluna sv_senha_pattern
+          var senhaPattern = imageBytes;
+          _clienteCompleto.servico.sv_senha_pattern = senhaPattern;
+        }
+
         string checkBoxSelecionadaByUser = form["PrevisaoEntrega"].ToString();
         var previsaoEntrega = PegarPrevisaoEntrega(checkBoxSelecionadaByUser);
 
@@ -208,11 +220,13 @@ namespace StandBy_WEB.Controllers
         {
           byte[] imageBytes = (byte[])servicoEditar.servico.sv_senha_pattern;
           string base64String = Convert.ToBase64String(imageBytes);
+          System.Console.WriteLine("[EDIT SERV] base64String: " + base64String);
           string imageSrc = String.Format("data:image/jpg;base64,{0}", base64String);
           ViewData["imageSrc"] = imageSrc;
+          Console.WriteLine("[EDIT SERV] base 64 formatado: " + ViewData["imageSrc"]);
         }
 
-        Console.WriteLine("Prev de entrega do serv: " + servicoEditar.servico.sv_previsao_entrega);
+        // Console.WriteLine("Prev de entrega do serv: " + servicoEditar.servico.sv_previsao_entrega);
         return View(servicoEditar);
       }
       #endregion

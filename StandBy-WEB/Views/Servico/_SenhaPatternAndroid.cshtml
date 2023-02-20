@@ -27,8 +27,8 @@
 
                                     @if (ViewData["imageSrc"] == null)
                                     {
-                                        Console.WriteLine("pTitle: " + ViewData["Lista"]);
-                                        Console.WriteLine("Nao tem imagem");
+                                        @* Console.WriteLine("pTitle: " + ViewData["Lista"]);
+                                        Console.WriteLine("Nao tem imagem"); *@
 
                                         <div class="containerPasswordLock" style="background-color: var(--vz-modal-bg);" id="containerPasswordLock">
                                             <svg class="patternlock" id="lock" viewBox="0 0 100 100">
@@ -125,8 +125,10 @@
                 {
                     <button type="button" class="btn btn-info" id="btnMudarSenha" onclick="return MudarSenha()">Mudar senha</button>
                     <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" onclick="return Cancelar()">Cancelar</button>
+                }else{
+                    <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" onclick="return LimparPattern()">Cancelar</button>
+
                 }
-                <button type="button" class="btn btn-secondary"  data-bs-dismiss="modal" onclick="return LimparPattern()">Cancelar</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="return EnviarSenhaPatternParaViewPai()"
                     id="submitButton">Ok</button>
                 @* <a class="btn bg-secondary col-md-5 d-block mx-auto text-dark" type="submit"

@@ -121,9 +121,9 @@ function MudarSenha() {
   btnMudarSenha.classList.add("d-none");
 }
 
-$("#exibirPatternPassword").on("hidden.bs.modal", function (e) {
-  LimparPattern();
-});
+// $("#exibirPatternPassword").on("hidden.bs.modal", function (e) {
+//   LimparPattern();
+// });
 
 function Cancelar() {
   console.log("Cancelando");

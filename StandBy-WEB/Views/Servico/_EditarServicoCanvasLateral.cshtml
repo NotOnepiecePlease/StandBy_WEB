@@ -117,7 +117,13 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="cleave-valor-cartao">CARTÃO</label>
+                                    @if(@Model.servico.sv_valorservico > 0){
                                     <input asp-for="servico.sv_valorservico"  value="@Model.servico.sv_valorservico" id="cleave-valor-cartao" class="form-control input-orcamento-text text-danger" type="text" ></input>
+
+                                    }else{
+                                    <input asp-for="servico.sv_valorservico"  value="0" id="cleave-valor-cartao" class="form-control input-orcamento-text text-danger" type="text"></input>
+
+                                    }
                                 </div>
                             </div>
 

@@ -6,7 +6,6 @@
     string marginBottom = "mb-3";
     DateTime? previsaoEntrega = @Model.servico.sv_previsao_entrega;
     DateTime ae = Convert.ToDateTime(previsaoEntrega);
-    Console.WriteLine("Previsao Entrega dentro da View: " + previsaoEntrega);
     ViewData["desconto"] = 20;
     
     if(ViewData["PrevisaoEntrega"] != null && ViewData["PrevisaoEntrega"].ToString() != ""){
@@ -14,6 +13,8 @@
     }else{
     previsaoEntrega = null;
     }
+
+   // Console.WriteLine("[EDIT SERV] Image base 64: " + ViewData["imageSrc"]);
 }
 
 @section Styles {
