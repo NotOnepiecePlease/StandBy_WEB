@@ -90,15 +90,6 @@ namespace StandBy_WEB.Controllers
     }
     #endregion
 
-    #region Editar cliente com id #DESCARTADO
-    // public IActionResult Edit(int id)
-    // {
-    //   tb_clientes cliente = clienteService.repositoryCliente.BuscarPorID(id);
-    //   return PartialView("EditClienteView", cliente);
-    //   //return PartialView("_EditClientePartialView", cliente);
-    // }
-    #endregion
-
     #region Deletar registro especifico
     public async Task<IActionResult> Delete(int _id)
     {

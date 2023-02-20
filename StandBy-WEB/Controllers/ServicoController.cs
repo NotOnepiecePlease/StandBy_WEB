@@ -113,6 +113,7 @@ namespace StandBy_WEB.Controllers
         return BadRequest("Erro ao adicionar servico: " + e);
       }
       System.Console.WriteLine("Servico adicionado com sucesso");
+      TempData["AlertMessage"] = "Serviço adicionado!";
       return RedirectToAction("Index");
     }
 
@@ -273,15 +274,8 @@ namespace StandBy_WEB.Controllers
     [HttpGet]
     public JsonResult ListaServicos()
     {
-      List<ServicoComNomeClienteStruct> listServicos = ListaServico();
+      List<ServicoComNomeClienteStruct> listServicos = servicoService.repositoryServico.BuscarServicosComCliente();
       return Json(listServicos);
-    }
-
-
-    public List<ServicoComNomeClienteStruct> ListaServico()
-    {
-      var result = servicoService.repositoryServico.BuscarServicosComCliente();
-      return result;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

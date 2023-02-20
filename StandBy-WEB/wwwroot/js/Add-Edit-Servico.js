@@ -122,10 +122,12 @@ function MudarSenha() {
 }
 
 $("#exibirPatternPassword").on("hidden.bs.modal", function (e) {
-  Cancelar();
+  LimparPattern();
 });
 
 function Cancelar() {
+  console.log("Cancelando");
+  LimparPattern();
   var root = document.getElementById("containerPasswordLock");
   root.classList.add("d-none");
 
@@ -133,6 +135,12 @@ function Cancelar() {
   senhaAparelho.classList.remove("d-none");
   var btnMudarSenha = document.getElementById("btnMudarSenha");
   btnMudarSenha.classList.remove("d-none");
+}
+
+function LimparPattern() {
+  lock.clear();
+  var inputValue = document.getElementById("inputPassPattern");
+  inputValue.value = "";
 }
 
 function TituloModalSenhaAtual() {

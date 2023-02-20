@@ -7,6 +7,8 @@
     ViewBag.pTitle = "Serviços";
     Layout = "~/Views/Shared/_Layout.cshtml";
     @* var order = ViewData["Lista"] as List<tb_servicos>; *@
+        ViewData["Lista"] = "teste";	
+
 }
 
 @section styles{
@@ -25,6 +27,17 @@
                 <h4 class="card-title text-center">Tela Principal - @ViewBag.pTitle</h4>
             </div>
         </div>
+        @if(TempData["AlertMessage"] != null)
+        {
+            <!-- Success Alert -->
+            <div class="alert alert-success alert-dismissible alert-solid alert-label-icon fade show" role="alert">
+                <i class="ri-notification-off-line label-icon"></i><strong>Sucesso</strong> - @TempData["AlertMessage"]
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+        }
+        
+
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title mb-0">Lista de serviços StandBy</h5>
@@ -84,6 +97,7 @@
             </div>
         </div>
     </div>
+
     <div id="clientesNaoPodemSerDeletadosDIV"></div>
     <div id="tes"></div>
     
@@ -110,6 +124,15 @@
 
 <!-- funcoes js da pagina -->
 <script src="~/js/IndexServico.js"></script>
+
+
+<script>
+    window.setTimeout(function () {
+        $(".alert").fadeTo(500, 0).slideUp(500, function () {
+            $(this).remove();
+        });
+    }, 3000);
+</script>
 
 @* <script>
     $(document).ready(function () {
@@ -214,19 +237,98 @@ $(document).ready(function () {
         pageLength: 10,
         drawCallback: function () {//Mudar o texto e o HTML da coluna apos renderizada
             $('#tabelaClientes tbody tr').each(function () {
-                var valor = $(this).find('td:eq(4)').text();
-                var diferencaDias = parseInt($(this).find('td:eq(4)').text());
-                @* console.log(valor); *@
-                if(valor == ""){
-                    return valor;
-                }else if (diferencaDias < 0) {
-                    $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + diferencaDias + ' Dias</span>');
-                } else {
-                    $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + diferencaDias + ' Dias</span>');
+                // var valor = $(this).find('td:eq(4)').text();
+                // var diferencaDias = parseInt($(this).find('td:eq(4)').text());
+                // @* console.log(valor); *@
+                // if(valor == ""){
+                //     return valor;
+                // }else if (diferencaDias < 0) {
+                //     $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + diferencaDias + ' Dias</span>');
+                // } else {
+                //     $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + diferencaDias + ' Dias</span>');
+                // }
+
+                var diferencaDiasTimeSpan = $(this).find('td:eq(4)').text();
+                var id = $(this).find('td:eq(2)').text();
+                var teste = secondsToDhms(diferencaDiasTimeSpan);
+                console.log("Id: ", id)
+                console.log("Diferenca Dias: ", diferencaDiasTimeSpan)
+                console.log("Timespan: ", teste)
+                console.log("Bool: " , (diferencaDiasTimeSpan < 3600 && diferencaDiasTimeSpan > -3600))
+                console.log("------------------------")
+     
+     
+                //No primeiro if eu ignoro qualquer coisa abaixo de 1 hora
+                if(diferencaDiasTimeSpan < 3600 && diferencaDiasTimeSpan > -3600){
+                    $(this).find('td:eq(4)').html('<span class="badge badge-soft-light"></span>');
+                }else if(teste.dias < 0 || teste.dias > 0){
+                    if(teste.dias > 0){
+                        if(teste.dias > 1){
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + teste.dias + ' Dias</span>');  
+                        }else{
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + teste.dias + ' Dia</span>');
+                        }
+                    }else if(teste.dias < 0){
+                        if(teste.dias < -1){
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.dias + ' Dias</span>');
+                        }else{
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.dias + ' Dia</span>');
+                        }
+                    }
+                }else if(teste.horas < 0 || teste.horas > 0){
+                    if(teste.horas > 0){
+                        if(teste.horas > 1){
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-warning">' + teste.horas + ' Horas</span>');  
+                        }else{
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-warning">' + teste.horas + ' Hora</span>');  
+                        }
+                    }else if(teste.horas < 0){
+                        if(teste.horas < -1){
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.horas + ' Horas</span>');
+                        }else{
+                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.horas + ' Hora</span>');
+                        }
+
+                    }
+                }else if(teste.horas == "" && teste.minutos == ""){
+                    @* $(this).find('td:eq(4)').html('<span class="badge badge-soft-light">a</span>'); *@
+                    return "";
                 }
             });
         }
     });
 });
+</script>
+
+<script>
+    function secondsToDhms(seconds) {
+    seconds = Number(seconds);
+      if (seconds < 0) {
+        seconds = -seconds;
+        var sinal = "-";
+    } else {
+        var sinal = "";
+    }
+    var d = Math.floor(seconds / (3600*24));
+    var h = Math.floor(seconds % (3600*24) / 3600);
+    var m = Math.floor(seconds % 3600 / 60);
+    var s = Math.floor(seconds % 60);
+
+    // var dDisplay = d > 0 ? sinal + d + (d == 1 ? " day, " : " days, ") : "";
+    // var hDisplay = h > 0 ? sinal + h + (h == 1 ? " hour, " : " hours, ") : "";
+    // var mDisplay = m > 0 ? sinal + m + (m == 1 ? " minute, " : " minutes, ") : "";
+    // var sDisplay = s > 0 ? sinal + s + (s == 1 ? " second" : " seconds") : "";
+
+    var dDisplay = d > 0 ? sinal + d : "";
+    var hDisplay = h > 0 ? sinal + h : "";
+    var mDisplay = m > 0 ? sinal + m : "";
+    var sDisplay = s > 0 ? sinal + s : "";
+
+    return {
+        dias: dDisplay,
+        horas: hDisplay,
+        minutos: mDisplay,
+        segundos: sDisplay};
+}
 </script>
 }

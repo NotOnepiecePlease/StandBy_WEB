@@ -136,3 +136,7 @@ textarea::-webkit-resizer {
   background-color: var(--vz-input-bg);
 }
 
+body {
+  height: 100vh;
+  overflow: hidden;
+}
