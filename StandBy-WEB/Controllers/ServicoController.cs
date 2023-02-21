@@ -220,10 +220,8 @@ namespace StandBy_WEB.Controllers
         {
           byte[] imageBytes = (byte[])servicoEditar.servico.sv_senha_pattern;
           string base64String = Convert.ToBase64String(imageBytes);
-          System.Console.WriteLine("[EDIT SERV] base64String: " + base64String);
           string imageSrc = String.Format("data:image/jpg;base64,{0}", base64String);
           ViewData["imageSrc"] = imageSrc;
-          Console.WriteLine("[EDIT SERV] base 64 formatado: " + ViewData["imageSrc"]);
         }
 
         // Console.WriteLine("Prev de entrega do serv: " + servicoEditar.servico.sv_previsao_entrega);

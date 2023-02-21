@@ -119,7 +119,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                                     id="validationCustom01" placeholder="Digite o nome do cliente" required
                                     type="text" />
                                 <div class="valid-feedback">Campo obrigatorio inserido!</div>
-                                <div class="invalid-feedback">Por favor, digite um nome!</div>
+                            <div class="invalid-feedback">Por favor, digite um nome!</div>
                             </div>
                         </div>
                         @*
@@ -624,22 +624,33 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
 
 
     <div class="row">
-        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit" id="btnCadastrarServico">Inserir
+        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit" >Inserir
             Serviço</button>
     </div>
 </form>
 
 
 @section scripts{
+<!-- Tirar print da imagem para salvar no banco -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
+
+<!-- Componente de selecionar o cliente. -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Componente patternlock, desenhar senha na tela -->
 <script src="~/js/novo/patternlock.js"></script>
+
+<!-- Custom JS da pagina -->
 <script src="~/js/Add-Edit-Servico.js"></script>
+
+<!-- Plugin de validacoes -->
+<script src="~/assets/libs/prismjs/prism.js" ></script>
+<script src="~/assets/js/pages/form-validation.init.js" ></script>
 
 
 
 <script>
-    $(document).ready(function () {
+    /* $(document).ready(function () {
         $("#btnCadastrarServico").click(function (event) {
             // $("#btnCadastrarServico").click(function (event) {
             //console.log("Tentando exibir alerta")
@@ -720,7 +731,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
         </div>
     </div>
 </div>
-`;
+`; */
 
 </script>
 

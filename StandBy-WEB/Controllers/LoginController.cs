@@ -29,8 +29,6 @@ namespace StandBy_WEB.Controllers
       string senha = HttpContext.Session.GetString("Senha");
       string lembrar = HttpContext.Session.GetString("Lembrar");
 
-      // Console.WriteLine($"Usuario: {usuario}" + $"\nSenha: {senha} " + $" \nLembrar: {lembrar}");
-
       ViewData["Usuario"] = usuario;
       ViewData["Senha"] = senha;
       ViewData["Lembrar"] = Convert.ToBoolean(lembrar);

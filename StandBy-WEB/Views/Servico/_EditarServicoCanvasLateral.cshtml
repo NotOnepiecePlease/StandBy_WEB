@@ -9,7 +9,10 @@
     Convert.ToDouble(@ViewData["desconto"]) / 100);
 
     //Mensagem padrao whatsapp
+
     var mensagem = "StandBy Assistencia Tecnica, Boa noite!";
+    var linkTelefonePrincipal = @Model.cliente.cl_telefone == "" ? "" : "https://wa.me/@Model.cliente.cl_telefone?text=@mensagem";
+    var linkTelefoneRecado = @Model.cliente.cl_telefone_recado == "" ? "" : "https://wa.me/@Model.cliente.cl_telefone_recado?text=@mensagem";
 }
 @* 
 <h1>@ViewData["Title"]</h1> *@
@@ -64,7 +67,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="cleave-date">Telefone</label><i class="ri-whatsapp-line text-success text-right" style="padding-left: 2%;"></i>
-                                    <a href="https://wa.me/@Model.cliente.cl_telefone?text=@mensagem" target="_blank">
+                                    <a href="@linkTelefonePrincipal" target="_blank">
                                         <input asp-for="cliente.cl_telefone" name="input-telefone" class="form-control" type="text" style="cursor: pointer;" readonly />
                                     </a>
                                 </div>
@@ -77,7 +80,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label class="form-label" for="cleave-date">Telefone Recado</label><i class="ri-whatsapp-line text-success text-right" style="padding-left: 2%;"></i>
-                                    <a href="https://wa.me/@Model.cliente.cl_telefone?text=@mensagem" target="_blank">
+                                    <a href="@linkTelefoneRecado" target="_blank">
                                         <input asp-for="cliente.cl_telefone_recado" name="input-telefone" class="form-control" type="text" style="cursor: pointer;"
                                             readonly />
                                     </a>
@@ -132,7 +135,12 @@
                             <div class="col-md-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="cleave-valor-avista">À VISTA</label><label class="form-label text-success" for="cleave-valor-avista" style="font-size: 80%;">@ViewData["desconto"]%</label>
-                                    <input id="cleave-valor-avista" class="form-control input-orcamento-text text-secondary" value="@valorAvista.ToString("N2")" type="text"></input>
+                                    @if(valorAvista > 0){
+                                        <input id="cleave-valor-avista" class="form-control input-orcamento-text text-secondary" value="@valorAvista.ToString("N2")" type="text"></input>
+                                    }else{
+                                        <input id="cleave-valor-avista" class="form-control input-orcamento-text text-secondary" value="0" type="text"></input>
+                                    }
+                                    
                                 </div>
                             </div>
 
