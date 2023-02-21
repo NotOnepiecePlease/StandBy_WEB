@@ -27,6 +27,7 @@ namespace StandBy_WEB.Controllers
     #region Adicionar cliente VIEW
     public IActionResult AddCliente()
     {
+      
       return View("AddCliente");
     }
     #endregion

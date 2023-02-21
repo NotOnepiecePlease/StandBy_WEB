@@ -55,16 +55,12 @@ builder.Services.AddAutoMapper(typeof(MappingModels));
 
 builder.Services.AddSession();
 
-Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(
-    "Mgo+DSMBMAY9C3t2VVhkQlFadVdJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkdjUX9YcHdVQWhdUk0=");
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
   app.UseExceptionHandler("/Home/Error");
-
-  //app.UseBrowserLink();
 }
 
 app.UseHttpsRedirection();

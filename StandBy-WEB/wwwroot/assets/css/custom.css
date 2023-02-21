@@ -61,7 +61,7 @@ input[name="input-telefone"]:hover {
 }
 
 .card-checklist {
-  --vz-card-spacer-y: 0.2rem;
+  --vz-card-spacer-y: 0rem;
   --vz-card-spacer-x: 0.2rem;
 }
 
@@ -136,7 +136,9 @@ textarea::-webkit-resizer {
   background-color: var(--vz-input-bg);
 }
 
-body {
-  height: 100vh;
-  overflow: hidden;
+@media only screen and (min-width: 768px) {
+  body {
+    height: 100vh;
+    overflow: hidden;
+  }
 }

@@ -78,7 +78,6 @@
                     <thead>
                         <!-- Cabecalho da table-->
                         <tr>
-                            @* <th scope="col" style="width: 10px;"></th> *@
                             <th><input class="form-check-input fs-15" type="checkbox" id="checkAll" onclick="return SelecionarTodasCheckBoxes()" value="0"></th>
                             <th data-ordering="false" id="sv_id" name="sv_id">ID</th>
                             <th id="sv_ordem_serv" name="sv_ordem_serv">OS</th>
@@ -176,6 +175,7 @@ $(document).ready(function () {
             {
                 data: null,
                 orderable: false,
+                visible: false,
                 render: function (data) {
                     return '<input class="form-check-input fs-15" type="checkbox" name="selectedIds" value="' +
                         data.cl_id +
@@ -248,10 +248,10 @@ $(document).ready(function () {
                 //     $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + diferencaDias + ' Dias</span>');
                 // }
 
-                var diferencaDiasTimeSpan = $(this).find('td:eq(4)').text();
-                var id = $(this).find('td:eq(2)').text();
-                var teste = secondsToDhms(diferencaDiasTimeSpan);
-                console.log("Id: ", id)
+                var diferencaDiasTimeSpan = $(this).find('td:eq(3)').text();
+                var Nome = $(this).find('td:eq(1)').text();
+                var teste = segundosParaDiasHoras(diferencaDiasTimeSpan);
+                console.log("Id: ", Nome)
                 console.log("Diferenca Dias: ", diferencaDiasTimeSpan)
                 console.log("Timespan: ", teste)
                 console.log("Bool: " , (diferencaDiasTimeSpan < 3600 && diferencaDiasTimeSpan > -3600))
@@ -260,33 +260,33 @@ $(document).ready(function () {
      
                 //No primeiro if eu ignoro qualquer coisa abaixo de 1 hora
                 if(diferencaDiasTimeSpan < 3600 && diferencaDiasTimeSpan > -3600){
-                    $(this).find('td:eq(4)').html('<span class="badge badge-soft-light"></span>');
+                    $(this).find('td:eq(3)').html('<span class="badge badge-soft-light"></span>');
                 }else if(teste.dias < 0 || teste.dias > 0){
                     if(teste.dias > 0){
                         if(teste.dias > 1){
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + teste.dias + ' Dias</span>');  
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-success">' + teste.dias + ' Dias</span>');  
                         }else{
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-success">' + teste.dias + ' Dia</span>');
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-success">' + teste.dias + ' Dia</span>');
                         }
                     }else if(teste.dias < 0){
                         if(teste.dias < -1){
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.dias + ' Dias</span>');
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-danger">' + teste.dias + ' Dias</span>');
                         }else{
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.dias + ' Dia</span>');
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-danger">' + teste.dias + ' Dia</span>');
                         }
                     }
                 }else if(teste.horas < 0 || teste.horas > 0){
                     if(teste.horas > 0){
                         if(teste.horas > 1){
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-warning">' + teste.horas + ' Horas</span>');  
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-warning">' + teste.horas + ' Horas</span>');  
                         }else{
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-warning">' + teste.horas + ' Hora</span>');  
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-warning">' + teste.horas + ' Hora</span>');  
                         }
                     }else if(teste.horas < 0){
                         if(teste.horas < -1){
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.horas + ' Horas</span>');
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-danger">' + teste.horas + ' Horas</span>');
                         }else{
-                            $(this).find('td:eq(4)').html('<span class="badge badge-soft-danger">' + teste.horas + ' Hora</span>');
+                            $(this).find('td:eq(3)').html('<span class="badge badge-soft-danger">' + teste.horas + ' Hora</span>');
                         }
 
                     }
@@ -301,7 +301,7 @@ $(document).ready(function () {
 </script>
 
 <script>
-    function secondsToDhms(seconds) {
+    function segundosParaDiasHoras(seconds) {
     seconds = Number(seconds);
       if (seconds < 0) {
         seconds = -seconds;

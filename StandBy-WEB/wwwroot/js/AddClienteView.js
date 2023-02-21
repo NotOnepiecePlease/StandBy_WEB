@@ -46,13 +46,4 @@ $(document).ready(function () {
   });
 });
 
-//Funcao que mostra e esconde o card que exibe os erros
-$(document).ready(function () {
-  if ($(".validation-summary-errors li").length > 0) {
-    $("#errorCard").removeClass("d-none");
-    $("#errorCard").show();
-  } else {
-    $("#errorCard").addClass("d-none");
-    $("#errorCard").hide();
-  }
-});
+

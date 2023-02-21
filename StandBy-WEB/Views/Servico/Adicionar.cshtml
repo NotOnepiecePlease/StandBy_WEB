@@ -624,7 +624,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
 
 
     <div class="row">
-        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit" >Inserir
+        <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit" id="btnCadastrarServico" >Inserir
             Serviço</button>
     </div>
 </form>
@@ -650,10 +650,10 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
 
 
 <script>
-    /* $(document).ready(function () {
+     $(document).ready(function () {
         $("#btnCadastrarServico").click(function (event) {
-            // $("#btnCadastrarServico").click(function (event) {
-            //console.log("Tentando exibir alerta")
+            $("#btnCadastrarServico").click(function (event) {
+            console.log("Tentando exibir alerta")
             event.preventDefault();
 
             Swal.fire({
@@ -664,7 +664,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
                 if (result.value) {
-                    //pegar qual checkbox foi selecionada dentre as 5
+                    // pegar qual checkbox foi selecionada dentre as 5
                     var checkboxes = document.getElementsByClassName("form-check-input");
                     var selectedCheckbox = null;
                     for (var i = 0; i < checkboxes.length; i++) {
@@ -685,9 +685,10 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
             });
         });
     });
+});
 
 
-    //Bloco html com checkboxes de previsao de entrega exibido no sweetie alert
+    {/* Bloco html com checkboxes de previsao de entrega exibido no sweetie alert */}
     var html = `
 <div class="containerChk">
     <div class="justify-content-between">
@@ -731,7 +732,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
         </div>
     </div>
 </div>
-`; */
+`;
 
 </script>
 
