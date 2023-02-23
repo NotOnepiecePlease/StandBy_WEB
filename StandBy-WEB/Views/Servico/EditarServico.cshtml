@@ -98,7 +98,7 @@
                                 <div class="@marginBottom">
                                     <label class="form-label-servicos" for="cleave-date-servicos">Data</label>
                                     <input asp-for="servico.sv_data" class="form-control input-servicos-text"
-                                        id="cleave-date-servicos" placeholder="DD-MM-YYYY" type="text" />
+                                        id="cleave-date-servicos" placeholder="DD-MM-YYYY" type="text" readonly/>
                                 </div>
                             </div>
 
@@ -619,8 +619,11 @@
 
 </form>
 
+@await Html.PartialAsync("_InserirCheckListEntrada")
 
-
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalgrid">
+Launch Demo Modal
+</button>
 
 
 
