@@ -4,10 +4,10 @@
 ViewData["Title"] = "Adicionar";
 string marginBottom = "mb-3";
 int? idCliente = null;
-if(ViewData["ClienteSelecionado"] != null){
-Console.WriteLine("Diferente de null");
-idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
-}
+    if(ViewData["ClienteSelecionado"] != null){
+    Console.WriteLine("Diferente de null");
+    idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
+    }
 }
 
 @section Styles{
@@ -404,7 +404,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Biometria / Face-ID</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_biometria_faceid" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChBiometriaFaceItemsList)
@@ -418,7 +418,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Microfone</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_microfone" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChMicrofoneItemsList)
@@ -436,7 +436,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Tela</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_tela" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChTelaItemsList)
@@ -450,7 +450,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Chip</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_chip" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChChipItemsList)
@@ -468,7 +468,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Botões</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_botoes" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChBotoesList)
@@ -482,7 +482,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Sensor</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_sensor" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChSensorList)
@@ -500,7 +500,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Câmeras</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_cameras" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChCamerasList)
@@ -514,7 +514,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Auricular</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_auricular" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChAuricularList)
@@ -532,7 +532,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Wi-Fi</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_wifi" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChWifiList)
@@ -546,7 +546,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Alto Falante</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_altofalante" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChAltoFalanteList)
@@ -564,7 +564,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Bluetooth</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_bluetooth" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChBluetoothList)
@@ -578,7 +578,7 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Carregamento</label>
-                            <select asp-for="condicaoFisica.cf_lente_camera" class="form-select input-servicos-select "
+                            <select asp-for="checkList.ch_carregamento" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
                                 @foreach (var item in @Model.ListasItems.ChCarregamentoList)
@@ -593,8 +593,8 @@ idCliente = Convert.ToInt32(ViewData["ClienteSelecionado"]);
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 select-clientes-pai ">
-                            <label class="form-label-servicos mt-3" for="cleave-cpf">Carregamento</label>
-                            <textarea asp-for="checkList.ch_carregamento" class="form-control"
+                            <label class="form-label-servicos mt-3" for="cleave-cpf">Observacoes</label>
+                            <textarea asp-for="checkList.ch_observacoes" class="form-control"
                                 id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                     </div>

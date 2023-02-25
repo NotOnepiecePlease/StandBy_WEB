@@ -1,20 +1,19 @@
-@using System.Globalization;
+@using standby_data.Models.DTOs;
 @model ServicoCompletoModel
 @{
     ViewData["Title"] = "EditarServico";
-    ViewData["Senha"] = @Model.servico.sv_senha;
+    ViewData["OrdemServico"] = @Model.servico.sv_ordem_serv;
+    ViewData["IdServico"] = @Model.servico.sv_id;
     string marginBottom = "mb-3";
     DateTime? previsaoEntrega = @Model.servico.sv_previsao_entrega;
     DateTime ae = Convert.ToDateTime(previsaoEntrega);
     ViewData["desconto"] = 20;
     
     if(ViewData["PrevisaoEntrega"] != null && ViewData["PrevisaoEntrega"].ToString() != ""){
-    previsaoEntrega = Convert.ToDateTime(ViewData["PrevisaoEntrega"]);
+        previsaoEntrega = Convert.ToDateTime(ViewData["PrevisaoEntrega"]);
     }else{
-    previsaoEntrega = null;
+        previsaoEntrega = null;
     }
-
-   // Console.WriteLine("[EDIT SERV] Image base 64: " + ViewData["imageSrc"]);
 }
 
 @section Styles {
@@ -29,6 +28,7 @@
 
 
 <form asp-action="Editar" asp-controller="Servico" class="row needs-validation " id="formulario" method="post" novalidate>
+    
     <input type="hidden" id="ImageData" name="ImageData" value="@ViewData["imageSrc"]">
     <input type="hidden" id="PrevisaoEntrega" name="PrevisaoEntrega" value="">
     <input asp-for="servico.sv_senha_pattern" type="hidden" id="senhaPatternCliente" name="senhaPatternCliente" value="@ViewData["imageSrc"]">
@@ -309,10 +309,8 @@
 
                 <div class="card-body card-body-checklist">
                     <div class="live-preview">
-                        <a class="btn-servicos btn btn-primary col-md-12 d-block mx-auto mb-1" type="submit">Inserir
-                            Checklist - ENTRADA</a>
-                        <a class="btn-servicos btn btn-info col-md-12 d-block mx-auto" type="submit">Inserir Checklist -
-                            SAIDA</a>
+                        <a class="btn-servicos btn btn-primary col-md-12 d-block mx-auto mb-1" data-bs-toggle="modal" data-bs-target="#exampleModalgrid" type="submit">Inserir Checklist - ENTRADA</a>
+                        <a class="btn-servicos btn btn-info col-md-12 d-block mx-auto" type="submit">Inserir Checklist - SAIDA</a>
                     </div>
                 </div>
 
@@ -617,9 +615,9 @@
         <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit">Atualizar SERV</button>
     </div>
 
-</form>
 
-@await Html.PartialAsync("_InserirCheckListEntrada")
+</form>
+@await Html.PartialAsync("_InserirCheckListEntrada", @Model.checkList)
 
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalgrid">
 Launch Demo Modal
@@ -635,6 +633,32 @@ Launch Demo Modal
 <script type="text/javascript" src="~/js/script.js"></script>
 <script src="~/js/novo/patternlock.js"></script>
 <script src="~/js/Add-Edit-Servico.js"></script>
+
+
+
+<script>
+    $(document).ready(function() {
+        $('#submitBtn').click(function(e) {
+            e.preventDefault();
+            console.log("Entrou no submit");
+
+            $.ajax({
+                type: 'POST',
+                url: '/Servico/InserirAtualizarChecklist',
+                data: $('#formId').serialize(),
+                success: function(result) {
+                    // Código a ser executado em caso de sucesso na requisição
+                    $('#formChecklist').modal('hide');
+                },
+                error: function(xhr, status, error) {
+                    // Código a ser executado em caso de erro na requisição
+                }
+            });
+        });
+    });
+</script>
+
+
 
 
 <script>

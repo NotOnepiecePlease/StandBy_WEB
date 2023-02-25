@@ -1,5 +1,10 @@
+@using standby_data.Models.DTOs
+@model ChecklistDTO
 @{
     ViewData["Title"] = "_InserirCheckListEntrada";
+    var ListasItems = ViewData["ListasItems"] as ListasItems;
+    var OrdemServico = ViewData["OrdemServico"];
+    var IdServico = ViewData["IdServico"];
 }
 
 <!-- Grids in modals -->
@@ -10,19 +15,28 @@
 <h5 class="modal-title" id="exampleModalgridLabel">Checklist</h5>
 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
-<div class="modal-body">
+    <div class="modal-body">
 
 
+            <form asp-action="InserirAtualizarChecklist" asp-controller="Servico" class="row needs-validation " id="formChecklist" method="post" novalidate>
+                <input asp-for="ch_id" type="hidden" value="@Model.ch_id" />
+                <input asp-for="ch_ordem_serv" type="hidden" value="@OrdemServico" />
+                <input asp-for="ch_data" type="hidden" value="@Model.ch_data" />
+                <input asp-for="ch_sv_idservico" type="hidden" value="@IdServico" />
+                <input asp-for="ch_tipo" type="hidden" value="ENTRADA" />
 
-        @* <div class="live-preview"> *@
+                <div class="live-preview">
                     <div class="row">
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Biometria / Face-ID</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_biometria_faceid" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChBiometriaFaceItemsList)
+                                {
+                                    <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -30,9 +44,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Microfone</label>
-                            <select class="form-select input-servicos-select " id="cleave-estado">
+                            <select asp-for="ch_microfone" class="form-select input-servicos-select "
+                                id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChMicrofoneItemsList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -44,10 +62,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Tela</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_tela" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChTelaItemsList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -55,10 +76,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Chip</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_chip" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChChipItemsList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -70,10 +94,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Botões</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_botoes" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChBotoesList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -81,10 +108,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Sensor</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_sensor" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChSensorList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -96,10 +126,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Câmeras</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_cameras" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChCamerasList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -107,10 +140,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Auricular</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_auricular" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChAuricularList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -122,10 +158,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Wi-Fi</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_wifi" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChWifiList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -133,10 +172,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Alto Falante</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_altofalante" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChAltoFalanteList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -148,10 +190,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Bluetooth</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_bluetooth" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChBluetoothList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -159,10 +204,13 @@
                         <div class="col-md-6 col-sm-6 select-clientes-pai ">
 
                             <label class="form-label-servicos" for="cleave-cpf">Carregamento</label>
-                            <select class="form-select input-servicos-select "
+                            <select asp-for="ch_carregamento" class="form-select input-servicos-select "
                                 id="cleave-estado">
                                 <option disabled selected value=""></option>
-                                <option>TEste</option>
+                                @foreach (var item in ListasItems.ChCarregamentoList)
+                                {
+                                <option>@item</option>
+                                }
                             </select>
 
                         </div>
@@ -171,8 +219,8 @@
 
                     <div class="row">
                         <div class="col-md-12 col-sm-12 select-clientes-pai ">
-                            <label class="form-label-servicos mt-3" for="cleave-cpf">Carregamento</label>
-                            <textarea class="form-control"
+                            <label class="form-label-servicos mt-3" for="cleave-cpf">Observacoes</label>
+                            <textarea asp-for="ch_observacoes" class="form-control"
                                 id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                     </div>
@@ -180,7 +228,7 @@
 
                     <!-- Switches Color -->
                     <div class="form-check form-switch mt-4">
-                        <input class="form-check-input" type="checkbox" role="switch"
+                        <input asp-for="ch_ausente" class="form-check-input" type="checkbox" role="switch"
                             id="SwitchCheck1" unchecked>
                         <label class="form-check-label" for="SwitchCheck1">Impossivel fazer checklist</label>
                     </div>
@@ -189,18 +237,23 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12 select-clientes-pai ">
                             <label class="form-label-servicos mt-3" for="cleave-cpf">Motivo</label>
-                            <textarea class="form-control"
+                            <textarea asp-for="ch_motivo_ausencia" class="form-control"
                                 id="exampleFormControlTextarea1" rows="3"></textarea>
                         </div>
                     </div>
 
                 </div>
 
+                
+            </form>
+
+                <div class="row">
+                    <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit" id="submitBtn">Atualizar CHK</button>
+                </div>
 
 
-
-
+    </div>
 </div>
 </div>
 </div>
-</div>
+

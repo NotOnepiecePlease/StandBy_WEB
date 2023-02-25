@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
 using standby_data.Models;
 using standby_data.Models.DTOs;
@@ -15,6 +11,7 @@ namespace standby_data.AutoMapper
       CreateMap<tb_clientes, ClienteDTO>().ReverseMap();
       CreateMap<tb_condicoes_fisicas, CondicoesFisicasDTO>().ReverseMap();
       CreateMap<tb_servicos, ServicoDTO>().ReverseMap();
+      CreateMap<tb_checklist, ChecklistDTO>().ReverseMap();
     }
   }
 }
