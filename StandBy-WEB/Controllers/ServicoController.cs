@@ -260,9 +260,9 @@ namespace StandBy_WEB.Controllers
     }
 
     [HttpPost]
-    public IActionResult InserirAtualizarChecklist(ChecklistDTO checklist)
+    public IActionResult InserirAtualizarChecklist(ChecklistDTO checklist, IFormCollection form)
     {
-
+      System.Console.WriteLine("Checklist FOREIGN: " + checklist.ch_sv_idservico);
       try
       {
         System.Console.WriteLine("Try");

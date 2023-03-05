@@ -21,7 +21,7 @@ namespace StandBy_WEB.Controllers
 
     public async Task<IActionResult> Index(string _usuarioLogado)
     {
-      System.Console.WriteLine("Entrando na DASH");
+      System.Console.WriteLine("Exibindo DashBoard\n------------------");
       var valorLucroSemana = await BuscarValorLucrosSemana();
       ViewData["Lucro"] = valorLucroSemana.First().LucroTotalSemana.ToString(CultureInfo.InvariantCulture);
 
@@ -47,7 +47,6 @@ namespace StandBy_WEB.Controllers
       {
         lucroPorcentagem = ((receita - despesas) / receita) * 100;
       }
-      System.Console.WriteLine("Lucro: " + lucroPorcentagem);
 
       ViewData["LucroPorcentagem"] = lucroPorcentagem.ToString("N2");
 
@@ -85,13 +84,39 @@ namespace StandBy_WEB.Controllers
     //Buscar  Dados
     private async Task<List<BuscarLucroValorUltimaSemana>> BuscarValorLucrosSemana()
     {
-      return await context.BuscarLucroValorUltimaSemana.FromSqlRaw(Querys.ValorLucroUltimos7Dias).ToListAsync();
+      try
+      {
+        return await context.BuscarLucroValorUltimaSemana.FromSqlRaw(Querys.ValorLucroUltimos7Dias).ToListAsync();
+      }
+      catch (System.Exception)
+      {
+        var result = new List<BuscarLucroValorUltimaSemana>();
+        result.Add(new BuscarLucroValorUltimaSemana()
+        {
+          LucroTotalSemana = 0
+        });
+        return result;
+      }
     }
 
     private async Task<List<BuscarServicoValorUltimaSemana>> BuscarValorServicoSemana()
     {
-      return await context.BuscarServicoValorUltimaSemana.FromSqlRaw(Querys.ValorServicoUltimos7Dias)
-          .ToListAsync();
+
+      try
+      {
+        return await context.BuscarServicoValorUltimaSemana.FromSqlRaw(Querys.ValorServicoUltimos7Dias)
+            .ToListAsync();
+      }
+      catch (System.Exception)
+      {
+
+        var result = new List<BuscarServicoValorUltimaSemana>();
+        result.Add(new BuscarServicoValorUltimaSemana()
+        {
+          ServicoTotalSemana = 0
+        });
+        return result;
+      }
     }
 
     private async Task<List<BuscarPrejuizoValorUltimaSemana>> BuscarValorPrejuizoSemana()
@@ -117,7 +142,19 @@ namespace StandBy_WEB.Controllers
 
     private async Task<List<BuscarPecasValorUltimaSemana>> BuscarValorPecasSemana()
     {
-      return await context.BuscarPecasValorUltimaSemana.FromSqlRaw(Querys.ValorPecasUltimos7Dias).ToListAsync();
+      try
+      {
+        return await context.BuscarPecasValorUltimaSemana.FromSqlRaw(Querys.ValorPecasUltimos7Dias).ToListAsync();
+      }
+      catch (System.Exception)
+      {
+        var result = new List<BuscarPecasValorUltimaSemana>();
+        result.Add(new BuscarPecasValorUltimaSemana()
+        {
+          GastosPecasTotalSemana = 0
+        });
+        return result;
+      }
     }
 
     private List<tb_clientes> BuscarAniversariantesDoMes()

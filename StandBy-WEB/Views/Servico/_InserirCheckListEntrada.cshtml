@@ -4,7 +4,8 @@
     ViewData["Title"] = "_InserirCheckListEntrada";
     var ListasItems = ViewData["ListasItems"] as ListasItems;
     var OrdemServico = ViewData["OrdemServico"];
-    var IdServico = ViewData["IdServico"];
+    var IdServico = Convert.ToInt32(ViewData["IdServico"]);
+    System.Console.WriteLine("IdServico: " + IdServico);
 }
 
 <!-- Grids in modals -->
@@ -244,12 +245,12 @@
 
                 </div>
 
-                
-            </form>
-
                 <div class="row">
                     <button class="btn btn-primary col-md-4 d-block mx-auto" type="submit" id="submitBtn">Atualizar CHK</button>
                 </div>
+            </form>
+
+                
 
 
     </div>

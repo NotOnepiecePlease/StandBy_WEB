@@ -645,10 +645,11 @@ Launch Demo Modal
             $.ajax({
                 type: 'POST',
                 url: '/Servico/InserirAtualizarChecklist',
-                data: $('#formId').serialize(),
+                data: $('#formChecklist').serialize(),
                 success: function(result) {
                     // Código a ser executado em caso de sucesso na requisição
-                    $('#formChecklist').modal('hide');
+                    $('#exampleModalgrid').modal('hide');
+                    location.reload();
                 },
                 error: function(xhr, status, error) {
                     // Código a ser executado em caso de erro na requisição
